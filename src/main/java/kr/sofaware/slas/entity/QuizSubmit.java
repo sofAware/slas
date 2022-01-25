@@ -13,9 +13,9 @@ public class QuizSubmit implements Serializable {
     @Id
     @ManyToOne
     @JoinColumns ({
-        @JoinColumn(name = "syllabus_id"),
-        @JoinColumn(name = "quiz_id"),
-        @JoinColumn(name = "question_num")
+        @JoinColumn(name = "syllabus_id", referencedColumnName = "syllabus_id"),
+        @JoinColumn(name = "quiz_id", referencedColumnName = "id"),
+        @JoinColumn(name = "question_num", referencedColumnName = "questionNum")
     })
     private Quiz quiz;          // 퀴즈
 
