@@ -23,14 +23,11 @@ public class Lecture implements Serializable {
     @JoinColumn(name = "syllabus_id")
     private Syllabus syllabus;          // 강의
 
-    @Id private int year;               // 년도
-    @Id private int semester;           // 학기
-
-    private int grade;                  // 학점
+    private double grade;                  // 학점
 
     @Override
     public int hashCode() {
-        return Objects.hash(student, syllabus, year, semester);
+        return Objects.hash(student, syllabus);
     }
 
     @Override
@@ -40,8 +37,6 @@ public class Lecture implements Serializable {
 
         Lecture o = (Lecture) obj;
         return Objects.equals(student, o.getStudent()) &&
-                Objects.equals(syllabus, o.getSyllabus()) &&
-                Objects.equals(year, o.getYear()) &&
-                Objects.equals(semester, o.getSemester());
+                Objects.equals(syllabus, o.getSyllabus());
     }
 }

@@ -18,8 +18,6 @@ public class Syllabus {
     private String id;              // 학정번호
 
     private String name;            // 과목명
-    private int year;               // 년도
-    private int semester;           // 학기 (1~2)
     private String category;        // 카테고리 (전선, 교필, 교선, ...)
     private int credit;             // 학점 (1, 2, 3, 4)
 

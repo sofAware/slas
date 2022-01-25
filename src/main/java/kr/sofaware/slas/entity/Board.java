@@ -9,7 +9,9 @@ import java.util.Date;
 @Entity
 @Getter
 public class Board implements Serializable {
-    @Id private int id;                 // 글 고유 번호
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;                 // 글 고유 번호
 
     @ManyToOne
     @JoinColumn(name = "syllabus_id")
@@ -31,7 +33,10 @@ public class Board implements Serializable {
 
     private Date date;                  // 등록일
     private int view;                   // 조회수
-    private Boolean state;              // 제출 여부
+
+    @ManyToOne
+    @JoinColumn(name = "assignment_id")
+    private Assignment assignment;          // 과제 번호
 
     private String attachmentName;      // 첨부 파일 이름
     private String attachmentPath;      // 첨부 파일 경로
