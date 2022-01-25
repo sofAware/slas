@@ -8,7 +8,9 @@ import java.util.Date;
 @Entity
 @Getter
 public class Assignment {
-    @Id private int id;                 // 과제 고유 번호
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;                 // 과제 고유 번호
 
     @ManyToOne
     @JoinColumn(name = "syllabus_id")

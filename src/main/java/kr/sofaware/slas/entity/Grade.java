@@ -19,9 +19,10 @@ public class Grade implements Serializable {
     private Student student;            // 학생
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "syllabus_id")
-    private Syllabus syllabus;          // 강의
+    private int year;                   // 년도
+
+    @Id
+    private int semester;               // 학기
 
     private int ranking;                // 석차
     private double gradeAvg;            // 전체 평점
@@ -30,16 +31,18 @@ public class Grade implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(student, syllabus);
+        return Objects.hash(student, year, semester);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj)) return false;
+        if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj))
+            return false;
 
         Grade o = (Grade) obj;
         return Objects.equals(student, o.getStudent()) &&
-                Objects.equals(syllabus, o.getSyllabus());
+                Objects.equals(year, o.getYear()) &&
+                Objects.equals(semester, o.getSemester());
     }
 }
