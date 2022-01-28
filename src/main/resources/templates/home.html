@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Welcome to Slas</h1>
+    <hr>
+    ID : <span sec:authentication="name"></span> <br>
+    소유 권한 : <span sec:authentication="authorities"></span> <br>
+
+    <a sec:authorize="!isAuthenticated()" href="/login">로그인</a> <br>
+    <a sec:authorize="!isAuthenticated()" href="/signup">회원가입</a> <br>
+    <a href="/student">학생 페이지</a> <br>
+    <a href="/professor">교수 페이지</a> <br>
+    <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="GET">
+        <input type="submit" value="로그아웃"/>
+    </form> <br>
+</body>
+</html>
