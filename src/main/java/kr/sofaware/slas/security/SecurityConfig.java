@@ -27,6 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/home", "/", "/login", "/signup").permitAll() //누구나 접근 가능
                     .antMatchers("/student").hasRole("STUDENT") //학생만 접근 가능
                     .antMatchers("/professor").hasRole("PROFESSOR") //교수만 접근 가능
+                    .antMatchers("/s/**").hasRole("STUDENT")
+                    .antMatchers("/p/**").hasRole("PROFESSOR")
                     .anyRequest().authenticated() //나머지는 권한이 있기만 하면 접근 가능
                 .and()
                     .formLogin() //로그인에 대한 설정

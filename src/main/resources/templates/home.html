@@ -17,6 +17,8 @@
     <a sec:authorize="!isAuthenticated()" href="/signup">회원가입</a> <br>
     <a href="/student">학생 페이지</a> <br>
     <a href="/professor">교수 페이지</a> <br>
+    <a sec:authorize="hasRole('STUDENT')" href="/s/timetable">시간표</a> <br>
+    <a sec:authorize="hasRole('PROFESSOR')" href="/p/timetable">시간표</a> <br>
     <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="GET">
         <input type="submit" value="로그아웃"/>
     </form> <br>
