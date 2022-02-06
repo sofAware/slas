@@ -24,6 +24,7 @@ public class Grade implements Serializable {
     @Id
     private int semester;               // 학기
 
+    private String major;               // 학과
     private int ranking;                // 석차
     private double gradeAvg;            // 전체 평점
     private double majorGradeAvg;       // 전공 학점

@@ -8,8 +8,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 public class Student {
-    @Id
-    private int id;             // 학번
+    @Id private String id;             // 학번
 
     private String password;    // 비밀번호
     private String name;        // 이름
