@@ -1,18 +1,18 @@
 package kr.sofaware.slas.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@EqualsAndHashCode
+@IdClass(GradePK.class)
 @Entity
 @Getter
-public class Grade implements Serializable {
+public class Grade {//implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name = "student_id")
@@ -30,20 +30,26 @@ public class Grade implements Serializable {
     private double majorGradeAvg;       // 전공 학점
     private int totalCredit;            // 신청 학점
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(student, year, semester);
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(student, year, semester);
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) return true;
+//        if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj))
+//            return false;
+//
+//        Grade o = (Grade) obj;
+//        return Objects.equals(student, o.getStudent()) &&
+//                Objects.equals(year, o.getYear()) &&
+//                Objects.equals(semester, o.getSemester());
+//    }
+}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj))
-            return false;
-
-        Grade o = (Grade) obj;
-        return Objects.equals(student, o.getStudent()) &&
-                Objects.equals(year, o.getYear()) &&
-                Objects.equals(semester, o.getSemester());
-    }
+class GradePK implements Serializable{
+    private Student student;            // 학생
+    private int year;                   // 년도
+    private int semester;
 }
