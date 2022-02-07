@@ -1,13 +1,19 @@
 package kr.sofaware.slas.entity;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

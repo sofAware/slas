@@ -17,9 +17,9 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 불완전한 객체 생성을 막아주는 역할
 @Entity
 @Getter
-public class Student {
+public class Student implements UserDetails {
     @Id
-    private int id;             // 학번
+    private String id;             // 학번
 
     private String password;    // 비밀번호
     private String name;        // 이름
