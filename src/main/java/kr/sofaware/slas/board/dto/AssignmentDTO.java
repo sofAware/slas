@@ -1,11 +1,12 @@
 package kr.sofaware.slas.board.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class AssignmentDTO extends BoardDTO {
     // 과제 관련 정보
     private Date submitStart;           // 제출 시작일
