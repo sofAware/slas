@@ -1,4 +1,4 @@
-package kr.sofaware.slas.repo;
+package kr.sofaware.slas.repository;
 
 import kr.sofaware.slas.entity.Professor;
 import org.springframework.data.jpa.repository.JpaRepository;

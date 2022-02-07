@@ -20,6 +20,7 @@ import java.util.Set;
 public class Student implements UserDetails {
     @Id
     private String id;             // 학번
+
     private String password;    // 비밀번호
     private String name;        // 이름
     private String major;       // 전공
