@@ -3,54 +3,47 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta th:replace="/frame/head.html :: head">
     <title>공지사항</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: inherit;
-        }
-        th, td {
-            padding: 10px;
-        }
-        tr:nth-child(2n) {
-            background-color: #fafafa;
-        }
-    </style>
 </head>
 <body>
-<h1>공지사항</h1>
-<p>내 이름은 <span th:text="${name}">Name</span>, <span th:text="${role}">Role</span>입니다.</p>
-<hr>
-<h3>우선 지금은 모든 게시글 다 보여줄게.</h3>
-<table>
-    <tr>
-        <th>학정 번호</th>
-        <th>강의 제목</th>
-        <th>글 번호</th>
-        <th>분류</th>
-        <th>조회수</th>
-        <th>등록일</th>
-        <th>작성자</th>
-        <th>제목</th>
-        <th>내용</th>
-        <th>첨부 파일 이름</th>
-        <th>첨부 파일 경로</th>
-    </tr>
+<header th:replace="/frame/header.html :: header"></header>
 
-    <tr th:each="board : ${list}">
-        <td th:text="${board.getSyllabusId()}"></td>
-        <td th:text="${board.getSyllabusName()}"></td>
-        <td th:text="${board.getId()}"></td>
-        <td th:text="${board.getCategory()}"></td>
-        <td th:text="${board.getView()}"></td>
-        <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
-        <td th:text="${board.getAuthor()}"></td>
-        <td th:text="${board.getTitle()}"></td>
-        <td th:text="${board.getContent()}"></td>
-        <td th:text="${board.getAttachmentName()}"></td>
-        <td th:text="${board.getAttachmentPath()}"></td>
-    </tr>
+<h1>공지사항</h1>
+<h3>우선 지금은 모든 게시글 다 보여줌</h3>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>학정 번호</th>
+            <th>강의 제목</th>
+            <th>글 번호</th>
+            <th>분류</th>
+            <th>조회수</th>
+            <th>등록일</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>내용</th>
+            <th>첨부 파일 이름</th>
+            <th>첨부 파일 경로</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="board : ${list}">
+            <th th:text="${board.getSyllabusId()}"></th>
+            <td th:text="${board.getSyllabusName()}"></td>
+            <td th:text="${board.getId()}"></td>
+            <td th:text="${board.getCategory()}"></td>
+            <td th:text="${board.getView()}"></td>
+            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
+            <td th:text="${board.getAuthor()}"></td>
+            <td th:text="${board.getTitle()}"></td>
+            <td th:text="${board.getContent()}"></td>
+            <td th:text="${board.getAttachmentName()}"></td>
+            <td th:text="${board.getAttachmentPath()}"></td>
+        </tr>
+    </tbody>
 </table>
+
+<footer th:replace="/frame/footer.html :: footer"></footer>
 </body>
 </html>

@@ -28,8 +28,8 @@ public class Board implements Serializable {
     private String content;             // 내용
 
     @ManyToOne
-    @JoinColumn(name = "professor_id")
-    private Member member;        // 작성자
+    @JoinColumn(name = "member_id")
+    private Member member;              // 작성자
 
     private Date date;                  // 등록일
     private int view;                   // 조회수

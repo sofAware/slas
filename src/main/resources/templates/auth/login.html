@@ -22,33 +22,40 @@
             <label for="floatingPassword">비밀번호</label>
         </div>
 
-        <div class="container g-0 mb-4">
+        <div class="container g-0 mb-2">
             <div class="row">
-                <div class="col-sm-6">
-                    <span class="float-start"><input type="checkbox" value="remember-me"> 학번 저장</span>
+                <div class="col-6">
+                    <span class="float-start">
+                        <input type="checkbox" id="floatingRemember">
+                        <label for="floatingRemember">학번 저장</label>
+                    </span>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-6">
                     <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
                 </div>
             </div>
         </div>
 
 
-        <button type="submit" class="w-100 btn btn-lg btn-block btn-primary mb-2">로그인</button>
+        <button type="submit" class="w-100 fw-bold btn btn-lg btn-block btn-primary mb-5">로그인</button>
 
         <div class="container g-0">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6 mb-1">
                     <button type="button" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 mb-1">
                     <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
                 </div>
             </div>
         </div>
+
+
+        <button type="button" class="w-100 btn btn-sm btn-secondary">개인정보 처리방침</button>
     </form>
 </main>
 
+<footer th:replace="/frame/footer.html :: footer"></footer>
 <div th:replace="/frame/tail.html :: tail"></div>
 </body>
 </html>
