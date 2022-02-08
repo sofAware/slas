@@ -1,8 +1,9 @@
 package kr.sofaware.slas.board.repository;
 
-import kr.sofaware.slas.auth.entity.Member;
-import kr.sofaware.slas.auth.repository.MemberRepository;
-import kr.sofaware.slas.board.entity.Board;
+import kr.sofaware.slas.entity.Member;
+import kr.sofaware.slas.repository.MemberRepository;
+import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.repository.BoardRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

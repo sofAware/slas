@@ -1,6 +1,6 @@
 package kr.sofaware.slas.auth.dto;
 
-import kr.sofaware.slas.auth.entity.Member;
+import kr.sofaware.slas.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

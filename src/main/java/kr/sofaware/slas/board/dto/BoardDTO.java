@@ -1,6 +1,6 @@
 package kr.sofaware.slas.board.dto;
 
-import kr.sofaware.slas.board.entity.Board;
+import kr.sofaware.slas.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

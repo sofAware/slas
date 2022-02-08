@@ -1,6 +1,6 @@
-package kr.sofaware.slas.auth.repository;
+package kr.sofaware.slas.repository;
 
-import kr.sofaware.slas.auth.entity.Member;
+import kr.sofaware.slas.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

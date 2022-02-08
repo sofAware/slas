@@ -1,4 +1,4 @@
-package kr.sofaware.slas.auth.entity;
+package kr.sofaware.slas.entity;
 
 import kr.sofaware.slas.auth.dto.MemberDTO;
 import lombok.*;

@@ -1,6 +1,5 @@
-package kr.sofaware.slas.quiz.entity;
+package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.syllabus.entity.Syllabus;
 import lombok.*;
 
 import javax.persistence.*;

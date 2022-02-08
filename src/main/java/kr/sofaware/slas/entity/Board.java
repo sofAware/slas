@@ -1,7 +1,5 @@
-package kr.sofaware.slas.board.entity;
+package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.auth.entity.Member;
-import kr.sofaware.slas.syllabus.entity.Syllabus;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;

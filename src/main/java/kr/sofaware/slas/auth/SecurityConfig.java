@@ -15,13 +15,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final MemberService studentService;
+    private final MemberService memberService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
                 .antMatchers("/favicon.ico", "/login", "/signup").permitAll() // 누구나 접근 가능
+                .antMatchers("/p/**").hasRole("ROLE_PROFESSOR")
+                .antMatchers("/s/**").hasRole("ROLE_STUDENT")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
                 .anyRequest().authenticated() //나머지는 로그인만 하면 접근 가능
             .and()
@@ -42,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     // 로그인 시 필요한 정보를 가져오기
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(studentService) // 학생 정보는 userService 에서 가져온다
+        auth.userDetailsService(memberService) // 맴버 정보는 userService 에서 가져온다
                 .passwordEncoder(new BCryptPasswordEncoder()); // 패스워드 인코더는 passwordEncoder(BCrypt 사용)
     }
 }

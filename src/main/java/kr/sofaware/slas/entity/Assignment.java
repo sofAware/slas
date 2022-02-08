@@ -1,6 +1,6 @@
-package kr.sofaware.slas.board.entity;
+package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.syllabus.entity.Syllabus;
+import kr.sofaware.slas.entity.Syllabus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

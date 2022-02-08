@@ -1,8 +1,8 @@
 package kr.sofaware.slas.auth.service;
 
 import kr.sofaware.slas.auth.dto.MemberDTO;
-import kr.sofaware.slas.auth.entity.Member;
-import kr.sofaware.slas.auth.repository.MemberRepository;
+import kr.sofaware.slas.entity.Member;
+import kr.sofaware.slas.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

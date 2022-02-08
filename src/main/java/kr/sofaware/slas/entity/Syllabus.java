@@ -1,6 +1,5 @@
-package kr.sofaware.slas.syllabus.entity;
+package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.auth.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

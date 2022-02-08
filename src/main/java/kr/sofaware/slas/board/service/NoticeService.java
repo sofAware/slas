@@ -1,7 +1,7 @@
 package kr.sofaware.slas.board.service;
 
-import kr.sofaware.slas.board.entity.Board;
-import kr.sofaware.slas.board.repository.BoardRepository;
+import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

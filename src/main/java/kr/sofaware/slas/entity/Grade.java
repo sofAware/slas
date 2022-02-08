@@ -1,6 +1,5 @@
-package kr.sofaware.slas.grade.entity;
+package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.auth.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;

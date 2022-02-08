@@ -1,6 +1,6 @@
 package kr.sofaware.slas.board.service;
 
-import kr.sofaware.slas.board.entity.Board;
+import kr.sofaware.slas.entity.Board;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
