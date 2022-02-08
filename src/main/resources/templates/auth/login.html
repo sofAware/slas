@@ -9,7 +9,7 @@
 </head>
 <body class="text-center">
 
-<main class="form-signin">
+<main>
     <form th:action="@{/login}" method="POST">
         <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
 
@@ -17,20 +17,34 @@
             <input type="text" name="username" class="form-control" id="floatingInput" placeholder=" ">
             <label for="floatingInput">학번</label>
         </div>
-        <div class="form-floating">
+        <div class="form-floating mb-2">
             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder=" ">
             <label for="floatingPassword">비밀번호</label>
         </div>
 
-        <div class="row mb-3 align-items-center">
-            <div class="col-sm-6"><input type="checkbox" value="remember-me"> 학번 저장</div>
-            <button type="button" class="col-sm-6 btn btn-sm btn-secondary">비밀번호 찾기</button>
+        <div class="container g-0 mb-4">
+            <div class="row">
+                <div class="col-sm-6">
+                    <span class="float-start"><input type="checkbox" value="remember-me"> 학번 저장</span>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="w-100 btn btn-lg btn-block btn-primary mb-3">로그인</button>
 
-        <div class="row">
-            <button type="button" class="col-sm-6 btn btn-sm btn-secondary mr-1">학번 조회</button>
-            <button type="button" class="col-sm-6 btn btn-sm btn-secondary ml-1">비밀번호 최초 등록</button>
+
+        <button type="submit" class="w-100 btn btn-lg btn-block btn-primary mb-2">로그인</button>
+
+        <div class="container g-0">
+            <div class="row">
+                <div class="col-sm-6">
+                    <button type="button" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
+                </div>
+            </div>
         </div>
     </form>
 </main>
