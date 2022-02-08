@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>signup page</title>
 </head>
+
 <body>
 <h1>회원가입 페이지</h1>
 <form th:action="@{/signup}" method="POST">
@@ -14,7 +15,7 @@
     password : <input type="password" name="password"> <br>
     name : <input type="text" name="name"> <br>
     major : <input type="text" name="major"> <br>
-    semester : <input type="number" name="semester"> <br>
+    semester : <input type="number" name="semester" id="semester" value="0"> <br>
 
     <input type="radio" name="auth" value="ROLE_PROFESSOR"> Professor
     <input type="radio" name="auth" value="ROLE_STUDENT" checked="checked"> Student <br>

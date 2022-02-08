@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Main Page</title>
+</head>
+
+<body>
+    <div>
+        <h2>SLAS</h2>
+        <span sec:authentication="name"></span>
+        <span th:text="${studentName}"></span>
+
+
+        <form id="logout" th:action="@{/logout}" method="GET">
+            <input type="submit" value="로그아웃"/>
+        </form> <br>
+    </div>
+
+    <a>공지 사항</a><br>
+    <a>Q&A 게시판</a><br>
+    <a>강의 자료 게시판</a><br>
+    <a>강의 영상 게시판</a><br>
+    <a>강의계획서</a><br>
+    <a>출석 체크</a><br>
+    <a>과제 게시판</a><br>
+    <a>퀴즈</a><br>
+    <a>개인정보 조회&수정</a><br>
+
+    <select>
+<!--        <option value="21-2">2021-2</option>-->
+        <!-- 이 사람이 들은 학기들을 받아오기 + 받아서 드롭다운 박스 출력 -->
+
+
+
+
+
+
+        <!-- 해당 학기에 들은 과목들 받아오기 + 표로 출력 -->
+
+
+
+
+    </select>
+
+
+
+
+    <a href="/home">홈으로 이동 -></a>
+</body>
+</html>

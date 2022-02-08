@@ -48,14 +48,6 @@ public class LoginController {
     public String login() {
         return "login";
     }
-    
-    //학생페이지
-    @GetMapping("/student")
-    public String student() { return "student"; }
-
-    //교수페이지
-    @GetMapping("/professor")
-    public String professor() { return "professor"; }
 
     @GetMapping("/logout") // logout by GET 요청
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
