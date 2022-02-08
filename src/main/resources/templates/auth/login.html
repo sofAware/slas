@@ -11,7 +11,7 @@
 
 <main class="form-signin">
     <form th:action="@{/login}" method="POST">
-        <img class="mb-4" src="/favicon.png" alt="" width="72" height="57">
+        <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
 
         <div class="form-floating">
             <input type="text" name="username" class="form-control" id="floatingInput" placeholder=" ">
@@ -22,12 +22,16 @@
             <label for="floatingPassword">비밀번호</label>
         </div>
 
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> 학번 저장
-            </label>
+        <div class="row mb-3 align-items-center">
+            <div class="col-sm-6"><input type="checkbox" value="remember-me"> 학번 저장</div>
+            <button type="button" class="col-sm-6 btn btn-sm btn-secondary">비밀번호 찾기</button>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
+        <button type="submit" class="w-100 btn btn-lg btn-block btn-primary mb-3">로그인</button>
+
+        <div class="row">
+            <button type="button" class="col-sm-6 btn btn-sm btn-secondary mr-1">학번 조회</button>
+            <button type="button" class="col-sm-6 btn btn-sm btn-secondary ml-1">비밀번호 최초 등록</button>
+        </div>
     </form>
 </main>
 
