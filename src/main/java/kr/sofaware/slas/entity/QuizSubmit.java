@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "quiz_submit")
 @IdClass(QuizSubmitPK.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

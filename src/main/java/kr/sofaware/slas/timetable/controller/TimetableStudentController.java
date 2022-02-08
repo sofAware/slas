@@ -1,6 +1,6 @@
 package kr.sofaware.slas.timetable.controller;
 
-import kr.sofaware.slas.lecture.service.LectureService;
+import kr.sofaware.slas.timetable.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Getter
+@ToString
 @IdClass(GradePK.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
