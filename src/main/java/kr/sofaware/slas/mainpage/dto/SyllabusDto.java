@@ -1,13 +1,9 @@
-package kr.sofaware.slas.dto;
+package kr.sofaware.slas.mainpage.dto;
 
-import kr.sofaware.slas.entity.Professor;
 import kr.sofaware.slas.entity.Syllabus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Getter
 @Setter

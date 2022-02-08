@@ -1,16 +1,14 @@
-package kr.sofaware.slas.service;
+package kr.sofaware.slas.mainpage.service;
 
-import kr.sofaware.slas.dto.StudentDto;
+import kr.sofaware.slas.mainpage.dto.StudentDto;
 import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Student;
-import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.repo.LectureRepository;
-import kr.sofaware.slas.repo.StudentRepository;
+import kr.sofaware.slas.repository.LectureRepository;
+import kr.sofaware.slas.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor

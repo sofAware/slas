@@ -1,7 +1,7 @@
 package kr.sofaware.slas.controller;
 
-import kr.sofaware.slas.dto.ProfessorDto;
-import kr.sofaware.slas.dto.StudentDto;
+import kr.sofaware.slas.mainpage.dto.ProfessorDto;
+import kr.sofaware.slas.mainpage.dto.StudentDto;
 import kr.sofaware.slas.service.ProfessorService;
 import kr.sofaware.slas.service.StudentService;
 import lombok.RequiredArgsConstructor;

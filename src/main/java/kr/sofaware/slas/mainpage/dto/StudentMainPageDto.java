@@ -1,4 +1,4 @@
-package kr.sofaware.slas.dto;
+package kr.sofaware.slas.mainpage.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

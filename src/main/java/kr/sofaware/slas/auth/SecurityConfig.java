@@ -1,4 +1,4 @@
-package kr.sofaware.slas.security;
+package kr.sofaware.slas.auth;
 
 import kr.sofaware.slas.service.ProfessorService;
 import kr.sofaware.slas.service.StudentService;

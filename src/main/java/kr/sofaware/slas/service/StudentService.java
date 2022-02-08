@@ -1,8 +1,8 @@
 package kr.sofaware.slas.service;
 
-import kr.sofaware.slas.dto.StudentDto;
+import kr.sofaware.slas.mainpage.dto.StudentDto;
 import kr.sofaware.slas.entity.Student;
-import kr.sofaware.slas.repo.StudentRepository;
+import kr.sofaware.slas.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

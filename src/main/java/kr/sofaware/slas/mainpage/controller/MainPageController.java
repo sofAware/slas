@@ -1,9 +1,9 @@
-package kr.sofaware.slas.controller;
+package kr.sofaware.slas.mainpage.controller;
 
-import kr.sofaware.slas.dto.StudentDto;
+import kr.sofaware.slas.mainpage.dto.StudentDto;
 import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.service.ProfessorService;
-import kr.sofaware.slas.service.StudentMainPageService;
+import kr.sofaware.slas.mainpage.service.StudentMainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
