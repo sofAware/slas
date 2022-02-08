@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member implements UserDetails {
