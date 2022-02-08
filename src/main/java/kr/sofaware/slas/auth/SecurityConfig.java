@@ -22,8 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/favicon.ico", "/login", "/signup").permitAll() // 누구나 접근 가능
-                .antMatchers("/p/**").hasRole("ROLE_PROFESSOR")
-                .antMatchers("/s/**").hasRole("ROLE_STUDENT")
+                .antMatchers("/p/**").hasRole("PROFESSOR")
+                .antMatchers("/s/**").hasRole("STUDENT")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
                 .anyRequest().authenticated() //나머지는 로그인만 하면 접근 가능
             .and()

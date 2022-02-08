@@ -33,7 +33,7 @@ public class TimetableStudentController {
         model.addAttribute("auth",auth);
 
         //lecture service
-        model.addAttribute("lectures", lectureService.findAll());
+        //model.addAttribute("lectures", lectureService.findAll());
 
         return "timetable";
     }
