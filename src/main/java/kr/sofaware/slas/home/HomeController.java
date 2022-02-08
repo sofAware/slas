@@ -8,12 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class HomeController {
     @GetMapping("/")
-    public String defaultUrl() {
-        return "home";
-    }
-
-    @GetMapping("/home")
     public String home() {
-        return "home";
+        return "home/home";
     }
 }

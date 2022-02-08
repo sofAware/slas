@@ -3,6 +3,7 @@ package kr.sofaware.slas.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Syllabus {
@@ -28,5 +30,5 @@ public class Syllabus {
 
     @ManyToOne
     @JoinColumn(name = "professor_id")
-    private Professor professor;    // 담당교수
+    private Member professor;    // 담당교수
 }

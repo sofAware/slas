@@ -1,13 +1,16 @@
 package kr.sofaware.slas.entity;
 
-import lombok.Getter;
-
+import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Getter
+@Builder
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +27,8 @@ public class Board implements Serializable {
     private String content;             // 내용
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;            // 학생
-
-    @ManyToOne
-    @JoinColumn(name = "professor_id")
-    private Professor professor;        // 교수
+    @JoinColumn(name = "member_id")
+    private Member member;              // 작성자
 
     private Date date;                  // 등록일
     private int view;                   // 조회수

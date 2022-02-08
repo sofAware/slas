@@ -9,5 +9,4 @@ public class SlasApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SlasApplication.class, args);
 	}
-
 }

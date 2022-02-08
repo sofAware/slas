@@ -1,9 +1,7 @@
 package kr.sofaware.slas.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import kr.sofaware.slas.auth.dto.MemberDTO;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,43 +12,44 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 불완전한 객체 생성을 막아주는 역할
 @Entity
 @Getter
-public class Professor implements UserDetails {
-    @Id
-    private String id;         // 교수 학번
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class Member implements UserDetails {
+    public static String ROLE_STUDENT = "ROLE_STUDENT";
+    public static String ROLE_PROFESSOR = "ROLE_PROFESSOR";
 
+    @Id
+    private String id;          // 학번 또는 교번
     private String password;    // 비밀번호
     private String name;        // 이름
     private String major;       // 전공
-    private String auth;        // 역할
+    private int semester;       // 학기
 
-    @Builder
-    public Professor(String id, String password, String name, String major, String auth){
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.major = major;
-        this.auth = auth;
+    private String role;        // 역할
+
+    public static Member from(MemberDTO memberDTO) {
+        return new Member(
+                memberDTO.getId(),
+                memberDTO.getPassword(),
+                memberDTO.getName(),
+                memberDTO.getMajor(),
+                memberDTO.getSemester(),
+                memberDTO.getRole());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority(auth));
+        roles.add(new SimpleGrantedAuthority(role));
         return roles;
     }
 
-    //Unique Value
     @Override
     public String getUsername() {
-        return this.id;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
+        return id;
     }
 
     @Override

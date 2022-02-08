@@ -1,20 +1,66 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>login page</title>
+    <meta th:replace="/frame/head.html :: head">
+    <title>소파대학교 로그인</title>
+    <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
-<body>
-<h1>Login</h1> <hr>
-<form th:action="@{/login_proc}" method="POST">
-    id : <input type="text" name="username"> <br>
-    password : <input type="password" name="password"> <br>
-    <button type="submit">Login</button>
-</form> <br>
+<body class="text-center">
 
-<a href="/signup">회원가입 하기 -></a>
+<!-- section -->
+<main>
+    <form th:action="@{/login}" method="POST">
+        <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
+
+        <div class="form-floating">
+            <input type="text" name="username" class="form-control" id="floatingInput" placeholder=" ">
+            <label for="floatingInput">학번</label>
+        </div>
+        <div class="form-floating mb-2">
+            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder=" ">
+            <label for="floatingPassword">비밀번호</label>
+        </div>
+
+        <div class="container g-0 mb-2">
+            <div class="row">
+                <div class="col-6">
+                    <span class="float-start">
+                        <input type="checkbox" id="floatingRemember">
+                        <label for="floatingRemember">학번 저장</label>
+                    </span>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="w-100 fw-bold btn btn-lg btn-block btn-primary mb-5">로그인</button>
+
+        <div class="container g-0">
+            <div class="row">
+                <div class="col-sm-6 mb-1">
+                    <button type="button" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
+                </div>
+                <div class="col-sm-6 mb-1">
+                    <button type="button" id="signup" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="button" class="w-100 btn btn-sm btn-secondary">개인정보 처리방침</button>
+    </form>
+</main>
+
+<!-- footer -->
+<footer th:replace="/frame/footer.html :: footer"></footer>
+
+<!-- tail -->
+<div th:replace="/frame/tail.html :: tail"></div>
+<script type="text/javascript" th:src="@{/js/login.js}"></script>
 </body>
 </html>

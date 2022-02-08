@@ -1,12 +1,16 @@
 package kr.sofaware.slas.entity;
 
-import lombok.Getter;
+import kr.sofaware.slas.entity.Syllabus;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Assignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
