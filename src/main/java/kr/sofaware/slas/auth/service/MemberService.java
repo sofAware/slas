@@ -22,6 +22,10 @@ public class MemberService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(id));
     }
 
+    public boolean isUserExist(String id) {
+        return userRepository.findById(id).isPresent();
+    }
+
     @Transactional
     public String save(MemberDTO memberDTO) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

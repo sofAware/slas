@@ -11,7 +11,7 @@ public class MemberDTO {
     private String password;    // 비밀번호
     private String name;        // 이름
     private String major;       // 전공
-    private int semester;       // 학기
+    private Integer semester;       // 학기
 
     private String role;        // 권한
 

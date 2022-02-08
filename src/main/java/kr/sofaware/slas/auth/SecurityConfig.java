@@ -20,19 +20,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                    .antMatchers("/favicon.ico", "/login", "/signup").permitAll() // 누구나 접근 가능
-                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
-                    .anyRequest().authenticated() //나머지는 로그인만 하면 접근 가능
-                .and()
-                    .formLogin() //로그인에 대한 설정
-                    .loginPage("/login")// 로그인 페이지 링크
-                    .loginProcessingUrl("/login")//로그인 HTML에서 SUBMIT POST 요청시
-                    .defaultSuccessUrl("/")//로그인 성공시 연결되는 주소
-                .and()
-                    .logout() // 로그아웃 관련 설정
-                    .logoutSuccessUrl("/login") // 로그아웃 성공시 연결되는 주소
-                    .invalidateHttpSession(true) // 로그아웃시 저장해 둔 세션 날리기
+            .authorizeRequests()
+                .antMatchers("/favicon.ico", "/login", "/signup").permitAll() // 누구나 접근 가능
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
+                .anyRequest().authenticated() //나머지는 로그인만 하면 접근 가능
+            .and()
+                .formLogin() //로그인에 대한 설정
+                .loginPage("/login")// 로그인 페이지 링크
+                .loginProcessingUrl("/login")//로그인 HTML에서 SUBMIT POST 요청시
+                .defaultSuccessUrl("/")//로그인 성공시 연결되는 주소
+            .and()
+                .logout() // 로그아웃 관련 설정
+                .logoutSuccessUrl("/login") // 로그아웃 성공시 연결되는 주소
+                .invalidateHttpSession(true) // 로그아웃시 저장해 둔 세션 날리기
+            .and()
+                .csrf() //회원가입은 /login 에서 이뤄지므로 /signup 으로 post 날라오면
+                .ignoringAntMatchers("/signup") // csrf 비활성화
         ;
     }
 
