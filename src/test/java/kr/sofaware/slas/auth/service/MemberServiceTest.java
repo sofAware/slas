@@ -12,9 +12,4 @@ class MemberServiceTest {
         this.memberRepository = memberRepository;
         this.boardRepository = boardRepository;
     }
-
-    @Test
-    public void foreignKeyTest() {
-
-    }
 }
