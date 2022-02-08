@@ -28,6 +28,6 @@ public class TimetableProfessorController {
         model.addAttribute("auth", auth);
 
 
-        return "timetable";
+        return "timetable/timetable";
     }
 }

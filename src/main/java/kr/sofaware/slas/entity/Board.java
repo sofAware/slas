@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Entity
 @Getter
+@ToString
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

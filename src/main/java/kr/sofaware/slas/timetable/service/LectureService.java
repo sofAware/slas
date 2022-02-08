@@ -1,4 +1,4 @@
-package kr.sofaware.slas.lecture.service;
+package kr.sofaware.slas.timetable.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
