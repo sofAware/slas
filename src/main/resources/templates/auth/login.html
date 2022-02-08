@@ -5,10 +5,11 @@
 <head>
     <meta th:replace="/frame/head.html :: head">
     <title>소파대학교 로그인</title>
-    <link href="/css/login.css" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body class="text-center">
 
+<!-- section -->
 <main>
     <form th:action="@{/login}" method="POST">
         <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
@@ -45,7 +46,7 @@
                     <button type="button" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
                 </div>
                 <div class="col-sm-6 mb-1">
-                    <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
+                    <button type="button" id="signup" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
                 </div>
             </div>
         </div>
@@ -55,7 +56,14 @@
     </form>
 </main>
 
+<!-- footer -->
 <footer th:replace="/frame/footer.html :: footer"></footer>
+
+<!-- alert -->
+
+
+<!-- tail -->
 <div th:replace="/frame/tail.html :: tail"></div>
+<script type="text/javascript" th:src="@{/js/login.js}"></script>
 </body>
 </html>
