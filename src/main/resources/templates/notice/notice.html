@@ -29,13 +29,13 @@
     </thead>
     <tbody>
         <tr th:each="board : ${list}">
-            <th th:text="${board.getSyllabusId()}"></th>
-            <td th:text="${board.getSyllabusName()}"></td>
+            <th th:text="${board.getSyllabus().getId()}"></th>
+            <td th:text="${board.getSyllabus().getName()}"></td>
             <td th:text="${board.getId()}"></td>
             <td th:text="${board.getCategory()}"></td>
             <td th:text="${board.getView()}"></td>
             <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
-            <td th:text="${board.getAuthor()}"></td>
+            <td th:text="${board.getMember().getName()}"></td>
             <td th:text="${board.getTitle()}"></td>
             <td th:text="${board.getContent()}"></td>
             <td th:text="${board.getAttachmentName()}"></td>

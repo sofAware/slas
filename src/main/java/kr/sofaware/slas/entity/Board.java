@@ -9,6 +9,7 @@ import java.util.Date;
 @Getter
 @ToString
 @Builder
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board implements Serializable {

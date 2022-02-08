@@ -21,7 +21,7 @@ function signup() {
 `,
         confirmButtonText: '등록',
         showCloseButton: true,
-        focusConfirm: false,
+        focusConfirm: true,
         preConfirm: () => {
             const radPro = Swal.getPopup().querySelector('#professor');
             const radStd = Swal.getPopup().querySelector('#student');
