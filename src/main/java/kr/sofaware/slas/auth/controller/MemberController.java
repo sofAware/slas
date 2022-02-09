@@ -1,7 +1,7 @@
 package kr.sofaware.slas.auth.controller;
 
 import kr.sofaware.slas.auth.dto.MemberDTO;
-import kr.sofaware.slas.auth.dto.SignupResDTO;
+import kr.sofaware.slas.auth.dto.AuthDTO;
 import kr.sofaware.slas.auth.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -36,12 +36,12 @@ public class MemberController {
     // 회원가입 요청
     @PostMapping("/signup")
     @ResponseBody
-    public SignupResDTO postSignup(@RequestBody MemberDTO memberDTO) {
+    public AuthDTO postSignup(@RequestBody MemberDTO memberDTO) {
         if (memberService.isUserExist(memberDTO.getId())) {
-            return new SignupResDTO(false, "이미 등록된 학번 입니다.<br>" + memberDTO.getId());
+            return new AuthDTO(false, "이미 등록된 학번 입니다.<br>" + memberDTO.getId());
         } else {
             memberService.save(memberDTO);
-            return new SignupResDTO(true, "");
+            return new AuthDTO(true, "");
         }
     }
 

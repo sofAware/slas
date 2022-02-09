@@ -10,14 +10,10 @@
 <body>
 <header th:replace="/frame/header.html :: header"></header>
 
-    ID : <span sec:authentication="name"></span> <br>
-    소유 권한 : <span sec:authentication="authorities"></span> <br>
-
-    <a href="/notice">공지사항</a> <br>
-
-    <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="GET">
-        <input type="submit" value="로그아웃"/>
-    </form> <br>
+<section class="d-flex align-items-center justify-content-center flex-column pt-40">
+    <h1>학번 : <h2 sec:authentication="name"></h2></h1>
+    <h1>권한 : <h2 sec:authentication="authorities"></h2></h1>
+</section>
 
 <footer th:replace="/frame/footer.html :: footer"></footer>
 </body>

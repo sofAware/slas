@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupResDTO {
+public class AuthDTO {
     private Boolean success;
     private String message;
 }
