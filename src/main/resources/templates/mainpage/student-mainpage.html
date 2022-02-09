@@ -5,6 +5,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Student Main Page</title>
 </head>
 
@@ -12,7 +14,7 @@
     <div>
         <h2>SLAS</h2>
         <span sec:authentication="name"></span>
-        <span th:text="${studentName}"></span>
+        <span th:text="${studentMainPageDto.name}"></span>
 
 
         <form id="logout" th:action="@{/logout}" method="GET">
@@ -30,25 +32,39 @@
     <a>퀴즈</a><br>
     <a>개인정보 조회&수정</a><br>
 
-    <select>
-<!--        <option value="21-2">2021-2</option>-->
-        <!-- 이 사람이 들은 학기들을 받아오기 + 받아서 드롭다운 박스 출력 -->
+    <!-- 년도, 학기 드롭다운 박스 출력 -->
+        <select id="year" th:name="year">
+            <option th:each="year : ${#numbers.sequence(studentMainPageDto.getAdmissionYear(),studentMainPageDto.getYear())}"
+                    th:value="${year}"
+                    th:utext="${year+' 년도'}"
+                    th:selected="${year eq studentMainPageDto.admissionYear}">
+            </option>
+        </select>
+
+        <select id="semester" th:name="semester">
+            <option th:each="semester : ${#numbers.sequence(1,2)}"
+                    th:value="${semester}"
+                    th:utext="${semester+' 학기'}"
+                    th:selected="${semester eq 1}">
+            </option>
+        </select>
+
+    <button type="button" id="btn-request" onclick="selectBoxRequest();">조회</button>
+
+    <a>${#dates.month(date)}</a>
 
 
 
 
+    <!-- 해당 학기에 들은 과목들 시간표로 출력 -->
 
-
-        <!-- 해당 학기에 들은 과목들 받아오기 + 표로 출력 -->
-
-
-
-
-    </select>
 
 
 
 
     <a href="/home">홈으로 이동 -></a>
+
+    <div th:replace="/frame/tail.html :: tail"></div>
+    <script type="text/javascript" th:src="@{/js/mainpage/mainpage.js}"></script>
 </body>
 </html>

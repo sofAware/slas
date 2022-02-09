@@ -6,6 +6,6 @@ import java.io.Serializable;
 
 @EqualsAndHashCode
 public class LecturePK implements Serializable {
-    private Student student;
+    private Member student;
     private Syllabus syllabus;
 }

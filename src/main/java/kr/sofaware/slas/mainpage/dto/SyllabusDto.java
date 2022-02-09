@@ -1,5 +1,6 @@
 package kr.sofaware.slas.mainpage.dto;
 
+import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.entity.Syllabus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

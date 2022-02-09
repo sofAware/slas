@@ -25,8 +25,8 @@ public class Lecture implements Serializable {
     private double grade;                  // 학점
 }
 
-@EqualsAndHashCode
-class LecturePK implements Serializable{
-    private Member student;            // 학생
-    private Syllabus syllabus;          // 강의
-}
+//@EqualsAndHashCode
+//class LecturePK implements Serializable{
+//    private Member student;            // 학생
+//    private Syllabus syllabus;          // 강의
+//}
