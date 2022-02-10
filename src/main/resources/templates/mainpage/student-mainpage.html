@@ -8,6 +8,23 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Student Main Page</title>
+
+    <!--시간표 출력 style-->
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+            width : 100px;
+            height: 40px;
+        }
+        th, td {
+            padding: 5px;
+        }
+        th {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,13 +48,15 @@
     <a>과제 게시판</a><br>
     <a>퀴즈</a><br>
     <a>개인정보 조회&수정</a><br>
+    <a href="/home">홈으로 이동 -></a><br>
 
     <!-- 년도, 학기 드롭다운 박스 출력 -->
+    <form th:action="@{/student}" method="POST" th:id="selectBox">
         <select id="year" th:name="year">
             <option th:each="year : ${#numbers.sequence(studentMainPageDto.getAdmissionYear(),studentMainPageDto.getYear())}"
                     th:value="${year}"
                     th:utext="${year+' 년도'}"
-                    th:selected="${year eq studentMainPageDto.admissionYear}">
+                    th:selected="${year eq studentMainPageDto.year}">
             </option>
         </select>
 
@@ -45,26 +64,79 @@
             <option th:each="semester : ${#numbers.sequence(1,2)}"
                     th:value="${semester}"
                     th:utext="${semester+' 학기'}"
-                    th:selected="${semester eq 1}">
+                    th:selected="${semester eq studentMainPageDto.semester}">
             </option>
         </select>
+    </form>
 
-    <button type="button" id="btn-request" onclick="selectBoxRequest();">조회</button>
-
-    <a>${#dates.month(date)}</a>
-
-
+    <button type="submit" id="btn-request" th:form="selectBox">조회</button>
 
 
     <!-- 해당 학기에 들은 과목들 시간표로 출력 -->
+    <!-- 해당 학기에 들은 시간표가 있는 경우 => studentMainPageDto 의 cellDtoList 를 바탕으로 출력하면 됨  -->
+    <!-- 해당 학기에 들은 시간표가 없는 경우 => 그냥 빈 테이블 출력  -->
+    <table style="width:50%; height:50%;">
+        <caption th:text="${studentMainPageDto.year+' 년도 '+studentMainPageDto.semester+' 학기 시간표'}"></caption>
+        <tr>
+            <th> </th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+        </tr>
+        <tr>
+            <th>1교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(0).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(0).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(0).get(num).cellSpan}"></td>
+        </tr>
+        <tr>
+            <th>2교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(1).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(1).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(1).get(num).cellSpan}"></td>
+        </tr>
+        <tr>
+            <th>3교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(2).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(2).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(2).get(num).cellSpan}"></td>
+        </tr>
+        <tr>
+            <th>4교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(3).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(3).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(3).get(num).cellSpan}"></td>
+        </tr>
+        <tr>
+            <th>5교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(4).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(4).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(4).get(num).cellSpan}"></td>
+        </tr>
+        <tr>
+            <th>6교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(5).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(5).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(5).get(num).cellSpan}"></td>
+        </tr>
+        <tr>
+            <th>7교시</th>
+            <!-- 들은 강의들이 없는 경우 -->
+            <td th:if="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+            <!-- 들은 강의들이 있는 경우 -->
+            <td th:unless="${studentMainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.cellDtoList.get(6).size()-1)}" th:utext="${studentMainPageDto.cellDtoList.get(6).get(num).lectureName}" th:rowspan="${studentMainPageDto.cellDtoList.get(6).get(num).cellSpan}"></td>
+        </tr>
+    </table>
 
-
-
-
-
-    <a href="/home">홈으로 이동 -></a>
 
     <div th:replace="/frame/tail.html :: tail"></div>
-    <script type="text/javascript" th:src="@{/js/mainpage/mainpage.js}"></script>
 </body>
 </html>

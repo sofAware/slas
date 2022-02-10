@@ -33,10 +33,9 @@ public class StudentMainPageService {
         List<SyllabusDto> syllabusDtoList=new ArrayList<>();
 
         List<Lecture> lectureList=lectureRepository.findByIdAndYearSemester(id,yearSemester);
+
         lectureList.forEach(lecture -> syllabusDtoList.add(new SyllabusDto(lecture.getSyllabus())));
 
         return syllabusDtoList;
     }
-
-
 }
