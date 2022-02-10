@@ -4,21 +4,21 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta th:replace="/frame/head.html :: head">
+    <meta th:replace="/frame/head.html">
     <title>Title</title>
 </head>
 <body>
-<header th:replace="/frame/header.html :: header"></header>
+<header th:replace="/frame/sHeader.html"></header>
 
-    ID : <span sec:authentication="name"></span> <br>
-    소유 권한 : <span sec:authentication="authorities"></span> <br>
+<section class="d-flex align-items-center justify-content-center flex-column pt-40">
+    <h3>나는 말이야</h3>
+    <p>학번 : <span sec:authentication="name"></span></p>
+    <p>권한 : <span sec:authentication="authorities"></span></p>
+    <p>이름 : <span th:text="${member.getName()}"></span></p>
+    <p>전공 : <span th:text="${member.getMajor()}"></span></p>
+</section>
 
-    <a href="/notice">공지사항</a> <br>
-
-    <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="GET">
-        <input type="submit" value="로그아웃"/>
-    </form> <br>
-
-<footer th:replace="/frame/footer.html :: footer"></footer>
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
 </body>
 </html>

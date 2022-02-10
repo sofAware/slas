@@ -12,6 +12,12 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board implements Serializable {
+    public static final int CATEGORY_NOTICE = 1;       // 공지사항
+    public static final int CATEGORY_FILES = 2;        // 강의자료
+    public static final int CATEGORY_VIDEO = 3;        // 강의영상
+    public static final int CATEGORY_ASSIGNMENT = 4;   // 과제
+    public static final int CATEGORY_QNA = 5;          // 질문
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;                 // 글 고유 번호

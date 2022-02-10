@@ -1,6 +1,6 @@
 package kr.sofaware.slas.timetable.controller;
 
-import kr.sofaware.slas.timetable.service.LectureService;
+//import kr.sofaware.slas.timetable.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,8 +18,8 @@ import java.util.Collection;
 @RequestMapping("/s")
 public class TimetableStudentController {
 
-    @Autowired
-    private final LectureService lectureService;
+//    @Autowired
+//    private final LectureService lectureService;
 
     @GetMapping("timetable")
     public String getStudentTimetable(Authentication authentication, Principal principal, Model model){

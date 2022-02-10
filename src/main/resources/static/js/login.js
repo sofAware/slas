@@ -1,3 +1,7 @@
+const btnFindId = document.querySelector('#findId');
+const btnFindPw = document.querySelector('#findPw');
+const btnSignup = document.querySelector('#signup');
+
 // 회원 가입 창 시작
 function signup() {
     Swal.fire({
@@ -50,9 +54,9 @@ function signup() {
             body: JSON.stringify(result.value)
         }).then(res => {
             return res.json();
-        }).then(json => {
+        }).then(body => {
             // 완료 메세지
-            if (json.success) {
+            if (body.success) {
                 Swal.fire(
                     `${result.value.name}님 환영합니다!`,
                     `학번: ${result.value.id}`,
@@ -61,7 +65,7 @@ function signup() {
             } else {
                 Swal.fire(
                     `사용자 등록에 실패하였습니다.`,
-                    json.message,
+                    body.message,
                     'error'
                 );
             }
@@ -70,10 +74,37 @@ function signup() {
 }
 
 // 회원 가입 버튼 이벤트 등록
-const btnSignup = document.querySelector('#signup');
 btnSignup.addEventListener('click', signup);
 
 // 회원 가입 리디렉션 감지
 if (new URL(window.location).hash === "#signup") {
     signup();
 }
+
+// 로그인 이벤트
+document.forms['login'].addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    Swal.fire({
+        title: "로그인 중",
+        timer: 100000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+            Swal.stopTimer();
+        },
+    });
+
+    fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target))
+    }).then((res) => {
+        if (res.ok) {
+            location.href = "/";
+        } else {
+            Swal.fire(`로그인에 실패하였습니다.`, '', 'error');
+        }
+    }).then((body) => {
+
+    })
+});
