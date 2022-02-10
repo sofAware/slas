@@ -1,4 +1,4 @@
-package kr.sofaware.slas.board.service;
+package kr.sofaware.slas.service;
 
 import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.repository.BoardRepository;
@@ -38,6 +38,11 @@ public class NoticeService implements BoardService {
     @Override
     public List<Board> listAll() {
         return boardRepository.findAll();
+    }
+
+    @Override
+    public List<Board> listAll(String SyllabusId) {
+        return boardRepository.findAllByCategoryAndSyllabus_Id(Board.CATEGORY_NOTICE, SyllabusId);
     }
 
     @Override

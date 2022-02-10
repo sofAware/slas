@@ -1,6 +1,6 @@
 package kr.sofaware.slas.auth;
 
-import kr.sofaware.slas.auth.service.MemberService;
+import kr.sofaware.slas.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 인가 거부 핸들링 필드
     private AccessDeniedHandler accessDeniedHandler = (request, response, accessDeniedException) -> {
-        System.out.println("authException = " + accessDeniedException);
         response.sendError(HttpStatus.FORBIDDEN.value());
     };
 

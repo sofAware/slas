@@ -1,6 +1,6 @@
-package kr.sofaware.slas.auth.service;
+package kr.sofaware.slas.service;
 
-import kr.sofaware.slas.auth.dto.MemberDTO;
+import kr.sofaware.slas.auth.MemberDto;
 import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +18,16 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository userRepository;
 
     @Override
-    public Member loadUserByUsername(String id) throws UsernameNotFoundException {
+    public Member loadUserByUsername(String id) {
         return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(id));
     }
 
     public boolean isUserExist(String id) {
-        return userRepository.findById(id).isPresent();
+        return userRepository.existsById(id);
     }
 
     @Transactional
-    public String save(MemberDTO memberDTO) {
+    public String save(MemberDto memberDTO) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         memberDTO.setPassword(encoder.encode(memberDTO.getPassword())); //패스워드 인코딩
 

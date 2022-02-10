@@ -1,4 +1,4 @@
-package kr.sofaware.slas.auth.dto;
+package kr.sofaware.slas.auth;
 
 import kr.sofaware.slas.entity.Member;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MemberDTO {
+public class MemberDto {
     private String id;          // 학번 또는 교번
     private String password;    // 비밀번호
     private String name;        // 이름
@@ -15,8 +15,8 @@ public class MemberDTO {
 
     private String role;        // 권한
 
-    public static MemberDTO from(Member member) {
-        return new MemberDTO(
+    public static MemberDto from(Member member) {
+        return new MemberDto(
                 member.getId(),
                 member.getPassword(),
                 member.getName(),
