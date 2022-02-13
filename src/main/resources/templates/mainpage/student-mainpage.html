@@ -137,6 +137,25 @@
     </table>
 
 
+    <!--    수강과목들 보여주기-->
+    <div th:if="${studentMainPageDto.noLectures eq false}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.getSyllabusDtoList().size()-1)}">
+        <h3 th:text="${studentMainPageDto.getSyllabusDtoList().get(num).name}"></h3>                <!-- num 번째 syllabusDto 를 get 해서 .name 으로 과목이름 가져옴 -->
+        <a>공지 사항 바로가기</a><br>
+        <a>Q&A 게시판 바로가기 </a><br>
+        <a>강의 자료 게시판 바로가기</a><br>
+        <a>강의 영상 게시판 바로가기</a><br>
+
+        <h4>최신 공지사항</h4>
+        <div th:each="i : ${#numbers.sequence(0,studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().size()-1)}">
+            <a th:text="${studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getYear()+1900+'-'+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getMonth()+'-'+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getDay()+' '+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}"></a> <br>
+        </div>
+
+        <h4>남은 강의</h4>
+
+        <h4>남은 과제</h4>
+    </div>
+
+
     <div th:replace="/frame/tail.html :: tail"></div>
 </body>
 </html>
