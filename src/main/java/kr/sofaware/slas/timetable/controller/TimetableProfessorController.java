@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -28,6 +26,6 @@ public class TimetableProfessorController {
         model.addAttribute("auth", auth);
 
 
-        return "timetable/timetable";
+        return "timetable/pTimetable";
     }
 }

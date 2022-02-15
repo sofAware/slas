@@ -1,9 +1,6 @@
 package kr.sofaware.slas.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +9,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,5 +32,22 @@ public class Syllabus {
 
     public static String formatYearSemester(String yearSemester) {
         return String.format("20%s년도 %c학기", yearSemester.substring(0, 2), yearSemester.charAt(3));
+    }
+
+    public static int formatDayToInt(String dayOfWeek){
+        if("MON".equals(dayOfWeek))
+            return 0;
+        else if("TUE".equals(dayOfWeek))
+            return 1;
+        else if("WED".equals(dayOfWeek))
+            return 2;
+        else if("THU".equals(dayOfWeek))
+            return 3;
+        else if("FRI".equals(dayOfWeek))
+            return 4;
+        else if("SAT".equals(dayOfWeek))
+            return 5;
+        else
+            return -1;
     }
 }

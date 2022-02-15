@@ -48,6 +48,7 @@ public class NoticeStudentController {
 
         Map<String, String> formatYS = new TreeMap<>(Collections.reverseOrder());
         lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
+
         // 학기 선택 리스트
         model.addAttribute("mapYS", formatYS);
         model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));

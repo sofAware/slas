@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 기본 인가 범위
                 .authorizeRequests()
-                .antMatchers("/login", "/signup").permitAll() // 누구나 접근 가능
+                .antMatchers("/", "/login", "/signup").permitAll() // 누구나 접근 가능
                 .antMatchers("/p/**").hasRole("PROFESSOR")
                 .antMatchers("/s/**").hasRole("STUDENT")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 
@@ -17,6 +18,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, Principal principal) {
+
+        if(principal == null)
+            return "redirect:/login";
+
         Member member = memberService.loadUserByUsername(principal.getName());
 
         model.addAttribute("member", member);
