@@ -13,16 +13,19 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class AssignmentDto {
+    int id;                             // 과제 id
     String name;                        // 과제 이름
-    Date submitEnd;                    // 과제 제출 날짜
+    Date submitEnd;                     // 과제 제출 날짜
 
     @Builder
-    public AssignmentDto(String name, Date submitEnd){
-       this.name=name;
-       this.submitEnd=submitEnd;
+    public AssignmentDto(int id, String name, Date submitEnd){
+        this.id=id;
+        this.name=name;
+        this.submitEnd=submitEnd;
     }
 
-    public AssignmentDto(Assignment entity){         // board entity 로부터 noticeDto 를 생성
+    public AssignmentDto(Assignment entity){         // assignment entity 로부터 assignmentDto 를 생성
+        this.id=entity.getId();
         this.name=entity.getName();
         this.submitEnd=entity.getSubmitEnd();
     }

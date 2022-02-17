@@ -51,9 +51,9 @@
     <a href="/home">홈으로 이동 -></a><br>
 
     <!-- 년도, 학기 드롭다운 박스 출력 -->
-    <form th:action="@{/student}" method="POST" th:id="selectBox">
+    <form th:action="@{/s/main}" method="POST" th:id="selectBox">
         <select id="year" th:name="year">
-            <option th:each="year : ${#numbers.sequence(studentMainPageDto.getAdmissionYear(),studentMainPageDto.getYear())}"
+            <option th:each="year : ${#numbers.sequence(studentMainPageDto.getAdmissionYear(),#calendars.format(#calendars.createNow(), 'yyyy'))}"
                     th:value="${year}"
                     th:utext="${year+' 년도'}"
                     th:selected="${year eq studentMainPageDto.year}">
@@ -139,20 +139,41 @@
 
     <!--    수강과목들 보여주기-->
     <div th:if="${studentMainPageDto.noLectures eq false}" th:each="num : ${#numbers.sequence(0,studentMainPageDto.getSyllabusDtoList().size()-1)}">
-        <h3 th:text="${studentMainPageDto.getSyllabusDtoList().get(num).name}"></h3>                <!-- num 번째 syllabusDto 를 get 해서 .name 으로 과목이름 가져옴 -->
+        <h3 th:text="${studentMainPageDto.getSyllabusDtoList().get(num).getName()}"></h3>                <!-- num 번째 syllabusDto 를 get 해서 .name 으로 과목이름 가져옴 -->
         <a>공지 사항 바로가기</a><br>
         <a>Q&A 게시판 바로가기 </a><br>
         <a>강의 자료 게시판 바로가기</a><br>
         <a>강의 영상 게시판 바로가기</a><br>
+
 
         <h4>최신 공지사항</h4>
         <div th:each="i : ${#numbers.sequence(0,studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().size()-1)}">
             <a th:text="${studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getYear()+1900+'-'+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getMonth()+'-'+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getDay()+' '+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}"></a> <br>
         </div>
 
+
         <h4>남은 강의</h4>
 
+
         <h4>남은 과제</h4>
+        <div th:if="${studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
+            <p th:text="${'이 과목의 남은 과제 개수는 '+studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()+' 개 입니다.'}"></p>
+            <p th:text="${'가장 빠른 마감일은 '+#dates.format(studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' 이고, 과제명은 '+studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getName()+' 입니다.'}"></p>
+            <p>남은 과제들의 목록</p>
+            <!-- 남은 과제들의 목록이 3개 이하인 경우 -->
+            <div th:if="${studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()-1)}">
+                <a th:text="${#dates.format(studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}"></a>
+            </div>
+            <!-- 남은 과제들의 목록이 3개 넘는 경우 => 3개까지만 보여주기 -->
+            <div th:unless="${studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,2)}">
+                <a th:text="${#dates.format(studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}"></a>
+            </div>
+        </div>
+        <div th:unless="${studentMainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
+            <p>남은 과제가 없습니다!</p>
+        </div>
+
+        <hr>
     </div>
 
 

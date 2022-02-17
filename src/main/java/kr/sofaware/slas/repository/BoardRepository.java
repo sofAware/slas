@@ -12,4 +12,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Board> findAllByMember_Id(@Param(value = "memberId") String memberId);
 
     List<Board> findFirst3ByCategoryAndSyllabus_IdOrderByDateDesc(int category, String syllabus_id);
+
+    Boolean existsByAssignment_IdAndMember_Id(int assignment_id, String member_id);
 }
