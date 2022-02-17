@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta th:replace="/frame/head.html">
+    <title>공허하다</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        img, h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: #ecf0f1;
+            font-size: 4rem;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<img src="/images/embarrassing.png"/>
+<div class="layer"></div>
+<h1>404 Not Found</h1>
+</body>
+</html>

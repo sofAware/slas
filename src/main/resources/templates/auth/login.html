@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta th:replace="/frame/head.html :: head">
+    <meta th:replace="/frame/head.html">
     <title>소파대학교 로그인</title>
     <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
 
 <!-- section -->
 <main>
-    <form th:action="@{/login}" method="POST">
+    <form th:action="@{/login}" id="login" method="POST">
         <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
 
         <div class="form-floating">
@@ -32,7 +32,7 @@
                     </span>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
+                    <button type="button" id="findPw" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
         <div class="container g-0">
             <div class="row">
                 <div class="col-sm-6 mb-1">
-                    <button type="button" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
+                    <button type="button" id="findId" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
                 </div>
                 <div class="col-sm-6 mb-1">
                     <button type="button" id="signup" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
@@ -52,15 +52,11 @@
         </div>
 
 
-        <button type="button" class="w-100 btn btn-sm btn-secondary">개인정보 처리방침</button>
+        <button type="button" class="w-100 btn btn-sm btn-secondary" onclick="location.href='/privacy-policy'">개인정보 처리방침</button>
     </form>
 </main>
 
-<!-- footer -->
-<footer th:replace="/frame/footer.html :: footer"></footer>
-
-<!-- tail -->
-<div th:replace="/frame/tail.html :: tail"></div>
+<div th:replace="/frame/tail.html"></div>
 <script type="text/javascript" th:src="@{/js/login.js}"></script>
 </body>
 </html>

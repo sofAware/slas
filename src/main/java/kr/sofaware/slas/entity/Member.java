@@ -1,6 +1,6 @@
 package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.auth.dto.MemberDTO;
+import kr.sofaware.slas.auth.MemberDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,7 +30,7 @@ public class Member implements UserDetails {
 
     private String role;        // 역할
 
-    public static Member from(MemberDTO memberDTO) {
+    public static Member from(MemberDto memberDTO) {
         return new Member(
                 memberDTO.getId(),
                 memberDTO.getPassword(),

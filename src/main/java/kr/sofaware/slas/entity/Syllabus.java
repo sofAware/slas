@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class Syllabus {
     @Id
-    private String id;              // 학정번호
+    private String id;              // 학정번호 (21-1-0201-1-0001-01)
 
     private String name;            // 과목명
     private String category;        // 카테고리 (전선, 교필, 교선, ...)
@@ -31,4 +31,8 @@ public class Syllabus {
     @ManyToOne
     @JoinColumn(name = "professor_id")
     private Member professor;    // 담당교수
+
+    public static String formatYearSemester(String yearSemester) {
+        return String.format("20%s년도 %c학기", yearSemester.substring(0, 2), yearSemester.charAt(3));
+    }
 }
