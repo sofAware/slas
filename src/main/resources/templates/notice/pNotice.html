@@ -7,69 +7,90 @@
     <title>공지사항</title>
 </head>
 <body>
-<header th:replace="/frame/sHeader.html"></header>
+<header th:replace="/frame/pHeader.html"></header>
 
 <div class="d-flex justify-content-center gap-4">
     <!-- 학기 선택 -->
     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${formatYS}">
             학기 선택
         </button>
         <ul class="dropdown-menu" aria-labelledby="semester">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li th:each="key : ${mapYS.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?year-semester=' + key}"
+                   th:text="${mapYS.get(key)}"></a>
+            </li>
         </ul>
     </div>
 
     <!-- 강의 선택 -->
     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${selectedSyllabusName}">
             강의 선택
         </button>
         <ul class="dropdown-menu" aria-labelledby="syllabus">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" th:attr="href=${'?year-semester=' + yearSemester}">전체</a></li>
+            <li th:each="s : ${syllabuses}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?syllabus-id=' + s.getId()}"
+                   th:text="${s.getName()}"></a>
+            </li>
         </ul>
     </div>
+
+    <button class="btn btn-primary" type="button" aria-expanded="false" id="write">
+        글쓰기
+    </button>
 </div>
 
 <!-- 게시글 목록 -->
 <table class="table table-striped table-hover">
     <thead>
-        <tr>
-            <th>학정 번호</th>
-            <th>강의 제목</th>
-            <th>글 번호</th>
-            <th>분류</th>
-            <th>조회수</th>
-            <th>등록일</th>
-            <th>작성자</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>첨부 파일 이름</th>
-            <th>첨부 파일 경로</th>
-        </tr>
+    <tr>
+        <th>학정 번호</th>
+        <th>강의 제목</th>
+        <th>강의 시간</th>
+        <th>글 번호</th>
+        <th>분류</th>
+        <th>조회수</th>
+        <th>등록일</th>
+        <th>작성자</th>
+        <th>제목</th>
+        <th>내용</th>
+        <th>첨부 파일 이름</th>
+        <th>첨부 파일 경로</th>
+    </tr>
     </thead>
     <tbody>
-        <tr th:each="board : ${boards}">
-            <th th:text="${board.getSyllabus().getId()}"></th>
-            <td th:text="${board.getSyllabus().getName()}"></td>
-            <td th:text="${board.getId()}"></td>
-            <td th:text="${board.getCategory()}"></td>
-            <td th:text="${board.getView()}"></td>
-            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
-            <td th:text="${board.getMember().getName()}"></td>
-            <td th:text="${board.getTitle()}"></td>
-            <td th:text="${board.getContent()}"></td>
-            <td th:text="${board.getAttachmentName()}"></td>
-            <td th:text="${board.getAttachmentPath()}"></td>
-        </tr>
+    <tr style="cursor: pointer;" th:each="board : ${boards}" th:attr="href=${'/p/notice/' + board.getId()}">
+        <th th:text="${board.getSyllabus().getId()}"></th>
+        <td th:text="${board.getSyllabus().getName()}"></td>
+        <td th:text="${board.getSyllabus().formatClassTime()}"></td>
+        <td th:text="${board.getId()}"></td>
+        <td th:text="${board.getCategory()}"></td>
+        <td th:text="${board.getView()}"></td>
+        <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh:mm:ss')}"></td>
+        <td th:text="${board.getMember().getName()}"></td>
+        <td th:text="${board.getTitle()}"></td>
+        <td th:text="${board.getContent()}"></td>
+        <td th:text="${board.getAttachmentName()}"></td>
+        <td th:text="${board.getAttachmentPath()}"></td>
+    </tr>
     </tbody>
 </table>
 
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
+<script>
+    // 게시글 리스트 각각 이동 이벤트
+    document.querySelectorAll('table tr').forEach(e => e.addEventListener('click', evt =>
+        location.href = e.getAttribute("href")));
+
+    // 글쓰기 버튼 이벤트
+    document.querySelector('#write').addEventListener('click', evt =>)
+</script>
 </body>
 </html>

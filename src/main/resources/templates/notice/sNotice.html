@@ -65,7 +65,7 @@
             <td th:text="${board.getId()}"></td>
             <td th:text="${board.getCategory()}"></td>
             <td th:text="${board.getView()}"></td>
-            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
+            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh:mm:ss')}"></td>
             <td th:text="${board.getMember().getName()}"></td>
             <td th:text="${board.getTitle()}"></td>
             <td th:text="${board.getContent()}"></td>

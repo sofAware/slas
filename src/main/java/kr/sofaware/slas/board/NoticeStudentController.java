@@ -46,8 +46,10 @@ public class NoticeStudentController {
             yearSemester = syllabusId.substring(0, 4);
         }
 
+        // 21-1를 2021학년도 1학기로 포맷하는 맵 초기화
         Map<String, String> formatYS = new TreeMap<>(Collections.reverseOrder());
         lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
+
         // 학기 선택 리스트
         model.addAttribute("mapYS", formatYS);
         model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
