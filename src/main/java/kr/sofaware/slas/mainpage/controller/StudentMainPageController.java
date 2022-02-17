@@ -1,8 +1,10 @@
 package kr.sofaware.slas.mainpage.controller;
 
 //import kr.sofaware.slas.service.ProfessorService;
+import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.mainpage.dto.*;
 import kr.sofaware.slas.mainpage.service.StudentMainPageService;
+import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Date;
+import java.util.*;
 
 import static kr.sofaware.slas.mainpage.dto.StudentMainPageDto.TOTAL_DAYOFWEEK;
 import static kr.sofaware.slas.mainpage.dto.StudentMainPageDto.TOTAL_PERIOD;
@@ -26,45 +25,58 @@ import static kr.sofaware.slas.mainpage.dto.StudentMainPageDto.TOTAL_PERIOD;
 @RequestMapping("/s")
 public class StudentMainPageController {
 
-        private final StudentMainPageService studentMainPageService;
+        private final AssignmentBoardService assignmentBoardService;
+        private final AssignmentService assignmentService;
+        private final LectureService lectureService;
+        private final MemberService memberService;
+        private final NoticeService noticeService;
 
         //학생 메인페이지
-        @RequestMapping(value="main", method = {RequestMethod.GET, RequestMethod.POST})
-        public String student(Model model, @RequestParam("year") @Nullable Integer year, @RequestParam("semester") @Nullable Integer semester){
+        @RequestMapping(value="main", method = {RequestMethod.GET})
+        public String student(Model model, @RequestParam("year-semester") @Nullable String yearSemester){
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();       //현재 로그인한 사용자의 id 받아오기
             UserDetails user = (UserDetails) principal;
             String username=((UserDetails) principal).getUsername();
 
-            StudentDto student=studentMainPageService.findById(username);                                   //현재 로그인한 학생 찾기
+            StudentDto student=memberService.findById(username);                                   //현재 로그인한 학생 찾기
 
-            if((year == null) && (semester == null)) {                                                                                    //제일 처음 로딩 시 -> 현재 년도-학기 로
-                year=LocalDate.now().getYear();
-                if(1<=LocalDate.now().getMonthValue()&&LocalDate.now().getMonthValue()<=6)                              //1~6 월까지는 1학기 현재년도-1학기 시간표로 표시 & 7~12 월까지는 현재년도-2학기 시간표로 표시
-                    semester=1;
-                else
-                    semester=2;
+            // 사용자의 수강 학기와 과목들 조회
+            Map<String, List<Syllabus>> lectures = lectureService.mapAllByStudentId(username);
+
+            if (yearSemester == null) {
+                ArrayList<String> yearSemesters = new ArrayList<>(lectures.keySet());
+                // 이 사람이 들었던 수업이 없을 경우 그냥 리턴
+                if (yearSemesters.isEmpty())
+                    return "mainpage/student-mainpage";
+
+                yearSemester = yearSemesters.get(0);
             }
 
-            List<SyllabusDto> syllabusDtoList = studentMainPageService.findByIdAndYearSemester(username,year,semester);      //년도, 학기를 바탕으로 이 학생이 해당 학기에 들은 강의들의 syllabus 들을 받아와서 view 에 전달하기 위한 syllabusDto 들로 변환
+            Map<String, String> formatYS = new TreeMap<>(Collections.reverseOrder());
+            lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
+            // 학기 선택 리스트
+            model.addAttribute("mapYS", formatYS);
+            model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+
+            List<SyllabusDto> syllabusDtoList = lectureService.findByIdAndYearSemester(username,yearSemester);      //년도, 학기를 바탕으로 이 학생이 해당 학기에 들은 강의들의 syllabus 들을 받아와서 view 에 전달하기 위한 syllabusDto 들로 변환
 
             List<ArrayList<CellDto>> cellDtoList=CellDto.createCellDtoList(syllabusDtoList);            // 시간표 출력 위한 cellDtoList 생성
 
 
             // ↓ ↓ ↓ syllabusDtoList 의 각각의 syllabus 들의 noticeDtoList 에 최신 공지 3개 정도 add
-            // category 1 인거 나중에 디벨롭 코드 머지하면 Board 클래스에 전역변수 선언돼있는걸로 바꾸기 !!!!
-            // board 테이블에서 ( category 는 1이고 && syllabus_id 는 syllabusDtoList.get(i).id ) 인 것들을 찾아서 등록일 빠른 순으로(datetime 내림차순) 정렬 => 위에서부터 레코드 3개만 가져오기 => noticeDtoList 로 결과 가져옴!!
+            // board 테이블에서 ( 공지사항이고 && syllabus_id 는 syllabusDtoList.get(i).id ) 인 것들을 찾아서 등록일 빠른 순으로(datetime 내림차순) 정렬 => 위에서부터 레코드 3개만 가져오기 => noticeDtoList 로 결과 가져옴!!
             for(SyllabusDto s : syllabusDtoList) {
-                s.setNoticeDtoList(studentMainPageService.findFirst3ByCategoryAndSyllabus_IdOrderByDateDesc(1, s.getId()));
+                s.setNoticeDtoList(noticeService.findFirst3ByCategoryAndSyllabus_IdOrderByDateDesc(s.getId()));
             }
 
 
             // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 assignmentDtoList 에 아직 제출하지 않은 과제들을 제출 마감일 빠른 순으로 출력 => 최대 얼만큼까지 출력해줄지는 프론트에서 처리
             for(SyllabusDto s : syllabusDtoList) {
-                List<AssignmentDto> assignmentDtoList = studentMainPageService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
+                List<AssignmentDto> assignmentDtoList = assignmentService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
 
                 for(Iterator<AssignmentDto> iter = assignmentDtoList.iterator(); iter.hasNext();){
                     AssignmentDto a=iter.next();
-                    if(studentMainPageService.existsByAssignment_IdAndMember_Id(a.getId(),username))
+                    if(assignmentBoardService.existsByAssignment_IdAndMember_Id(a.getId(),username))
                         iter.remove();
                 }
 
@@ -80,9 +92,6 @@ public class StudentMainPageController {
             model.addAttribute("studentMainPageDto", StudentMainPageDto.builder()                       // studentMainPageDto 를 view 에 전달
                                                                                     .id(username)
                                                                                     .name(student.getName())
-                                                                                    .admissionYear(Integer.parseInt(username.substring(0,4)))
-                                                                                    .year(year)
-                                                                                    .semester(semester)
                                                                                     .noLectures(syllabusDtoList.isEmpty())
                                                                                     .syllabusDtoList(syllabusDtoList)
                                                                                     .cellDtoList(cellDtoList)

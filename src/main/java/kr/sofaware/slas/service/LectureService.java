@@ -1,6 +1,8 @@
 package kr.sofaware.slas.service;
 
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.mainpage.dto.SyllabusDto;
 import kr.sofaware.slas.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,5 +35,21 @@ public class LectureService {
         // 강의명으로 정렬해서 반환
         map.forEach((s, syllabi) -> syllabi.sort(Comparator.comparing(Syllabus::getName)));
         return map;
+    }
+
+    /**
+     * 학생이 해당 년도, 학기에 들은 수업들을 SyllabusDto 들의 리스트로 만들어서 반환
+     * @author 정지민
+     * @param (학생 학번, 년도-학기)
+     * @return 메인페이지 구성 시 사용하는 SyllabusDto 들의 리스트로 반환
+     */
+    public List<SyllabusDto> findByIdAndYearSemester(String id, String yearSemester){
+        List<SyllabusDto> syllabusDtoList=new ArrayList<>();
+
+        List<Lecture> lectureList=lectureRepository.findByIdAndYearSemester(id,yearSemester);
+
+        lectureList.forEach(lecture -> syllabusDtoList.add(new SyllabusDto(lecture.getSyllabus())));
+
+        return syllabusDtoList;
     }
 }

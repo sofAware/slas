@@ -5,6 +5,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <meta th:replace="/frame/head.html">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Student Main Page</title>
@@ -28,15 +29,11 @@
 </head>
 
 <body>
+    <header th:replace="/frame/sHeader.html"></header>
+
     <div>
-        <h2>SLAS</h2>
         <span sec:authentication="name"></span>
         <span th:text="${studentMainPageDto.name}"></span>
-
-
-        <form id="logout" th:action="@{/logout}" method="GET">
-            <input type="submit" value="로그아웃"/>
-        </form> <br>
     </div>
 
     <a>공지 사항</a><br>
@@ -50,33 +47,26 @@
     <a>개인정보 조회&수정</a><br>
     <a href="/home">홈으로 이동 -></a><br>
 
-    <!-- 년도, 학기 드롭다운 박스 출력 -->
-    <form th:action="@{/s/main}" method="POST" th:id="selectBox">
-        <select id="year" th:name="year">
-            <option th:each="year : ${#numbers.sequence(studentMainPageDto.getAdmissionYear(),#calendars.format(#calendars.createNow(), 'yyyy'))}"
-                    th:value="${year}"
-                    th:utext="${year+' 년도'}"
-                    th:selected="${year eq studentMainPageDto.year}">
-            </option>
-        </select>
-
-        <select id="semester" th:name="semester">
-            <option th:each="semester : ${#numbers.sequence(1,2)}"
-                    th:value="${semester}"
-                    th:utext="${semester+' 학기'}"
-                    th:selected="${semester eq studentMainPageDto.semester}">
-            </option>
-        </select>
-    </form>
-
-    <button type="submit" id="btn-request" th:form="selectBox">조회</button>
+    <!-- 학기 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${yearSemester}">
+            학기 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="semester">
+            <li th:each="key : ${mapYS.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?year-semester=' + key}"
+                   th:text="${mapYS.get(key)}"></a>
+            </li>
+        </ul>
+    </div>
 
 
     <!-- 해당 학기에 들은 과목들 시간표로 출력 -->
     <!-- 해당 학기에 들은 시간표가 있는 경우 => studentMainPageDto 의 cellDtoList 를 바탕으로 출력하면 됨  -->
     <!-- 해당 학기에 들은 시간표가 없는 경우 => 그냥 빈 테이블 출력  -->
     <table style="width:50%; height:50%;">
-        <caption th:text="${studentMainPageDto.year+' 년도 '+studentMainPageDto.semester+' 학기 시간표'}"></caption>
         <tr>
             <th> </th>
             <th>월</th>
@@ -148,7 +138,7 @@
 
         <h4>최신 공지사항</h4>
         <div th:each="i : ${#numbers.sequence(0,studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().size()-1)}">
-            <a th:text="${studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getYear()+1900+'-'+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getMonth()+'-'+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).uploadDate.getDay()+' '+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}"></a> <br>
+            <a th:text="${#dates.format(studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).getUploadDate(), 'yyyy-MM-dd')+' '+studentMainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}"></a> <br>
         </div>
 
 
@@ -176,7 +166,7 @@
         <hr>
     </div>
 
-
-    <div th:replace="/frame/tail.html :: tail"></div>
+    <footer th:replace="/frame/footer.html"></footer>
+    <script th:replace="/frame/tail.html"></script>
 </body>
 </html>
