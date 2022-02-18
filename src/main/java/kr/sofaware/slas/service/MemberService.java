@@ -2,7 +2,6 @@ package kr.sofaware.slas.service;
 
 import kr.sofaware.slas.auth.MemberDto;
 import kr.sofaware.slas.entity.Member;
-import kr.sofaware.slas.mainpage.dto.StudentDto;
 import kr.sofaware.slas.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,17 +33,4 @@ public class MemberService implements UserDetailsService {
 
         return userRepository.save(Member.from(memberDTO)).getId();
     }
-
-    /**
-     * 학생 학번에 따른 Member 엔티티를 찾아서 StudentDto 를 반환
-     * @author 정지민
-     * @param 학생 학번
-     * @return StudentDto
-     */
-    public StudentDto findById(String id){
-        Member entity=userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(id));
-
-        return new StudentDto(entity);
-    }
-
 }

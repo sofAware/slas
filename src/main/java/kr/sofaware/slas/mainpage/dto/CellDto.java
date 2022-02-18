@@ -8,13 +8,15 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kr.sofaware.slas.mainpage.dto.StudentMainPageDto.TOTAL_DAYOFWEEK;
-import static kr.sofaware.slas.mainpage.dto.StudentMainPageDto.TOTAL_PERIOD;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class CellDto {
+    public static int TOTAL_PERIOD=7;                       // 교시는 7교시까지
+    public static int TOTAL_DAYOFWEEK=5;                    // 요일은 월화수목금 이렇게 5개만
+
     private String lectureName = null;
     private int cellSpan = 1;
 

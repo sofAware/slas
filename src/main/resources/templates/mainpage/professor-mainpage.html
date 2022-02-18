@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <meta th:replace="/frame/head.html">
-    <title>Student Main Page</title>
+    <title>Professor Main Page</title>
 
     <!--시간표 출력 style-->
     <style>
@@ -25,10 +23,9 @@
         }
     </style>
 </head>
-
 <body>
-    <header th:replace="/frame/sHeader.html"></header>
-
+<header th:replace="/frame/pHeader.html"></header>
+    <!-- Copy & Edit here! -->
     <div>
         <span th:text="${MainPageDto.id}"></span>
         <span th:text="${MainPageDto.name}"></span>
@@ -59,7 +56,6 @@
             </li>
         </ul>
     </div>
-
 
     <!-- 해당 학기에 들은 과목들 시간표로 출력 -->
     <!-- 해당 학기에 들은 시간표가 있는 경우 => studentMainPageDto 의 cellDtoList 를 바탕으로 출력하면 됨  -->
@@ -124,7 +120,6 @@
         </tr>
     </table>
 
-
     <!--    수강과목들 보여주기-->
     <div th:if="${MainPageDto.noLectures eq false}" th:each="num : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().size()-1)}">
         <h3 th:text="${MainPageDto.getSyllabusDtoList().get(num).getName()}"></h3>                <!-- num 번째 syllabusDto 를 get 해서 .name 으로 과목이름 가져옴 -->
@@ -134,20 +129,11 @@
         <a>강의 영상 게시판 바로가기</a><br>
 
 
-        <h4>최신 공지사항</h4>
-        <div th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().size()-1)}">
-            <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).getUploadDate(), 'yyyy-MM-dd')+' '+MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}"></a> <br>
-        </div>
-
-
-        <h4>남은 강의</h4>
-
-
-        <h4>남은 과제</h4>
+        <h4>마감기한 전 과제</h4>
         <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
             <p th:text="${'이 과목의 남은 과제 개수는 '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()+' 개 입니다.'}"></p>
             <p th:text="${'가장 빠른 마감일은 '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' 이고, 과제명은 '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getName()+' 입니다.'}"></p>
-            <p>남은 과제들의 목록</p>
+            <p>과제들의 목록</p>
             <!-- 남은 과제들의 목록이 3개 이하인 경우 -->
             <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()-1)}">
                 <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}"></a>
@@ -158,13 +144,13 @@
             </div>
         </div>
         <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
-            <p>남은 과제가 없습니다!</p>
+            <p>해당 과제가 없습니다!</p>
         </div>
 
         <hr>
     </div>
 
-    <footer th:replace="/frame/footer.html"></footer>
-    <script th:replace="/frame/tail.html"></script>
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
 </body>
 </html>
