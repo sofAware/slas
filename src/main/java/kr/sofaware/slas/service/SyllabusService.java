@@ -22,11 +22,14 @@ public class SyllabusService {
         Map<String, List<Syllabus>> map = new TreeMap<>(Collections.reverseOrder());
 
         syllabusRepository.findAllByProfessor_Id(professorId).forEach(syllabus -> {
+            // <년도>-<학기> 문자열 추출
             String yearSemester = syllabus.getId().substring(0, 4);
 
+            // 최초 대입 시 키 생성
             if (!map.containsKey(yearSemester))
                 map.put(yearSemester, new ArrayList<>());
 
+            // 값 대입
             map.get(yearSemester).add(syllabus);
         });
 

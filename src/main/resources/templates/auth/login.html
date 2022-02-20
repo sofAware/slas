@@ -15,12 +15,15 @@
         <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
 
         <div class="form-floating">
-            <input type="text" name="username" class="form-control" id="floatingInput" placeholder=" ">
-            <label for="floatingInput">학번</label>
+            <input type="text" name="username" class="form-control" id="floatingId" placeholder=" ">
+            <label for="floatingId">학번</label>
         </div>
         <div class="form-floating mb-2">
             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder=" ">
             <label for="floatingPassword">비밀번호</label>
+            <div id="floatingPasswordFeedback" class="invalid-feedback">
+                학번 혹은 비밀번호가 틀렸습니다.
+            </div>
         </div>
 
         <div class="container g-0 mb-2">

@@ -28,7 +28,7 @@
     <!-- 강의 선택 -->
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
-                th:text="${selectedSyllabusName}">
+                th:text="${selectedSyllabusName}" th:attr="data-sid=${selectedSyllabusId}">
             강의 선택
         </button>
         <ul class="dropdown-menu" aria-labelledby="syllabus">
@@ -90,7 +90,10 @@
         location.href = e.getAttribute("href")));
 
     // 글쓰기 버튼 이벤트
-    document.querySelector('#write').addEventListener('click', evt =>)
+    document.querySelector('#write').addEventListener('click', evt => {
+        const sid = document.querySelector('#syllabus').getAttribute('data-sid');
+        location.href = '/p/notice/write' + (sid ? '?syllabus-id=' + sid : '');
+    });
 </script>
 </body>
 </html>

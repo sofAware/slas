@@ -24,12 +24,13 @@ public class NoticeProfessorController {
     private final BoardService noticeService;
     private final SyllabusService syllabusService;
 
+    // 전체 공지사항 리스트
     @GetMapping("notice")
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
-        // 사용자의 수강 학기와 과목들 조회
+        // 교수가 강의한 학기와 과목들 조회
         Map<String, List<Syllabus>> lectures = syllabusService.mapAllByProfessorId(principal.getName());
 
         // 강의 선택 없으면
@@ -73,6 +74,7 @@ public class NoticeProfessorController {
             // 날짜 내림차순 정렬
             boards.sort(Comparator.comparing(Board::getDate).reversed());
 
+            model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
         }
         else {
@@ -80,9 +82,15 @@ public class NoticeProfessorController {
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력
             String finalSyllabusId = syllabusId;
-            model.addAttribute("selectedSyllabusName",
-                    lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
-                            .findAny().get().getName());
+
+            Syllabus syllabus = lectures
+                    .get(yearSemester)
+                    .stream()
+                    .filter(s -> s.getId().equals(finalSyllabusId))
+                    .findAny()
+                    .get();
+            model.addAttribute("selectedSyllabusId", syllabus.getId());
+            model.addAttribute("selectedSyllabusName", syllabus.getName());
         }
 
         model.addAttribute("boards", boards);
@@ -90,9 +98,21 @@ public class NoticeProfessorController {
         return "notice/pNotice";
     }
 
+    // 작성
     @GetMapping("notice/write")
-    public String GetWriting(Model model, Principal principal) {
+    public String GetWriting(Model model, Principal principal,
+                             @RequestParam("syllabus-id") Optional<String> syllabusId) {
 
+        // 교수가 강의한 학기와 과목들 조회
+        Map<String, List<Syllabus>> mapLectures = syllabusService.mapAllByProfessorId(principal.getName());
+
+        // 맵으로 있던 과목들을 쭉 리스트로 변환
+        List<Syllabus> listLectures = new ArrayList<>();
+        mapLectures.forEach((s, syllabi) -> listLectures.addAll(syllabi));
+
+        // 모델에 추가
+        model.addAttribute("lectures", listLectures);
+        model.addAttribute("selectedSyllabusId", syllabusId.orElse(""));
 
         return "/notice/pWrite";
     }
@@ -103,6 +123,7 @@ public class NoticeProfessorController {
         return "redirect:/p/notice/12345678";
     }
 
+    // 수정
     @GetMapping("notice/edit")
     public String GetEditing(Model model, Principal principal) {
         String data = "# 제목 입니다\\n\\n다름이 아니라 지금 예쁜 에디터를 사용해보려고 하는데\\n\\n뭔가 좀 잘 되는 듯 하면서 왜 잘되지 느낌도 받고 참 모르겠을 제 마음을 전하고 싶습니다.\\n\\n아래가 예제 코드랍니다 공식 사이트에서 복붙 해보죠\\n```javascript\\nconst editor = new toastui.Editor({\\n        el: document.querySelector('#editor'),\\n        previewStyle: 'vertical',\\n        height: '500px',\\n        initialValue: content\\n      });\\n```\\n\\n아하 역따옴표 3개로 코드 시작했을 때 끝내려면 다시 역따옴표 3개 더 입력하고 엔터하며 나가지네요.";
