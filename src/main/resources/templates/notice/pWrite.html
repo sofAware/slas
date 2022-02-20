@@ -13,6 +13,8 @@
 <div class="container">
     <h2 class="my-4">공지사항</h2>
     <form>
+        <input type="hidden" id="csrf" th:name="${_csrf.headerName}" th:value="${_csrf.token}"/>
+
         <div class="mb-3 row">
             <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
             <div class="col-sm-10">
@@ -44,12 +46,6 @@
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script>
-    const editor = new toastui.Editor({
-        el: document.querySelector('#inputContent'),
-        previewStyle: 'vertical',
-        height: '600px',
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/pWrite.js}"></script>
 </body>
 </html>
