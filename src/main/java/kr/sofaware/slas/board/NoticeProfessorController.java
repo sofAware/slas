@@ -3,17 +3,16 @@ package kr.sofaware.slas.board;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.BoardService;
 import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.service.FileService;
 import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
@@ -23,6 +22,7 @@ import java.util.*;
 public class NoticeProfessorController {
     private final BoardService noticeService;
     private final SyllabusService syllabusService;
+    private final FileService fileService;
 
     // 전체 공지사항 리스트
     @GetMapping("notice")
@@ -117,7 +117,14 @@ public class NoticeProfessorController {
         return "/notice/pWrite";
     }
     @PostMapping("notice/write")
-    public String postWriting(Model model, Principal principal) {
+    public String postWriting(NoticeDto noticeDto, Model model, Principal principal)
+            throws IOException {
+
+        // 작성 권한 체크
+        // TODO
+
+        if (noticeDto.getFile() != null)
+            fileService.save(noticeDto.getFile());
 
         // 작성된 포스트 번호로 뷰 이동
         return "redirect:/p/notice/12345678";

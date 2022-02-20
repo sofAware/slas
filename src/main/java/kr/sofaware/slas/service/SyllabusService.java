@@ -37,4 +37,6 @@ public class SyllabusService {
         map.forEach((s, syllabi) -> syllabi.sort(Comparator.comparing(Syllabus::getName)));
         return map;
     }
+
+
 }
