@@ -181,9 +181,12 @@ public class NoticeProfessorController {
         int boardId = Integer.parseInt(boardIdStr);
         Optional<Board> board = noticeService.read(boardId);
 
+        // 없으면 404
+        if (board.isEmpty())
+            return "error/404";
+
         // 글 작성자가 아니면 403
-        if (board.isEmpty() ||
-                !board.get().getMember().getId().equals(principal.getName()))
+        if (!board.get().getMember().getId().equals(principal.getName()))
             return "error/403";
 
         // 페이지 전송
@@ -213,7 +216,7 @@ public class NoticeProfessorController {
         // 새로운 파일을 업로드하면
         if (!noticeDto.getFile().isEmpty()) {
             if (attachmentName != null && !attachmentName.isEmpty()) {
-                // 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...)
+                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
             }
 
             attachmentName = noticeDto.getFile().getOriginalFilename();
@@ -224,7 +227,7 @@ public class NoticeProfessorController {
                 noticeDto.getDeleteFile() != null && !noticeDto.getDeleteFile().isEmpty()) {
             attachmentName = "";
             attachmentPath = "";
-            // 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...)
+            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
         }
 
         // 새로운 값들로 세팅
@@ -233,5 +236,30 @@ public class NoticeProfessorController {
 
         // 수정된 포스트 번호로 뷰 이동
         return "redirect:/p/notice/" + boardIdStr;
+    }
+
+    // 삭제
+    @GetMapping("notice/delete/{boardIdStr:[0-9]+}")
+    public String delete(Model model, Principal principal,
+                         @PathVariable String boardIdStr) {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> board = noticeService.read(boardId);
+
+        // 없으면 404
+        if (board.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        if (!board.get().getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 삭제
+        noticeService.delete(boardId);
+        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
+
+        // 목록으로 리디렉션
+        return "redirect:/p/notice";
     }
 }

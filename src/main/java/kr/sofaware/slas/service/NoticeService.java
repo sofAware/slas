@@ -27,7 +27,7 @@ public class NoticeService implements BoardService {
 
     @Override
     public void delete(int boardId) {
-
+        boardRepository.deleteById(boardId);
     }
 
     @Override
