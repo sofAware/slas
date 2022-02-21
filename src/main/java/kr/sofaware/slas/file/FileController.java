@@ -23,8 +23,8 @@ public class FileController {
     @ResponseBody
     public String upload(HttpServletRequest request,
                          @RequestParam("file") MultipartFile file) throws IOException {
-//        return fileService.save(file);
-        return null;
+        String syllabusId = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/") + 1);
+        return fileService.saveOnSyllabus(file, syllabusId);
     }
 
     @GetMapping("/**")
@@ -35,5 +35,4 @@ public class FileController {
 
         return Files.exists(path) ? Files.readAllBytes(path) : null;
     }
-
 }

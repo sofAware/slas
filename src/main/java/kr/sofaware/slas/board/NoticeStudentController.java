@@ -21,6 +21,7 @@ public class NoticeStudentController {
     private final BoardService noticeService;
     private final LectureService lectureService;
 
+    // 전체 공지사항 리스트
     @GetMapping("notice")
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
@@ -68,6 +69,7 @@ public class NoticeStudentController {
         return "notice/sNotice";
     }
 
+    // 열람
     @GetMapping("notice/{boardIdStr:[1-9]+}")
     @ResponseBody
     public String view(Model model,

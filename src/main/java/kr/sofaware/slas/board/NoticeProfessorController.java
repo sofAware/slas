@@ -11,7 +11,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -130,7 +129,7 @@ public class NoticeProfessorController {
         if (noticeDto.getFile() != null) {
             builder
                     .attachmentName(noticeDto.getFile().getOriginalFilename())
-                    .attachmentPath(fileService.save(noticeDto.getFile()));
+                    .attachmentPath(fileService.saveOnSyllabus(noticeDto.getFile(), noticeDto.getSyllabusId()));
         }
 
         // 게시글 작성
@@ -155,5 +154,15 @@ public class NoticeProfessorController {
 
         // 수정된 포스트 번호로 뷰 이동
         return "redirect:/p/notice/12345678";
+    }
+
+    // 열람
+    @GetMapping("notice/{boardIdStr:[0-9]+}")
+    @ResponseBody
+    public String view(Model model,
+                       @PathVariable String boardIdStr) {
+        int boardId = Integer.parseInt(boardIdStr);
+
+        return boardIdStr + "번의 게시글을 조회하려 하는군요 아직 개발중이니 기다려 주시오.";
     }
 }

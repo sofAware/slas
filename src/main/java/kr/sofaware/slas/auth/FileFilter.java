@@ -31,9 +31,9 @@ public class FileFilter extends OncePerRequestFilter {
         // URL 분리
         String[] split = request.getRequestURI().split("/");
 
-        // 지정된 파일이 아닌 상위로 접근하려 하는 경우 인가 거부
-        if (split.length < 5) {
-            response.setStatus(403);
+        // 지정된 파일이 아닌 상위로 접근하려 하는 경우 잘못된 요청 반환
+        if (split.length < 4) {
+            response.setStatus(400);
             return;
         }
 

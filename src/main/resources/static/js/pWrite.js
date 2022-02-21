@@ -2,6 +2,8 @@ const txtCsrf = document.querySelector('#csrf');
 const header = txtCsrf.getAttribute('data-header-name');
 const token = txtCsrf.getAttribute('value');
 
+const syllabusId = document.querySelector('option[selected]').getAttribute('value');
+
 const editor = new toastui.Editor({
     el: document.querySelector('#inputContent'),
     previewStyle: 'vertical',
@@ -14,7 +16,7 @@ editor.addHook('addImageBlobHook', (blob, callback) => {
     let formData = new FormData();
     formData.append("file", blob);
 
-    fetch('/upload', {
+    fetch('/upload/syllabus/' + syllabusId, {
         method: 'POST',
         headers: {
             [header]: token
@@ -45,22 +47,14 @@ document.querySelector('#write').addEventListener('submit', e => {
     // 학정번호
     formData.append(
         document.querySelector('select').getAttribute('name'),
-        document.querySelector('option[selected]').getAttribute('value')
+        syllabusId
     );
 
     fetch('', {
         method: 'POST',
         body: formData
     }).then(
-        res => res.text()
-    ).then(
-        body => {
-            if (body && body.success) {
-                console.log("잘 작성되었고 반환받은 url로 넘어가자");
-            } else {
-                console.log("오류 처리 부분인데 음... 작성에 오류가 있으려나? 컨텐츠가 너무 길 때???");
-            }
-        }
+        res => location.href = res.url
     ).catch(
         error => console.error(error)
     );
