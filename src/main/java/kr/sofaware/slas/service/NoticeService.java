@@ -16,18 +16,13 @@ public class NoticeService implements BoardService {
     private final BoardRepository boardRepository;
 
     @Override
-    public void create(Board board) {
+    public void save(Board board) {
         boardRepository.save(board);
     }
 
     @Override
     public Optional<Board> read(int boardId) {
         return boardRepository.findById(boardId);
-    }
-
-    @Override
-    public void update(Board board) {
-
     }
 
     @Override

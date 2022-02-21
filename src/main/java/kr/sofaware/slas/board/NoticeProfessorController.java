@@ -113,7 +113,11 @@ public class NoticeProfessorController {
     @PostMapping("notice/write")
     public String postWriting(NoticeDto noticeDto, Model model, Principal principal) throws IOException {
 
-        System.out.println("noticeDto = " + noticeDto);
+        // 작성 권한 없으면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                noticeDto.getSyllabusId(),
+                principal.getName()))
+            return "error/403";
 
         // 게시글 만들기
         Board.BoardBuilder builder = Board.builder()
@@ -126,34 +130,19 @@ public class NoticeProfessorController {
                 .view(0);
 
         // 첨부 파일 저장
-        if (noticeDto.getFile() != null) {
+        if (!noticeDto.getFile().isEmpty()) {
+            String attachmentPath = fileService.saveOnSyllabus(noticeDto.getFile(), noticeDto.getSyllabusId());
             builder
                     .attachmentName(noticeDto.getFile().getOriginalFilename())
-                    .attachmentPath(fileService.saveOnSyllabus(noticeDto.getFile(), noticeDto.getSyllabusId()));
+                    .attachmentPath(attachmentPath);
         }
 
         // 게시글 작성
         Board board = builder.build();
-        noticeService.create(board);
+        noticeService.save(board);
 
         // 작성된 포스트 번호로 뷰 이동
         return "redirect:/p/notice/" + board.getId();
-    }
-
-    // 수정
-    @GetMapping("notice/edit")
-    public String GetEditing(Model model, Principal principal) {
-        String data = "# 제목 입니다\\n\\n다름이 아니라 지금 예쁜 에디터를 사용해보려고 하는데\\n\\n뭔가 좀 잘 되는 듯 하면서 왜 잘되지 느낌도 받고 참 모르겠을 제 마음을 전하고 싶습니다.\\n\\n아래가 예제 코드랍니다 공식 사이트에서 복붙 해보죠\\n```javascript\\nconst editor = new toastui.Editor({\\n        el: document.querySelector('#editor'),\\n        previewStyle: 'vertical',\\n        height: '500px',\\n        initialValue: content\\n      });\\n```\\n\\n아하 역따옴표 3개로 코드 시작했을 때 끝내려면 다시 역따옴표 3개 더 입력하고 엔터하며 나가지네요.";
-
-        model.addAttribute("content", data);
-
-        return "/notice/pEdit";
-    }
-    @PostMapping("notice/edit")
-    public String postEditing(Model model, Principal principal) {
-
-        // 수정된 포스트 번호로 뷰 이동
-        return "redirect:/p/notice/12345678";
     }
 
     // 열람
@@ -181,5 +170,68 @@ public class NoticeProfessorController {
         // 열람
         model.addAttribute("board", board.get());
         return "notice/pView";
+    }
+
+    // 수정
+    @GetMapping("notice/edit/{boardIdStr:[0-9]+}")
+    public String GetEditing(Model model, Principal principal,
+                             @PathVariable String boardIdStr) {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> board = noticeService.read(boardId);
+
+        // 글 작성자가 아니면 403
+        if (board.isEmpty() ||
+                !board.get().getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 페이지 전송
+        model.addAttribute("syllabus", board.get().getSyllabus());
+        model.addAttribute("board", board.get());
+        return "/notice/pWrite";
+    }
+    @PostMapping("notice/edit/{boardIdStr:[0-9]+}")
+    public String postEditing(NoticeDto noticeDto,
+                              Model model, Principal principal,
+                              @PathVariable String boardIdStr) throws IOException {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = noticeService.read(boardId);
+
+        // 글 작성자가 아니면 403
+        if (oBoard.isEmpty() ||
+                !oBoard.get().getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 기본 board 값 가져오기
+        Board board = oBoard.get();
+        String attachmentName = board.getAttachmentName();
+        String attachmentPath = board.getAttachmentPath();
+
+        // 새로운 파일을 업로드하면
+        if (!noticeDto.getFile().isEmpty()) {
+            if (attachmentName != null && !attachmentName.isEmpty()) {
+                // 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...)
+            }
+
+            attachmentName = noticeDto.getFile().getOriginalFilename();
+            attachmentPath = fileService.saveOnSyllabus(noticeDto.getFile(), noticeDto.getSyllabusId());
+        }
+        // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
+        else if (attachmentName != null && !attachmentName.isEmpty() &&
+                noticeDto.getDeleteFile() != null && !noticeDto.getDeleteFile().isEmpty()) {
+            attachmentName = "";
+            attachmentPath = "";
+            // 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...)
+        }
+
+        // 새로운 값들로 세팅
+        board.update(noticeDto.getTitle(), noticeDto.getContent(), attachmentName, attachmentPath);
+        noticeService.save(board);
+
+        // 수정된 포스트 번호로 뷰 이동
+        return "redirect:/p/notice/" + boardIdStr;
     }
 }

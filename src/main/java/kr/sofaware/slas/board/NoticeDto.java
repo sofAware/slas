@@ -13,4 +13,5 @@ public class NoticeDto {
     private String title;
     private String content;
     private MultipartFile file;
+    private String deleteFile;
 }

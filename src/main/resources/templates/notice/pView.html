@@ -12,10 +12,13 @@
 <header th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
+<!--    제목-->
     <div class="d-flex justify-content-center mb-2" style="margin-top: 2rem">
         <h1 th:text="${board.getTitle()}"></h1>
     </div>
-    <div class="row justify-content-center mb-5">
+
+<!--    세부 정보-->
+    <div class="row justify-content-center mb-2">
         <div class="col-sm-auto">
             <i class="fa-regular fa-user"></i>
             <span class="text-secondary" th:text="${board.getMember().getName()}"></span>
@@ -34,6 +37,12 @@
                 <span th:text="${board.getAttachmentName()}"></span>
             </a>
         </div>
+    </div>
+
+<!--    작성자 버튼-->
+    <div class="d-flex justify-content-end gap-3 mb-5" th:if="${#authentication.getName()}==${board.getMember().getId()}">
+        <a class="btn btn-secondary" th:attr="href='/p/notice/edit/' + ${board.getId()}">수정</a>
+        <a class="btn btn-danger" th:attr="href='/p/notice/delete/' + ${board.getId()}">삭제</a>
     </div>
 
     <div id="viewer"></div>

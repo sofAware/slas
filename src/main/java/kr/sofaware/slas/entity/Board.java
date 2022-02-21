@@ -51,4 +51,19 @@ public class Board implements Serializable {
     public void increaseViewCount() {
         view++;
     }
+
+    /**
+     * 게시글 수정 때 사용할 업데이트 함수
+     * @author 양경호
+     * @param title
+     * @param content
+     * @param attachmentName
+     * @param attachmentPath
+     */
+    public void update(String title, String content, String attachmentName, String attachmentPath) {
+        this.title = title;
+        this.content = content;
+        this.attachmentName = attachmentName;
+        this.attachmentPath = attachmentPath;
+    }
 }

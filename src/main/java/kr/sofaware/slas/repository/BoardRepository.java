@@ -11,4 +11,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Board> findAllByMember_Id(String memberId);
 
     List<Board> findAllByCategoryAndSyllabus_Id(int category, String syllabusId);
+
 }
