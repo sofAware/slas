@@ -175,6 +175,9 @@ public class NoticeProfessorController {
                 principal.getName()))
             return "error/403";
 
+        // 조회 수 증가
+        noticeService.increaseViewCount(boardId);
+
         // 열람
         model.addAttribute("board", board.get());
         return "notice/pView";

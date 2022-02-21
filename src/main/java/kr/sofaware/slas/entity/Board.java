@@ -47,4 +47,8 @@ public class Board implements Serializable {
 
     private String attachmentName;      // 첨부 파일 이름
     private String attachmentPath;      // 첨부 파일 경로
+
+    public void increaseViewCount() {
+        view++;
+    }
 }

@@ -28,7 +28,7 @@
             <i class="fa-regular fa-eye"></i>
             <span class="text-secondary" th:text="${board.getView()}"></span>
         </div>
-        <div class="col-sm-auto" th:if="${!board.getAttachmentName().isEmpty()}">
+        <div class="col-sm-auto" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
             <a class="text-decoration-none text-primary" target="_blank" th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
                 <i class="fa-regular fa-file-alt"></i>
                 <span th:text="${board.getAttachmentName()}"></span>

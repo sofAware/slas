@@ -46,7 +46,12 @@ public class NoticeService implements BoardService {
     }
 
     @Override
-    public void increaseViewCount(int boardId, HttpSession session) {
+    public void increaseViewCount(int boardId) {
+        Optional<Board> oBoard = boardRepository.findById(boardId);
+        if (oBoard.isEmpty()) return;
+        Board board = oBoard.get();
 
+        board.increaseViewCount();
+        boardRepository.save(board);
     }
 }
