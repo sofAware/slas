@@ -1,6 +1,8 @@
 package kr.sofaware.slas.entity;
 
 import lombok.*;
+import org.thymeleaf.util.DateUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;

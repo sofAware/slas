@@ -38,5 +38,34 @@ public class SyllabusService {
         return map;
     }
 
+    /**
+     * 교수가 해당 학정번호의 강의를 하는지 여부
+     * @author 양경호
+     * @param syllabusId 학정번호
+     * @param professorId 교번
+     * @return 내용의 참 거짓 값
+     */
+    public boolean existsByIdAndProfessor_Id(String syllabusId, String professorId) {
+        return syllabusRepository.existsByIdAndProfessor_Id(syllabusId, professorId);
+    }
 
+    /**
+     * 교수가 강의 한 것 들중 가장 최근에 강의 한 것 하나 반환
+     * @author 양경호
+     * @param professorId 교번
+     * @return Syllabus
+     */
+    public Optional<Syllabus> findFirstByProfessor_IdOrderByIdDesc(String professorId) {
+        return syllabusRepository.findFirstByProfessor_IdOrderByIdDesc(professorId);
+    }
+
+    /**
+     * 학정번호로 강의 가져오기
+     * @author 양경호
+     * @param syllabusId 학정번호
+     * @return
+     */
+    public Optional<Syllabus> findById(String syllabusId) {
+        return syllabusRepository.findById(syllabusId);
+    }
 }

@@ -19,4 +19,11 @@ class SyllabusRepositoryTest {
         List<Syllabus> syllabusList = syllabusRepository.findAllByProfessor_Id("10101");
         System.out.println("syllabusList = " + syllabusList);
     }
+
+    @Test
+    void existsByIdAndProfessor_Id() {
+        boolean b = syllabusRepository.existsByIdAndProfessor_Id("21-1-0201-1-0001-02", "20102");
+        System.out.println("b = " + b);
+    }
+
 }

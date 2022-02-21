@@ -34,10 +34,21 @@ public class Syllabus {
     @JoinColumn(name = "professor_id")
     private Member professor;    // 담당교수
 
+    /**
+     * "21-1" 과 같은 년도, 학기 포맷을 "2021학년도 1학기"로 바꿔줌
+     * @param yearSemester 년도학기
+     * @return "2021학년도 1학기"
+     */
     public static String formatYearSemester(String yearSemester) {
         return String.format("20%s년도 %c학기", yearSemester.substring(0, 2), yearSemester.charAt(3));
     }
 
+    /**
+     * 영어로 포맷의 요일을 한글로 반환해줌
+     * @author 양경호
+     * @param dayOfWeek 요일
+     * @return "일", "월", ...
+     */
     public static String translateDayOfWeek(String dayOfWeek) {
         switch (dayOfWeek) {
             case "SUN": return "일";
@@ -50,8 +61,10 @@ public class Syllabus {
         }
         return "";
     }
-    /***
+
+    /**
      * "금123", "화4, 목3" 이런식으로 한글로 포맷팅해서 강의 시간을 반환해줌
+     * @author 양경호
      * @return "금123" or "화4, 목3"
      */
     public String formatClassTime() {

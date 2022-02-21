@@ -19,4 +19,10 @@ class LectureRepositoryTest {
         System.out.println("allByStudent_id = " + allByStudent_id);
         allByStudent_id.forEach(lecture -> System.out.println("lecture : " + lecture));
     }
+
+    @Test
+    void existsByStudent_IdAndSyllabus_Id() {
+        boolean b = lectureRepository.existsByStudent_IdAndSyllabus_Id("2019010101", "21-1-0201-1-0001-02");
+        System.out.println("b = " + b);
+    }
 }

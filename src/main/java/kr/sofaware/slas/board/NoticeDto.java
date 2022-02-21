@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@ToString
 @AllArgsConstructor
 public class NoticeDto {
     private String syllabusId;

@@ -4,6 +4,7 @@ import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.BoardService;
 import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.service.FileService;
+import kr.sofaware.slas.service.MemberService;
 import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -20,6 +21,7 @@ import java.util.*;
 @RequestMapping("/p")
 @RequiredArgsConstructor
 public class NoticeProfessorController {
+    private final MemberService memberService;
     private final BoardService noticeService;
     private final SyllabusService syllabusService;
     private final FileService fileService;
@@ -71,9 +73,6 @@ public class NoticeProfessorController {
             lectures.get(yearSemester).forEach(syllabus ->
                     boards.addAll(noticeService.listAll(syllabus.getId())));
 
-            // 날짜 내림차순 정렬
-            boards.sort(Comparator.comparing(Board::getDate).reversed());
-
             model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
         }
@@ -93,6 +92,8 @@ public class NoticeProfessorController {
             model.addAttribute("selectedSyllabusName", syllabus.getName());
         }
 
+        // 날짜 내림차순 정렬 후 모델에 넣기
+        boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
 
         return "notice/pNotice";
@@ -101,33 +102,43 @@ public class NoticeProfessorController {
     // 작성
     @GetMapping("notice/write")
     public String GetWriting(Model model, Principal principal,
-                             @RequestParam("syllabus-id") Optional<String> syllabusId) {
+                             @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
-        // 교수가 강의한 학기와 과목들 조회
-        Map<String, List<Syllabus>> mapLectures = syllabusService.mapAllByProfessorId(principal.getName());
-
-        // 맵으로 있던 과목들을 쭉 리스트로 변환
-        List<Syllabus> listLectures = new ArrayList<>();
-        mapLectures.forEach((s, syllabi) -> listLectures.addAll(syllabi));
-
-        // 모델에 추가
-        model.addAttribute("lectures", listLectures);
-        model.addAttribute("selectedSyllabusId", syllabusId.orElse(""));
+        // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
+        model.addAttribute("syllabus", syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
+                syllabusService.findById(syllabusId).get());
 
         return "/notice/pWrite";
     }
     @PostMapping("notice/write")
-    public String postWriting(NoticeDto noticeDto, Model model, Principal principal)
-            throws IOException {
+    public String postWriting(NoticeDto noticeDto, Model model, Principal principal) throws IOException {
 
-        // 작성 권한 체크
-        // TODO
+        System.out.println("noticeDto = " + noticeDto);
 
-        if (noticeDto.getFile() != null)
-            fileService.save(noticeDto.getFile());
+        // 게시글 만들기
+        Board.BoardBuilder builder = Board.builder()
+                .syllabus(syllabusService.findById(noticeDto.getSyllabusId()).get())
+                .category(Board.CATEGORY_NOTICE)
+                .title(noticeDto.getTitle())
+                .content(noticeDto.getContent())
+                .member(memberService.loadUserByUsername(principal.getName()))
+                .date(new Date())
+                .view(0);
+
+        // 첨부 파일 저장
+        if (noticeDto.getFile() != null) {
+            builder
+                    .attachmentName(noticeDto.getFile().getOriginalFilename())
+                    .attachmentPath(fileService.save(noticeDto.getFile()));
+        }
+
+        // 게시글 작성
+        Board board = builder.build();
+        noticeService.create(board);
 
         // 작성된 포스트 번호로 뷰 이동
-        return "redirect:/p/notice/12345678";
+        return "redirect:/p/notice/" + board.getId();
     }
 
     // 수정

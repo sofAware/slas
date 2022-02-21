@@ -18,10 +18,9 @@
         <div class="mb-3 row">
             <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
             <div class="col-sm-10">
-                <select class="form-select" id="syllabus" name="syllabusId">
-                    <option th:each="s : ${lectures}" th:value="${s.getId()}"
-                            th:text="${s.getName()} + ' (' + ${s.getId()} + ') [' + ${s.formatClassTime()} + ']'"
-                            th:selected="${s.getId().equals(selectedSyllabusId)}"></option>
+                <select class="form-control" id="syllabus" name="syllabusId" disabled>
+                    <option th:text="${syllabus.getName()} + ' (' + ${syllabus.getId()} + ') [' + ${syllabus.formatClassTime()} + ']'"
+                            th:value="${syllabus.getId()}" selected></option>
                 </select>
             </div>
         </div>

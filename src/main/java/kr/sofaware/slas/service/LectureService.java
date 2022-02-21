@@ -34,4 +34,14 @@ public class LectureService {
         map.forEach((s, syllabi) -> syllabi.sort(Comparator.comparing(Syllabus::getName)));
         return map;
     }
+
+    /**
+     * 학생이 해당 수업을 듣는지 여부
+     * @param studentId 학번
+     * @param syllabusId 학정번호
+     * @return 내용의 참 거짓 값
+     */
+    public boolean existsByStudent_IdAndSyllabus_Id(String studentId, String syllabusId) {
+        return lectureRepository.existsByStudent_IdAndSyllabus_Id(studentId, syllabusId);
+    }
 }

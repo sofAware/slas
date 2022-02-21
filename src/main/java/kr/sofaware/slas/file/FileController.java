@@ -19,10 +19,12 @@ public class FileController {
 
     private final FileService fileService;
 
-    @PostMapping("")
+    @PostMapping("/**")
     @ResponseBody
-    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
-        return fileService.save(file);
+    public String upload(HttpServletRequest request,
+                         @RequestParam("file") MultipartFile file) throws IOException {
+//        return fileService.save(file);
+        return null;
     }
 
     @GetMapping("/**")

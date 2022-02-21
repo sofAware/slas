@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface LectureRepository extends JpaRepository<Lecture, String> {
     List<Lecture> findAllByStudent_Id(@Param(value = "memberId") String id);
+    boolean existsByStudent_IdAndSyllabus_Id(String studentId, String syllabusId);
 }

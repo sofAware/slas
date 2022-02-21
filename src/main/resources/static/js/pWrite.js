@@ -38,11 +38,15 @@ document.querySelector('#write').addEventListener('submit', e => {
     // 기본 이벤트 막고
     e.preventDefault();
 
-    // 폼 데이터 가져와서
+    // 폼 데이터 가져오고 안채워진 내용 데이터 채우기
     const formData = new FormData(e.target);
-
-    // 아직 안채워진 내용 데이터 채우기
+    // 내용
     formData.append("content", editor.getMarkdown());
+    // 학정번호
+    formData.append(
+        document.querySelector('select').getAttribute('name'),
+        document.querySelector('option[selected]').getAttribute('value')
+    );
 
     fetch('', {
         method: 'POST',
