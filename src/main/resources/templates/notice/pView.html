@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="/frame/head.html">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <title th:text="'공지사항 - ' + ${board.getSyllabus().getName()}"></title>
+</head>
+<body>
+<header th:replace="/frame/pHeader.html"></header>
+
+<div class="container">
+    <div class="d-flex justify-content-center mb-2" style="margin-top: 2rem">
+        <h1 th:text="${board.getTitle()}"></h1>
+    </div>
+    <div class="row justify-content-center mb-5">
+        <div class="col-sm-auto">
+            <i class="fa-regular fa-user"></i>
+            <span class="text-secondary" th:text="${board.getMember().getName()}"></span>
+        </div>
+        <div class="col-sm-auto">
+            <i class="fa-regular fa-calendar"></i>
+            <span class="text-secondary" th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd HH:mm')}"></span>
+        </div>
+        <div class="col-sm-auto">
+            <i class="fa-regular fa-eye"></i>
+            <span class="text-secondary" th:text="${board.getView()}"></span>
+        </div>
+        <div class="col-sm-auto" th:if="${!board.getAttachmentName().isEmpty()}">
+            <a class="text-decoration-none text-primary" target="_blank" th:attr="href=${board.getAttachmentPath()}">
+                <i class="fa-regular fa-file-alt"></i>
+                <span th:text="${board.getAttachmentName()}"></span>
+            </a>
+        </div>
+    </div>
+
+    <div id="viewer"></div>
+</div>
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="https://kit.fontawesome.com/dd744c090b.js" crossorigin="anonymous"></script>
+<script>
+    const viewer = new toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true,
+        initialValue: `[[${board.getContent()}]]`
+    });
+</script>
+</body>
+</html>

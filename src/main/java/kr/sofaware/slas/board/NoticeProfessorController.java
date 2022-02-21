@@ -158,11 +158,25 @@ public class NoticeProfessorController {
 
     // 열람
     @GetMapping("notice/{boardIdStr:[0-9]+}")
-    @ResponseBody
-    public String view(Model model,
+    public String view(Model model, Principal principal,
                        @PathVariable String boardIdStr) {
-        int boardId = Integer.parseInt(boardIdStr);
 
-        return boardIdStr + "번의 게시글을 조회하려 하는군요 아직 개발중이니 기다려 주시오.";
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> board = noticeService.read(boardId);
+
+        // 없으면 404
+        if (board.isEmpty())
+            return "error/404";
+
+        // 읽을 권한 없으면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                board.get().getSyllabus().getId(),
+                principal.getName()))
+            return "error/403";
+
+        // 열람
+        model.addAttribute("board", board.get());
+        return "notice/pView";
     }
 }
