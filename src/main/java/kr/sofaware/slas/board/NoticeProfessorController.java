@@ -78,7 +78,6 @@ public class NoticeProfessorController {
             boards.addAll(noticeService.listAll(syllabusId));
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력
-
             Syllabus syllabus = lectures
                     .get(yearSemester)
                     .stream()

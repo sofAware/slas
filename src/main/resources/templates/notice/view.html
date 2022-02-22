@@ -40,7 +40,8 @@
             <span class="text-secondary" th:text="${board.getView()}"></span>
         </div>
         <div class="col-sm-auto text-center" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
-            <a class="text-decoration-none text-primary" target="_blank" th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
+            <a class="text-decoration-none text-primary" target="_blank"
+                    th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
                 <i class="fa-solid fa-paperclip"></i>
                 <span th:text="${board.getAttachmentName()}"></span>
             </a>
@@ -55,6 +56,7 @@
         <a class="btn btn-primary" th:attr="href='./edit/' + ${board.getId()}"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
         <a class="btn btn-danger" th:attr="href='./delete/' + ${board.getId()}"
+           data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">삭제</a>
     </div>
 
@@ -65,6 +67,13 @@
 <script th:replace="/frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
+    // 삭제 버튼 툴팁
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    // Toast UI 뷰어
     const viewer = new toastui.Editor.factory({
         el: document.querySelector('#viewer'),
         viewer: true,

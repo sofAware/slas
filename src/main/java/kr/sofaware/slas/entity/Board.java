@@ -16,9 +16,8 @@ import java.util.Date;
 public class Board implements Serializable {
     public static final int CATEGORY_NOTICE = 1;            // 공지사항
     public static final int CATEGORY_LECTURE_MATERIAL = 2;  // 강의자료
-    public static final int CATEGORY_LECTURE_VIDEO = 3;     // 강의영상
-    public static final int CATEGORY_ASSIGNMENT = 4;        // 제출과제
-    public static final int CATEGORY_QNA = 5;               // 질문
+    public static final int CATEGORY_ASSIGNMENT = 3;        // 제출과제
+    public static final int CATEGORY_QNA = 4;               // 질문
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
