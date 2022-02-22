@@ -40,7 +40,10 @@ public class FileController {
 
         // 파일 위치 세팅 후 유무 체크
         Path path = Paths.get(System.getProperty("user.dir"), request.getRequestURI());
-        if (!Files.exists(path)) return;
+        if (!Files.exists(path)) {
+            response.setStatus(404);
+            return;
+        }
 
         // 파일 이름 인코딩
         String encodedFilename = URLEncoder.encode(
