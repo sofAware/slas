@@ -37,11 +37,11 @@ public class LectureService {
 
     /**
      * 학생이 해당 수업을 듣는지 여부
-     * @param studentId 학번
      * @param syllabusId 학정번호
+     * @param studentId 학번
      * @return 내용의 참 거짓 값
      */
-    public boolean existsByStudent_IdAndSyllabus_Id(String studentId, String syllabusId) {
-        return lectureRepository.existsByStudent_IdAndSyllabus_Id(studentId, syllabusId);
+    public boolean existsBySyllabus_IdAndStudent_Id(String syllabusId, String studentId) {
+        return lectureRepository.existsBySyllabus_IdAndStudent_Id(syllabusId, studentId);
     }
 }

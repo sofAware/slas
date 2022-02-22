@@ -53,7 +53,7 @@ public class Syllabus {
         switch (dayOfWeek) {
             case "SUN": return "일";
             case "MON": return "월";
-            case "THE": return "화";
+            case "TUE": return "화";
             case "WED": return "수";
             case "THU": return "목";
             case "FRI": return "금";

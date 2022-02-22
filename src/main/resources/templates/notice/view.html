@@ -42,7 +42,7 @@
 
 <!--    작성자 버튼-->
     <div class="d-flex justify-content-end gap-2 mb-5">
-        <a class="btn btn-secondary" href="/p/notice">목록</a>
+        <a class="btn btn-secondary" href="../notice">목록</a>
         <a class="btn btn-primary" th:attr="href='./edit/' + ${board.getId()}"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
         <a class="btn btn-danger" th:attr="href='./delete/' + ${board.getId()}"

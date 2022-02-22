@@ -47,7 +47,7 @@ public class FileFilter extends OncePerRequestFilter {
                 String syllabusId = split[3];
 
                 if (request.isUserInRole("STUDENT")) {
-                    auth = lectureService.existsByStudent_IdAndSyllabus_Id(username, syllabusId);
+                    auth = lectureService.existsBySyllabus_IdAndStudent_Id(syllabusId, username);
                 } else if (request.isUserInRole("PROFESSOR")) {
                     auth = syllabusService.existsByIdAndProfessor_Id(syllabusId, username);
                 }

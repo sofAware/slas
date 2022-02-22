@@ -22,7 +22,7 @@ class LectureRepositoryTest {
 
     @Test
     void existsByStudent_IdAndSyllabus_Id() {
-        boolean b = lectureRepository.existsByStudent_IdAndSyllabus_Id("2019010101", "21-1-0201-1-0001-02");
+        boolean b = lectureRepository.existsBySyllabus_IdAndStudent_Id("2019010101", "21-1-0201-1-0001-02");
         System.out.println("b = " + b);
     }
 }

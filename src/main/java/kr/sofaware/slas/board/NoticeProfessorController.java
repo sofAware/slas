@@ -52,7 +52,7 @@ public class NoticeProfessorController {
             yearSemester = syllabusId.substring(0, 4);
         }
 
-        // 초기화
+        // 21-1를 2021학년도 1학기로 포맷하는 맵 초기화
         Map<String, String> formatYS = new TreeMap<>(Collections.reverseOrder());
         lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
 
@@ -64,10 +64,8 @@ public class NoticeProfessorController {
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));
 
-        // 게시판 목록 초기화
-        List<Board> boards = new ArrayList<>();
-
         // 강의 선택 없으면 해당 학기 전체 강의에 대한 공지사항 긁어오기
+        List<Board> boards = new ArrayList<>();
         if (syllabusId == null || syllabusId.isEmpty()) {
             lectures.get(yearSemester).forEach(syllabus ->
                     boards.addAll(noticeService.listAll(syllabus.getId())));
@@ -79,12 +77,11 @@ public class NoticeProfessorController {
             boards.addAll(noticeService.listAll(syllabusId));
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력
-            String finalSyllabusId = syllabusId;
 
             Syllabus syllabus = lectures
                     .get(yearSemester)
                     .stream()
-                    .filter(s -> s.getId().equals(finalSyllabusId))
+                    .filter(s -> s.getId().equals(syllabusId))
                     .findAny()
                     .get();
             model.addAttribute("selectedSyllabusId", syllabus.getId());

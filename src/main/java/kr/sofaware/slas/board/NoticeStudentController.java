@@ -30,20 +30,21 @@ public class NoticeStudentController {
         // 사용자의 수강 학기와 과목들 조회
         Map<String, List<Syllabus>> lectures = lectureService.mapAllByStudentId(principal.getName());
 
-        // 학기, 과목 선택 없는 요청이면 제일 최근 학기와 사전 순 빠른 학정번호를 선택
-        if (syllabusId == null) {
-            if (yearSemester == null) {
+        // 강의 선택 없으면
+        if (syllabusId == null || syllabusId.isEmpty()) {
+            // 학기 선택도 없으면 최근학기 전체 공지 선택
+            if (yearSemester == null || yearSemester.isEmpty()) {
                 ArrayList<String> yearSemesters = new ArrayList<>(lectures.keySet());
-                // 이 사람이 들었던 수업이 없을 경우 그냥 리턴
+                // 이 사람이 했던 수업이 없을 경우 그냥 리턴
                 if (yearSemesters.isEmpty())
-                    return "notice/sNotice";
+                    return "notice/list";
 
+                // 있으면 최근 학기 입력
                 yearSemester = yearSemesters.get(0);
             }
-
-            // 첫번째 과목
-            syllabusId = lectures.get(yearSemester).get(0).getId();
-        } else if (yearSemester == null) {
+        }
+        // 강의 선택이 있으면 학기는 학정번호에서 따오기
+        else if (yearSemester == null) {
             yearSemester = syllabusId.substring(0, 4);
         }
 
@@ -53,19 +54,68 @@ public class NoticeStudentController {
 
         // 학기 선택 리스트
         model.addAttribute("mapYS", formatYS);
-        model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+        model.addAttribute("yearSemester", yearSemester);
+        model.addAttribute("formatYS", Syllabus.formatYearSemester(yearSemester));
 
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));
-        String finalSyllabusId = syllabusId;
-        model.addAttribute("selectedSyllabusName",
-                lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
-                        .findAny().get().getName());
 
-        // 게시판 목록 긁어오기
-        List<Board> boards = noticeService.listAll(syllabusId);
+        // 강의 선택 없으면 해당 학기 전체 강의에 대한 공지사항 긁어오기
+        List<Board> boards = new ArrayList<>();
+        if (syllabusId == null || syllabusId.isEmpty()) {
+            lectures.get(yearSemester).forEach(syllabus ->
+                    boards.addAll(noticeService.listAll(syllabus.getId())));
+
+            model.addAttribute("selectedSyllabusId", "");
+            model.addAttribute("selectedSyllabusName", "전체");
+        }
+        else {
+            boards.addAll(noticeService.listAll(syllabusId));
+
+            // 선택된 강의 lectures에서 찾아서 강의명 입력
+
+            Syllabus syllabus = lectures
+                    .get(yearSemester)
+                    .stream()
+                    .filter(s -> s.getId().equals(syllabusId))
+                    .findAny()
+                    .get();
+            model.addAttribute("selectedSyllabusId", syllabus.getId());
+            model.addAttribute("selectedSyllabusName",
+                    syllabus.getName() + " (" + syllabus.formatClassTime() + ")");
+        }
+
+        // 날짜 내림차순 정렬 후 모델에 넣기
+        boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
 
-        return "notice/sNotice";
+        return "notice/list";
+    }
+
+    // 열람
+    @GetMapping("notice/{boardIdStr:[0-9]+}")
+    public String view(Model model, Principal principal,
+                       @PathVariable String boardIdStr) {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> board = noticeService.read(boardId);
+
+        // 없으면 404
+        if (board.isEmpty())
+            return "error/404";
+
+        // 읽을 권한 없으면 403
+        if (!lectureService.existsBySyllabus_IdAndStudent_Id(
+                board.get().getSyllabus().getId(),
+                principal.getName()))
+            return "error/403";
+
+        // 조회 수 증가
+        noticeService.increaseViewCount(boardId);
+
+        // 열람
+        model.addAttribute("board", board.get());
+        return "notice/view";
     }
 }
