@@ -4,8 +4,9 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:replace="/frame/head.html">
-    <title>소파대학교 로그인</title>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.css" rel="stylesheet">
     <link th:href="@{/css/login.css}" rel="stylesheet">
+    <title>소파대학교 로그인</title>
 </head>
 <body class="text-center">
 
@@ -60,6 +61,7 @@
 </main>
 
 <div th:replace="/frame/tail.html"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 <script type="text/javascript" th:src="@{/js/login.js}"></script>
 </body>
 </html>
