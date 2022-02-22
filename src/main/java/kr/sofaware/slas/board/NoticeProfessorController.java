@@ -20,6 +20,7 @@ import java.util.*;
 @RequestMapping("/p")
 @RequiredArgsConstructor
 public class NoticeProfessorController {
+
     private final MemberService memberService;
     private final BoardService noticeService;
     private final SyllabusService syllabusService;

@@ -6,6 +6,11 @@
 <head>
     <meta th:replace="/frame/head.html">
     <title>공지사항</title>
+    <style>
+        tbody > tr {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
@@ -63,19 +68,22 @@
             <th class="text-center" th:if="${selectedSyllabusId.isEmpty()}">강의명</th>
             <th class="text-center" th:if="${selectedSyllabusId.isEmpty()}">강의시간</th>
             <th class="text-center">제목</th>
-            <th class="text-center"></th>
+            <th></th>
             <th class="text-center">작성자</th>
             <th class="text-center">작성일</th>
             <th class="text-center">조회수</th>
         </tr>
         </thead>
         <tbody>
-        <tr style="cursor: pointer;" th:each="board : ${boards}">
+        <tr th:each="board : ${boards}">
             <td class="text-center" th:text="${board.getId()}"></td>
             <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${board.getSyllabus().getName()}"></td>
             <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${board.getSyllabus().formatClassTime()}"></td>
             <td th:text="${board.getTitle()}"></td>
-            <td class="text-center"><i class="fa-solid fa-paperclip" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}"></i></td>
+            <td class="text-end">
+                <i class="far fa-image" th:if="${board.getContent().contains('![image](')}"></i>
+                <i class="fa-solid fa-paperclip" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}"></i>
+            </td>
             <td class="text-center" th:text="${board.getMember().getName()}"></td>
             <td class="text-center" th:text="${#dates.createToday().compareTo(board.getDate()) < 0 ?
                 #dates.format(board.getDate(), 'HH:mm') :

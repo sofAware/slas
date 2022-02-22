@@ -7,41 +7,50 @@
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
     <title th:text="'공지사항 - ' + ${board.getSyllabus().getName()}"></title>
+    <style>
+        .container-fluid {
+            padding-top: 4rem;
+            padding-bottom: 3rem;
+            background-color: #fafafa;
+        }
+    </style>
 </head>
 <body>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
-<div class="container">
-<!--    제목-->
-    <div class="d-flex justify-content-center mb-2" style="margin-top: 2rem">
+<div class="container-fluid m-0">
+    <!--    제목-->
+    <div class="d-flex justify-content-center mb-2">
         <h1 th:text="${board.getTitle()}"></h1>
     </div>
 
-<!--    세부 정보-->
+    <!--    세부 정보-->
     <div class="row justify-content-center mb-2">
-        <div class="col-sm-auto">
+        <div class="col-sm-auto text-center">
             <i class="fa-regular fa-user"></i>
             <span class="text-secondary" th:text="${board.getMember().getName()}"></span>
         </div>
-        <div class="col-sm-auto">
+        <div class="col-sm-auto text-center">
             <i class="fa-regular fa-calendar"></i>
             <span class="text-secondary" th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd HH:mm')}"></span>
         </div>
-        <div class="col-sm-auto">
+        <div class="col-sm-auto text-center">
             <i class="fa-regular fa-eye"></i>
             <span class="text-secondary" th:text="${board.getView()}"></span>
         </div>
-        <div class="col-sm-auto" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
+        <div class="col-sm-auto text-center" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
             <a class="text-decoration-none text-primary" target="_blank" th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
                 <i class="fa-solid fa-paperclip"></i>
                 <span th:text="${board.getAttachmentName()}"></span>
             </a>
         </div>
     </div>
+</div>
 
+<div class="container">
 <!--    작성자 버튼-->
-    <div class="d-flex justify-content-end gap-2 mb-5">
+    <div class="d-flex justify-content-end gap-2 mt-3 mb-5">
         <a class="btn btn-secondary" href="../notice">목록</a>
         <a class="btn btn-primary" th:attr="href='./edit/' + ${board.getId()}"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
