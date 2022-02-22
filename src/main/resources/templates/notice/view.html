@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
     <title th:text="'공지사항 - ' + ${board.getSyllabus().getName()}"></title>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
 <!--    제목-->
@@ -41,9 +43,9 @@
 <!--    작성자 버튼-->
     <div class="d-flex justify-content-end gap-2 mb-5">
         <a class="btn btn-secondary" href="/p/notice">목록</a>
-        <a class="btn btn-primary" th:attr="href='/p/notice/edit/' + ${board.getId()}"
+        <a class="btn btn-primary" th:attr="href='./edit/' + ${board.getId()}"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
-        <a class="btn btn-danger" th:attr="href='/p/notice/delete/' + ${board.getId()}"
+        <a class="btn btn-danger" th:attr="href='./delete/' + ${board.getId()}"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">삭제</a>
     </div>
 

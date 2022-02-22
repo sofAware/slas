@@ -7,7 +7,6 @@
     <meta th:replace="/frame/head.html">
     <title>공지사항</title>
 </head>
-<body>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
@@ -45,7 +44,8 @@
             </ul>
         </div>
 
-        <button class="btn btn-primary" type="button" aria-expanded="false" id="write">
+        <button class="btn btn-primary" type="button" aria-expanded="false" id="write"
+                sec:authorize="hasRole('PROFESSOR')">
             글쓰기
         </button>
     </div>
@@ -65,7 +65,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr style="cursor: pointer;" th:each="board : ${boards}" th:attr="href=${'/p/notice/' + board.getId()}">
+        <tr style="cursor: pointer;" th:each="board : ${boards}">
             <td class="text-center" th:text="${board.getId()}"></td>
             <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${board.getSyllabus().getName()}"></td>
             <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${board.getSyllabus().formatClassTime()}"></td>
@@ -86,12 +86,12 @@
 <script>
     // 게시글 리스트 각각 이동 이벤트
     document.querySelectorAll('tbody > tr').forEach(e => e.addEventListener('click', evt =>
-        location.href = e.getAttribute("href")));
+        location.href = './notice/' + e.querySelector('td').innerText));
 
     // 글쓰기 버튼 이벤트
     document.querySelector('#write').addEventListener('click', evt => {
         const sid = document.querySelector('#syllabus').getAttribute('data-sid');
-        location.href = '/p/notice/write' + (sid ? '?syllabus-id=' + sid : '');
+        location.href = './notice/write' + (sid ? '?syllabus-id=' + sid : '');
     });
 </script>
 </body>

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title>공지사항 글쓰기</title>
+    <title>공지사항 - 글쓰기</title>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
     <h2 class="my-4">공지사항</h2>
