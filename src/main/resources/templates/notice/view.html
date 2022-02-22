@@ -5,7 +5,6 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <title th:text="'공지사항 - ' + ${board.getSyllabus().getName()}"></title>
 </head>
 <body>
@@ -33,16 +32,19 @@
         </div>
         <div class="col-sm-auto" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
             <a class="text-decoration-none text-primary" target="_blank" th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
-                <i class="fa-regular fa-file-alt"></i>
+                <i class="fa-solid fa-paperclip"></i>
                 <span th:text="${board.getAttachmentName()}"></span>
             </a>
         </div>
     </div>
 
 <!--    작성자 버튼-->
-    <div class="d-flex justify-content-end gap-3 mb-5" th:if="${#authentication.getName()}==${board.getMember().getId()}">
-        <a class="btn btn-secondary" th:attr="href='/p/notice/edit/' + ${board.getId()}">수정</a>
-        <a class="btn btn-danger" th:attr="href='/p/notice/delete/' + ${board.getId()}">삭제</a>
+    <div class="d-flex justify-content-end gap-2 mb-5">
+        <a class="btn btn-secondary" href="/p/notice">목록</a>
+        <a class="btn btn-primary" th:attr="href='/p/notice/edit/' + ${board.getId()}"
+           th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
+        <a class="btn btn-danger" th:attr="href='/p/notice/delete/' + ${board.getId()}"
+           th:if="${#authentication.getName()}==${board.getMember().getId()}">삭제</a>
     </div>
 
     <div id="viewer"></div>
@@ -51,7 +53,6 @@
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script src="https://kit.fontawesome.com/dd744c090b.js" crossorigin="anonymous"></script>
 <script>
     const viewer = new toastui.Editor.factory({
         el: document.querySelector('#viewer'),

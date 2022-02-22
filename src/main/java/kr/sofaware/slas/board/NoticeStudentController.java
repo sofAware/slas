@@ -68,14 +68,4 @@ public class NoticeStudentController {
 
         return "notice/sNotice";
     }
-
-    // 열람
-    @GetMapping("notice/{boardIdStr:[1-9]+}")
-    @ResponseBody
-    public String view(Model model,
-                       @PathVariable String boardIdStr) {
-        int boardId = Integer.parseInt(boardIdStr);
-
-        return boardIdStr + "번의 게시글을 조회하려 하는군요 아직 개발중이니 기다려 주시오.";
-    }
 }

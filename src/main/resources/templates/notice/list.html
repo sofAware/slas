@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta th:replace="/frame/head.html">
     <title>공지사항</title>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
     <h2 class="my-4">공지사항</h2>
@@ -53,9 +55,10 @@
         <thead>
         <tr>
             <th class="text-center">글 번호</th>
-            <th class="text-center">강의명</th>
-            <th class="text-center">강의시간</th>
+            <th class="text-center" th:if="${selectedSyllabusId.isEmpty()}">강의명</th>
+            <th class="text-center" th:if="${selectedSyllabusId.isEmpty()}">강의시간</th>
             <th class="text-center">제목</th>
+            <th class="text-center"></th>
             <th class="text-center">작성자</th>
             <th class="text-center">작성일</th>
             <th class="text-center">조회수</th>
@@ -64,9 +67,10 @@
         <tbody>
         <tr style="cursor: pointer;" th:each="board : ${boards}" th:attr="href=${'/p/notice/' + board.getId()}">
             <td class="text-center" th:text="${board.getId()}"></td>
-            <td class="text-center" th:text="${board.getSyllabus().getName()}"></td>
-            <td class="text-center" th:text="${board.getSyllabus().formatClassTime()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${board.getSyllabus().getName()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${board.getSyllabus().formatClassTime()}"></td>
             <td th:text="${board.getTitle()}"></td>
+            <td class="text-center"><i class="fa-solid fa-paperclip" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}"></i></td>
             <td class="text-center" th:text="${board.getMember().getName()}"></td>
             <td class="text-center" th:text="${#dates.createToday().compareTo(board.getDate()) < 0 ?
                 #dates.format(board.getDate(), 'HH:mm') :
@@ -81,7 +85,7 @@
 <script th:replace="/frame/tail.html"></script>
 <script>
     // 게시글 리스트 각각 이동 이벤트
-    document.querySelectorAll('table tr').forEach(e => e.addEventListener('click', evt =>
+    document.querySelectorAll('tbody > tr').forEach(e => e.addEventListener('click', evt =>
         location.href = e.getAttribute("href")));
 
     // 글쓰기 버튼 이벤트

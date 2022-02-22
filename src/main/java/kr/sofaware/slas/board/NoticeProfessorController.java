@@ -41,7 +41,7 @@ public class NoticeProfessorController {
                 ArrayList<String> yearSemesters = new ArrayList<>(lectures.keySet());
                 // 이 사람이 했던 수업이 없을 경우 그냥 리턴
                 if (yearSemesters.isEmpty())
-                    return "notice/pNotice";
+                    return "notice/list";
 
                 // 있으면 최근 학기 입력
                 yearSemester = yearSemesters.get(0);
@@ -96,7 +96,7 @@ public class NoticeProfessorController {
         boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
 
-        return "notice/pNotice";
+        return "notice/list";
     }
 
     // 작성
@@ -109,7 +109,7 @@ public class NoticeProfessorController {
                 syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
                 syllabusService.findById(syllabusId).get());
 
-        return "/notice/pWrite";
+        return "/notice/write";
     }
     @PostMapping("notice/write")
     public String postWriting(NoticeDto noticeDto, Model model, Principal principal) throws IOException {
@@ -170,7 +170,7 @@ public class NoticeProfessorController {
 
         // 열람
         model.addAttribute("board", board.get());
-        return "notice/pView";
+        return "notice/view";
     }
 
     // 수정
@@ -193,7 +193,7 @@ public class NoticeProfessorController {
         // 페이지 전송
         model.addAttribute("syllabus", board.get().getSyllabus());
         model.addAttribute("board", board.get());
-        return "/notice/pWrite";
+        return "/notice/write";
     }
     @PostMapping("notice/edit/{boardIdStr:[0-9]+}")
     public String postEditing(NoticeDto noticeDto,
