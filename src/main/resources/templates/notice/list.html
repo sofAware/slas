@@ -36,10 +36,15 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="syllabus">
                 <li><a class="dropdown-item" th:attr="href=${'?year-semester=' + yearSemester}">전체</a></li>
-                <li th:each="s : ${syllabuses}">
+                <li sec:authorize="hasRole('PROFESSOR')" th:each="s : ${syllabuses}">
                     <a class="dropdown-item"
                        th:attr="href=${'?syllabus-id=' + s.getId()}"
                        th:text="${s.getName() + ' (' + s.formatClassTime() + ')'}"></a>
+                </li>
+                <li sec:authorize="hasRole('STUDENT')" th:each="s : ${syllabuses}">
+                    <a class="dropdown-item"
+                       th:attr="href=${'?syllabus-id=' + s.getId()}"
+                       th:text="${s.getName() + ' (' + s.formatClassTime() + ') - ' + s.getProfessor().getName()}"></a>
                 </li>
             </ul>
         </div>

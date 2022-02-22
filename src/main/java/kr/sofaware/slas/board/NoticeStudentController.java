@@ -82,7 +82,9 @@ public class NoticeStudentController {
                     .get();
             model.addAttribute("selectedSyllabusId", syllabus.getId());
             model.addAttribute("selectedSyllabusName",
-                    syllabus.getName() + " (" + syllabus.formatClassTime() + ")");
+                    syllabus.getName() + " (" +
+                            syllabus.formatClassTime() + ") - " +
+                            syllabus.getProfessor().getName());
         }
 
         // 날짜 내림차순 정렬 후 모델에 넣기
