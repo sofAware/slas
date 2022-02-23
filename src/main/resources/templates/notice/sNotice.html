@@ -44,34 +44,34 @@
 <!-- 게시글 목록 -->
 <table class="table table-striped table-hover">
     <thead>
-        <tr>
-            <th>학정 번호</th>
-            <th>강의 제목</th>
-            <th>글 번호</th>
-            <th>분류</th>
-            <th>조회수</th>
-            <th>등록일</th>
-            <th>작성자</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>첨부 파일 이름</th>
-            <th>첨부 파일 경로</th>
-        </tr>
+    <tr>
+        <th>학정 번호</th>
+        <th>강의 제목</th>
+        <th>글 번호</th>
+        <th>분류</th>
+        <th>조회수</th>
+        <th>등록일</th>
+        <th>작성자</th>
+        <th>제목</th>
+        <th>내용</th>
+        <th>첨부 파일 이름</th>
+        <th>첨부 파일 경로</th>
+    </tr>
     </thead>
     <tbody>
-        <tr style="cursor: pointer;" th:each="board : ${boards}" th:attr="href=${'/s/notice/' + board.getId()}">
-            <th th:text="${board.getSyllabus().getId()}"></th>
-            <td th:text="${board.getSyllabus().getName()}"></td>
-            <td th:text="${board.getId()}"></td>
-            <td th:text="${board.getCategory()}"></td>
-            <td th:text="${board.getView()}"></td>
-            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
-            <td th:text="${board.getMember().getName()}"></td>
-            <td th:text="${board.getTitle()}"></td>
-            <td th:text="${board.getContent()}"></td>
-            <td th:text="${board.getAttachmentName()}"></td>
-            <td th:text="${board.getAttachmentPath()}"></td>
-        </tr>
+    <tr style="cursor: pointer;" th:each="board : ${boards}" th:attr="href=${'/s/notice/' + board.getId()}">
+        <th th:text="${board.getSyllabus().getId()}"></th>
+        <td th:text="${board.getSyllabus().getName()}"></td>
+        <td th:text="${board.getId()}"></td>
+        <td th:text="${board.getCategory()}"></td>
+        <td th:text="${board.getView()}"></td>
+        <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd hh-mm-ss')}"></td>
+        <td th:text="${board.getMember().getName()}"></td>
+        <td th:text="${board.getTitle()}"></td>
+        <td th:text="${board.getContent()}"></td>
+        <td th:text="${board.getAttachmentName()}"></td>
+        <td th:text="${board.getAttachmentPath()}"></td>
+    </tr>
     </tbody>
 </table>
 

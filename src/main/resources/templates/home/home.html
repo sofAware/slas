@@ -8,7 +8,8 @@
     <title>Title</title>
 </head>
 <body>
-<header th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <section class="d-flex align-items-center justify-content-center flex-column pt-40">
     <h3>나는 말이야</h3>

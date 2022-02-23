@@ -1,5 +1,6 @@
 package kr.sofaware.slas.service;
 
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,9 @@ public class LectureService {
         // 강의명으로 정렬해서 반환
         map.forEach((s, syllabi) -> syllabi.sort(Comparator.comparing(Syllabus::getName)));
         return map;
+    }
+
+    public List<Lecture> findAllByStudentId(String studentId){
+        return lectureRepository.findAllByStudent_Id(studentId);
     }
 }
