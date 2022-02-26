@@ -39,5 +39,5 @@ main .input-group-text {
 }
 
 label[for='floatingPassword'] {
-    z-index: 1080;
+    z-index: 1040;
 }
