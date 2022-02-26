@@ -6,7 +6,7 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
-    <title th:text="'강의영상 - ' + ${lv.getSyllabus().getName()}"></title>
+    <title th:text="'강의영상 - ' + ${lv.getSyllabus().getName()} + ' ' + ${lv.getId()}"></title>
     <style>
         .container-fluid {
             padding-top: 4rem;
