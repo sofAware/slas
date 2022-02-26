@@ -82,7 +82,7 @@
             <td th:text="${board.getTitle()}"></td>
             <td class="text-end">
                 <i class="far fa-image" th:if="${board.getContent().contains('![image](')}"></i>
-                <i class="fa-solid fa-paperclip" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}"></i>
+                <i class="fa fa-paperclip" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}"></i>
             </td>
             <td class="text-center" th:text="${board.getMember().getName()}"></td>
             <td class="text-center" th:text="${#dates.createToday().compareTo(board.getDate()) < 0 ?

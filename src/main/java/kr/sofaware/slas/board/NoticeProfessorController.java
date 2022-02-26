@@ -71,6 +71,7 @@ public class NoticeProfessorController {
             lectures.get(yearSemester).forEach(syllabus ->
                     boards.addAll(noticeService.listAll(syllabus.getId())));
 
+            // 템플릿에서 강의명과 강의시간을 표시하기 위해 (isEmpty 판별) 추가
             model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
         }

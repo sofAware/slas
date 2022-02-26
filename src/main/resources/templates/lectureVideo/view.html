@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta th:replace="/frame/head.html">
+    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+    <title th:text="'강의영상 - ' + ${lv.getSyllabus().getName()}"></title>
+    <style>
+        .container-fluid {
+            padding-top: 4rem;
+            padding-bottom: 3rem;
+            background-color: #fafafa;
+        }
+        /* 배속 메뉴 */
+        .vjs-playback-rate .vjs-menu {
+            width: 6em;
+        }
+    </style>
+</head>
+<body>
+<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
+
+<div class="container-fluid m-0 px-sm-4">
+    <!--    제목-->
+    <div class="d-flex justify-content-center mb-2">
+        <h1 th:text="${lv.getName()}"></h1>
+    </div>
+
+    <!--    세부 정보-->
+    <div class="row justify-content-center mb-2">
+        <div class="col-sm-auto text-center">
+            <i class="fa-regular fa-calendar-check"></i>
+            <span class="text-secondary" th:text="${
+                #dates.format(lv.getAttendanceStart(), 'yyyy-MM-dd HH:mm') + ' ~ ' +
+                #dates.format(lv.getAttendanceEnd(),   'yyyy-MM-dd HH:mm')}"></span>
+        </div>
+        <div class="col-sm-auto text-center">
+            <i class="far fa-clock"></i>
+            <span class="text-secondary" th:text="${lv.getDuration()}+'분'"></span>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-4">
+<!--    작성자 버튼-->
+    <div class="d-flex justify-content-end gap-2 mt-3 mb-5">
+        <a class="btn btn-secondary" href="../lv">목록</a>
+        <a class="btn btn-primary" th:attr="href='./edit/?syllabus-id=' +
+            ${lv.getSyllabus().getId()} + '&id=' + ${lv.getId()}"
+           sec:authorize="hasRole('PROFESSOR')">수정</a>
+        <a class="btn btn-danger" th:attr="href='./delete/?syllabus-id=' +
+            ${lv.getSyllabus().getId()} + '&id=' + ${lv.getId()}"
+           data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
+           sec:authorize="hasRole('PROFESSOR')">삭제</a>
+    </div>
+
+    <video
+            id="my-video"
+            class="video-js vjs-big-play-centered"
+            controls
+            preload="auto"
+            data-setup='{"fluid": true, "playbackRates": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]}'
+    >
+        <source th:src="${lv.getAttachmentPath()}" type="video/mp4" />
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank"
+            >supports HTML5 video</a
+            >
+        </p>
+    </video>
+</div>
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+<script>
+    // 삭제 버튼 툴팁
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    // videojs 가져오기
+    const player = videojs('my-video');
+
+    // f: 전체 화면
+    // Space: 재생 및 일시정지
+    document.onkeydown = e => {
+        if (e.code === 'KeyF') {
+            if (player.isFullscreen()) player.exitFullscreen();
+            else player.requestFullscreen();
+        } else if (e.code === "Space") {
+            e.preventDefault();
+            if (player.paused()) player.play();
+            else player.pause();
+        }
+    };
+</script>
+</body>
+</html>

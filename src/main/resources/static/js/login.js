@@ -5,6 +5,17 @@ const btnFindId = document.querySelector('#findId');
 const btnFindPw = document.querySelector('#findPw');
 const btnSignup = document.querySelector('#signup');
 
+// 비밀번호 보이기 및 숨기기 토글
+const tglPw = document.querySelector("#togglePassword");
+
+tglPw.addEventListener("click", function () {
+    const type = txtPw.getAttribute("type") === "password" ? "text" : "password";
+    txtPw.setAttribute("type", type);
+
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+});
+
 // 회원 가입 창 시작
 function signup() {
     Swal.fire({

@@ -1,6 +1,7 @@
 package kr.sofaware.slas.board;
 
 import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.LectureVideo;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
@@ -60,19 +61,62 @@ public class LectureVideoProfessorController {
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));
 
-        // 강의 선택 없으면 해당 학기 전체 강의에 대한 공지사항 긁어오기
-        List<Board> boards = new ArrayList<>();
+        // 강의 선택 없으면 해당 학기 전체 강의에 대한 강의영상 긁어오기
+        List<LectureVideo> lectureVideos = new ArrayList<>();
         if (syllabusId == null || syllabusId.isEmpty()) {
+            lectures.get(yearSemester).forEach(syllabus ->
+                    lectureVideos.addAll(lectureVideoService.listAll(syllabus.getId())));
 
+            // 템플릿에서 강의명과 강의시간을 표시하기 위해 (isEmpty 판별) 추가
+            model.addAttribute("selectedSyllabusId", "");
+            model.addAttribute("selectedSyllabusName", "전체");
         }
         else {
+            lectureVideos.addAll(lectureVideoService.listAll(syllabusId));
 
+            // 선택된 강의 lectures에서 찾아서 강의명 입력
+            Syllabus syllabus = lectures
+                    .get(yearSemester)
+                    .stream()
+                    .filter(s -> s.getId().equals(syllabusId))
+                    .findAny()
+                    .get();
+            model.addAttribute("selectedSyllabusId", syllabus.getId());
+            model.addAttribute("selectedSyllabusName",
+                    syllabus.getName() + " (" + syllabus.formatClassTime() + ")");
         }
 
         // 날짜 내림차순 정렬 후 모델에 넣기
-        boards.sort(Comparator.comparing(Board::getDate).reversed());
-        model.addAttribute("boards", boards);
+        lectureVideos.sort(Comparator.comparing(LectureVideo::getAttendanceStart).reversed());
+        model.addAttribute("lectureVideos", lectureVideos);
 
         return "lectureVideo/list";
+    }
+
+    @GetMapping("lv/view")
+    public String view(Model model, Principal principal,
+                       @RequestParam("syllabus-id") String syllabusId,
+                       @RequestParam("id") String id) {
+
+        // 학정번호, 주회차를 입력하지 않았다면 400
+        if (syllabusId == null || id == null)
+            return "error/400";
+
+        // 강의영상 가져오기
+        Optional<LectureVideo> lectureVideo = lectureVideoService.get(syllabusId, id);
+
+        // 없으면 404
+        if (lectureVideo.isEmpty())
+            return "error/404";
+
+        // 읽을 권한 없으면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                lectureVideo.get().getSyllabus().getId(),
+                principal.getName()))
+            return "error/403";
+
+        // 열람
+        model.addAttribute("lv", lectureVideo.get());
+        return "lectureVideo/view";
     }
 }

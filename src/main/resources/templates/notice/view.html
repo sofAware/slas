@@ -19,7 +19,7 @@
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
-<div class="container-fluid m-0">
+<div class="container-fluid m-0 px-sm-4">
     <!--    제목-->
     <div class="d-flex justify-content-center mb-2">
         <h1 th:text="${board.getTitle()}"></h1>
@@ -28,15 +28,15 @@
     <!--    세부 정보-->
     <div class="row justify-content-center mb-2">
         <div class="col-sm-auto text-center">
-            <i class="fa-regular fa-user"></i>
+            <i class="far fa-user"></i>
             <span class="text-secondary" th:text="${board.getMember().getName()}"></span>
         </div>
         <div class="col-sm-auto text-center">
-            <i class="fa-regular fa-calendar"></i>
+            <i class="far fa-calendar-edit"></i>
             <span class="text-secondary" th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd HH:mm')}"></span>
         </div>
         <div class="col-sm-auto text-center">
-            <i class="fa-regular fa-eye"></i>
+            <i class="far fa-eye"></i>
             <span class="text-secondary" th:text="${board.getView()}"></span>
         </div>
         <div class="col-sm-auto text-center" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">

@@ -19,12 +19,15 @@
             <input type="text" name="username" class="form-control" id="floatingId" placeholder=" ">
             <label for="floatingId">학번</label>
         </div>
-        <div class="form-floating mb-2">
+        <div class="input-group form-floating mb-2">
             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder=" ">
             <label for="floatingPassword">비밀번호</label>
             <div id="floatingPasswordFeedback" class="invalid-feedback">
                 학번 혹은 비밀번호가 틀렸습니다.
             </div>
+            <span class="input-group-text" id="togglePassword" style="cursor: pointer">
+                <i class="far fa-eye"></i>
+            </span>
         </div>
 
         <div class="container g-0 mb-2">

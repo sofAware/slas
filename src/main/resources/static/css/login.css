@@ -32,7 +32,12 @@ main input[type="text"] {
     border-bottom-left-radius: 0;
 }
 
-main input[type="password"] {
+main input[type="password"],
+main .input-group-text {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+label[for='floatingPassword'] {
+    z-index: 1080;
 }
