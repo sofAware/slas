@@ -29,6 +29,9 @@
     </tbody>
 </table>
 
+<br>
+<br>
+
 <!-- 취득 학점 조회 -->
 <table class="table table-striped table-hover">
     <thead>
@@ -49,6 +52,9 @@
     </tbody>
 </table>
 
+<br>
+<br>
+
 <!-- 석차 조회 -->
 <table class="table table-striped table-hover">
     <thead>
@@ -67,6 +73,36 @@
         <td th:text="${grade.getTotalCredit()}" onclick="event.cancelBubble = true;"></td>
         <td th:text="${grade.getGradeAvg()}" onclick="event.cancelBubble = true;"></td>
         <td th:text="${grade.getRanking()}" onclick="event.cancelBubble = true;"></td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<!-- 년도별 석차 조회 -->
+<table th:each="element : ${gradeByYear}" class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th th:text="${element.key}" onclick="event.cancelBubble = true;"></th>
+    </tr>
+    <tr>
+        <th onclick="event.cancelBubble = true;">학정번호</th>
+        <th onclick="event.cancelBubble = true;">과목명</th>
+        <th onclick="event.cancelBubble = true;">개설학과</th>
+        <th onclick="event.cancelBubble = true;">이수구분</th>
+        <th onclick="event.cancelBubble = true;">학점</th>
+        <th onclick="event.cancelBubble = true;">성적</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="grade : ${element.value}" style="cursor: pointer;">
+        <td th:text="${grade.getSyllabusId()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getSyllabusName()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getMajor()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getCategory()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getCredit()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getGrade()}" onclick="event.cancelBubble = true;"></td>
     </tr>
     </tbody>
 </table>

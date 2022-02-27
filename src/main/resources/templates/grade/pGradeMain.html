@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta th:replace="/frame/head.html">
+    <title>공지사항</title>
 </head>
 <body>
+<header th:replace="/frame/pHeader.html"></header>
 
+<div class="d-flex justify-content-center gap-4">
+    <!-- 학기 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${yearSemester}">
+            학기 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="semester">
+            <li th:each="key : ${mapYS.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?year-semester=' + key}"
+                   th:text="${mapYS.get(key)}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 강의 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${selectedSyllabusName}">
+            강의 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="syllabus">
+            <li th:each="s : ${syllabuses}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?syllabus-id=' + s.getId()}"
+                   th:text="${s.getName()}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script>
+    document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
+        location.href = e.getAttribute("href")));
+</script>
 </body>
 </html>

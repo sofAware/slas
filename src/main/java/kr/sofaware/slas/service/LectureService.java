@@ -39,4 +39,25 @@ public class LectureService {
     public List<Lecture> findAllByStudentId(String studentId){
         return lectureRepository.findAllByStudent_Id(studentId);
     }
+
+    /**
+     * 학생 학번으로 들었던 수업들 '<년도>-<학기>' 형식으로 분류 후 HashMap 으로 반환해줌
+     * @author 김수헌
+     * @param studentId
+     * @return {21-2=[{기업과경영}, {분석화학}, {생화학}, {열전달}, {유기화학}], 21-1=[{경영전략론}, {마케팅원론}]}
+     */
+    public Map<String, List<Lecture>> mapLectureByStudentId(String studentId) {
+        Map<String, List<Lecture>> map = new TreeMap<>(Collections.reverseOrder());
+
+        lectureRepository.findAllByStudent_Id(studentId).forEach(lecture -> {
+            String yearSemester = lecture.getSyllabus().getId().substring(0, 4);
+
+            if (!map.containsKey(yearSemester))
+                map.put(yearSemester, new ArrayList<>());
+
+            map.get(yearSemester).add(lecture);
+        });
+
+        return map;
+    }
 }
