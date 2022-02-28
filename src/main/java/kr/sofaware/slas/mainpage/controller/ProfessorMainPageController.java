@@ -1,5 +1,6 @@
 package kr.sofaware.slas.mainpage.controller;
 
+import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.mainpage.dto.*;
@@ -29,7 +30,7 @@ public class ProfessorMainPageController {
 
     //교수 메인페이지
     @GetMapping("main")
-    public String professor(Model model, @RequestParam("year-semester") @Nullable String yearSemester) {
+    public String professorMain(Model model, @RequestParam("year-semester") @Nullable String yearSemester) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();       //현재 로그인한 사용자의 id 받아오기
         UserDetails user = (UserDetails) principal;
         String username=((UserDetails) principal).getUsername();
@@ -70,8 +71,10 @@ public class ProfessorMainPageController {
 
         // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 assignmentDtoList 에 아직 마감기한 지나지 않은 과제들을 제출 마감일 빠른 순으로 출력 => 최대 얼만큼까지 출력해줄지는 프론트에서 처리
         for(SyllabusDtoForProf s : syllabusDtoList) {
-            List<AssignmentDto> assignmentDtoList = assignmentService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
+            List<Assignment> assignmentList = assignmentService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
 
+            List<AssignmentDto> assignmentDtoList=new ArrayList<>();                                        // dto 로 변환해서 syllabusDto 내부에 set
+            assignmentList.forEach(assignment -> assignmentDtoList.add(new AssignmentDto(assignment)));
             s.setAssignmentDtoList(assignmentDtoList);
         }
 

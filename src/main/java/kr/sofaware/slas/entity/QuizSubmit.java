@@ -29,10 +29,11 @@ public class QuizSubmit {
 
     private String answer;      // 제출한 답안
     private boolean isCorrect;  // 정답 유무
+    private int score;          // 취득 점수
 }
 
-@EqualsAndHashCode
-class QuizSubmitPK implements Serializable {
-    private Quiz quiz;          // 퀴즈
-    private Member student;
-}
+//@EqualsAndHashCode
+//class QuizSubmitPK implements Serializable {
+//    private Quiz quiz;          // 퀴즈
+//    private Member student;
+//}

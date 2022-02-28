@@ -12,5 +12,11 @@ import java.util.List;
 public interface AssignmentRepository extends JpaRepository<Assignment, Integer> {
     @Query("SELECT a FROM Assignment a WHERE a.syllabus.id = :syllabus_id AND a.submitEnd >= :currentDate ORDER BY a.submitEnd ASC")        //지민
     List<Assignment> findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(String syllabus_id, Date currentDate);
+
+    List<Assignment> findBySyllabus_IdOrderBySubmitEndAsc(String syllabus_id);          //지민
+
+    List<Assignment> findBySyllabus_Id(String syllabus_id);
+
+    int countBySyllabus_Id(String syllabus_id);
 }
 

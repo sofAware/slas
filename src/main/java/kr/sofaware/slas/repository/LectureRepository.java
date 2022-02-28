@@ -16,7 +16,7 @@ public interface LectureRepository extends JpaRepository<Lecture, LecturePK> {
     List<Lecture> findByStudent_Id(String id);      //student_id 로 lecture 불러오기
 
     @Query("SELECT l FROM Lecture l WHERE l.student.id = :id AND l.syllabus.id LIKE :yearSemester%")
-    List<Lecture> findByIdAndYearSemester(String id, String yearSemester);              //학생이 해당 년도-학기 (ex. "21-2") 에 들은 수강목록을 반환    //지민
+    List<Lecture> findByIdAndYearSemester(String id, String yearSemester);              //학생이 해당 년도-학기 (ex. "21-2") 에 들은 수강목록을 반환    //지민 -> 근데 이거 사용안할듯
 
     List<Lecture> findAllByStudent_Id(@Param(value = "memberId") String id);
 }

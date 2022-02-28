@@ -1,6 +1,7 @@
 package kr.sofaware.slas.mainpage.controller;
 
 //import kr.sofaware.slas.service.ProfessorService;
+import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.mainpage.dto.*;
@@ -21,7 +22,7 @@ import java.util.*;
 @RequestMapping("/s")
 public class StudentMainPageController {
 
-        private final AssignmentBoardService assignmentBoardService;
+        //private final AssignmentBoardService assignmentBoardService;
         private final AssignmentService assignmentService;
         private final LectureService lectureService;
         private final MemberService memberService;
@@ -29,7 +30,7 @@ public class StudentMainPageController {
 
         //학생 메인페이지
         @GetMapping("main")
-        public String student(Model model, @RequestParam("year-semester") @Nullable String yearSemester){
+        public String studentMain(Model model, @RequestParam("year-semester") @Nullable String yearSemester){
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();       //현재 로그인한 사용자의 id 받아오기
             UserDetails user = (UserDetails) principal;
             String username=((UserDetails) principal).getUsername();
@@ -54,8 +55,10 @@ public class StudentMainPageController {
             model.addAttribute("mapYS", formatYS);
             model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
 
-
-            List<SyllabusDtoForStu> syllabusDtoList = lectureService.findByIdAndYearSemester(username,yearSemester);      //년도, 학기를 바탕으로 이 학생이 해당 학기에 들은 강의들의 syllabus 들을 받아와서 view 에 전달하기 위한 syllabusDto 들로 변환
+            List<SyllabusDtoForStu> syllabusDtoList = new ArrayList<>();                            //년도, 학기를 바탕으로 이 학생이 해당 학기에 들은 강의들의 syllabus 들을 받아와서 view 에 전달하기 위한 syllabusDto 들로 변환
+            for(Syllabus s : lectures.get(yearSemester)){
+                syllabusDtoList.add(new SyllabusDtoForStu(s));
+            }
 
             List<SyllabusDto> listForCreatingCellDtoList=new ArrayList<>();                                        // List<SyllabusDto> 에 List<SyllabusDtoForStu> 를 넣어줌.. 둘은 상속 관계.. 이 방법밖에 없나.. 마음에 안 드렁 ㅠㅠㅠ 왜 바로 안 들어가는 거 ㅜㅜ
             for(SyllabusDtoForStu s : syllabusDtoList)
@@ -72,14 +75,15 @@ public class StudentMainPageController {
 
             // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 assignmentDtoList 에 아직 제출하지 않은 과제들을 제출 마감일 빠른 순으로 출력 => 최대 얼만큼까지 출력해줄지는 프론트에서 처리
             for(SyllabusDtoForStu s : syllabusDtoList) {
-                List<AssignmentDto> assignmentDtoList = assignmentService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
+                List<Assignment> assignmentList = assignmentService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
 
-                for(Iterator<AssignmentDto> iter = assignmentDtoList.iterator(); iter.hasNext();){                      // 제출한 과제라면 목록에서 삭제
-                    AssignmentDto a=iter.next();
-                    if(assignmentBoardService.existsByAssignment_IdAndMember_Id(a.getId(),username))
+                for(Iterator<Assignment> iter = assignmentList.iterator(); iter.hasNext();){                      // 제출한 과제라면 목록에서 삭제
+                    Assignment a=iter.next();
+                    if(assignmentService.existsByAssignment_IdAndMember_Id(a.getId(),username))
                         iter.remove();
                 }
-
+                List<AssignmentDto> assignmentDtoList=new ArrayList<>();                                        // dto 로 변환해서 syllabusDto 내부에 set
+                assignmentList.forEach(assignment -> assignmentDtoList.add(new AssignmentDto(assignment)));
                 s.setAssignmentDtoList(assignmentDtoList);
             }
 
