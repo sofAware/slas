@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Member implements UserDetails {
     public static String ROLE_STUDENT = "ROLE_STUDENT";

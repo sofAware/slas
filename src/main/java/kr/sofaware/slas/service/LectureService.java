@@ -6,6 +6,7 @@ import kr.sofaware.slas.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -59,5 +60,32 @@ public class LectureService {
         });
 
         return map;
+    }
+
+    public List<Lecture> findAllBySyllabusId(String syllabusId)
+    {
+        return lectureRepository.findAllBySyllabus_Id(syllabusId);
+    }
+
+    @Transactional
+    public List<Lecture> saveAllByPutMethod(List<Lecture> lectures)
+    {
+        return lectureRepository.saveAll(lectures);
+    }
+
+    @Transactional
+    public Lecture saveByPutMethod(Lecture lecture)
+    {
+        return lectureRepository.save(lecture);
+    }
+
+    public Optional<Lecture> findByStudentIdAndSyllabusId(String studentId, String syllabusId)
+    {
+        return lectureRepository.findByStudent_IdAndSyllabus_Id(studentId, syllabusId);
+    }
+
+    public Lecture deleteByStudentId(String studentId)
+    {
+        return lectureRepository.deleteByStudent_Id(studentId);
     }
 }

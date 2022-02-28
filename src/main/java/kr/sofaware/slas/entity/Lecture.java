@@ -5,11 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Data
 @Entity
 @Getter
+@Builder
 @ToString
 @IdClass(LecturePK.class)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Lecture implements Serializable {
     @Id

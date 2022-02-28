@@ -12,4 +12,8 @@ import java.util.Optional;
 @Repository
 public interface LectureRepository extends JpaRepository<Lecture, String> {
     List<Lecture> findAllByStudent_Id(@Param(value = "memberId") String id);
+    List<Lecture> findAllBySyllabus_Id(String syllabusId);
+    //List<Lecture> saveAll(List<Lecture> lectures);
+    Optional<Lecture> findByStudent_IdAndSyllabus_Id(String studentId, String syllabusId);
+    Lecture deleteByStudent_Id(String studentId);
 }

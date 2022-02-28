@@ -1,25 +1,31 @@
 package kr.sofaware.slas.grade.controller;
 
+import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.Lecture;
+import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.service.LectureService;
 import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/p")
+@Log4j2
 public class GradeProfessorController {
 
     private final SyllabusService syllabusService; //강의 정보 가져올 때 사용
+    private final LectureService lectureService;
 
     @GetMapping("grade")
     public String getProfessorGrade(Authentication authentication, Principal principal, Model model,
@@ -61,6 +67,54 @@ public class GradeProfessorController {
                 lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
                         .findAny().get().getName());
 
+
+        //1. 해당 syllabusId에 대한 Lecture 정보 가져오기
+        List<Lecture> lecturesBySyllabusId = lectureService.findAllBySyllabusId(syllabusId);
+        model.addAttribute("lecturesBySyllabusId", lecturesBySyllabusId);
+        model.addAttribute("syllabusId", syllabusId);
+
         return "grade/pGradeMain";
     }
+
+    @PostMapping("grade")
+    public String putProfessorGrade(
+                                    @RequestParam("student-id") String studentId,
+                                    @RequestParam("syllabusId") String syllabusId,
+                                    @RequestParam("grade") double grade)
+    {
+        //교수님이 입력한 학점 반양
+        //lectureService.saveByPutMethod(lecture);
+
+        log.error("ID : " + studentId);
+        log.error("GRADE : " + grade);
+
+        Optional<Lecture> lecture = lectureService.findByStudentIdAndSyllabusId(studentId, syllabusId);
+
+        Lecture.LectureBuilder lectureBuilder = Lecture.builder()
+                .student(lecture.get().getStudent())
+                .syllabus(lecture.get().getSyllabus())
+                .grade(grade);
+
+        Lecture lectureForSave = lectureBuilder.build();
+        lectureService.saveByPutMethod(lectureForSave);
+
+        /*
+        lecture.ifPresent(selectLecture -> {
+            selectLecture.setGrade(grade);
+            lectureService.saveByPutMethod(selectLecture);
+        });
+         */
+
+
+        //Lecture newLecture = new Lecture(lecture.getStudent(), lecture.getSyllabus(), grade);
+
+        //기존꺼 제거
+        //lectureService.deleteByStudentId(studentId);
+        //새로운 학점 추가
+        //lectureService.saveByPutMethod(newLecture);
+
+        return "redirect:/grade";
+    }
 }
+
+

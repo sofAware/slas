@@ -41,6 +41,37 @@
     </div>
 </div>
 
+<!--성적주는 테이블-->
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th onclick="event.cancelBubble = true;">이름</th>
+            <th onclick="event.cancelBubble = true;">학번</th>
+            <th onclick="event.cancelBubble = true;">학과</th>
+            <th onclick="event.cancelBubble = true;">학점</th>
+            <th onclick="event.cancelBubble = true;">수정</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="lectures, stat : ${lecturesBySyllabusId}" style="cursor: pointer;">
+            <form th:action="@{/p/grade}" method="post">
+                <td th:text="${lectures.getStudent().getName()}" onclick="event.cancelBubble = true;"></td>
+                <td th:text="${lectures.getStudent().getId()}" onclick="event.cancelBubble = true;"></td>
+                <td th:text="${lectures.getStudent().getMajor()}" onclick="event.cancelBubble = true;"></td>
+                <td onclick="event.cancelBubble = true;">
+                    <input type="hidden" name="student-id" th:value="${lectures.getStudent().getId()}">
+                    <input type="hidden" name="syllabusId" th:value="${syllabusId}">
+                    <input type="text" name="grade" th:value="${lectures.getGrade()}">
+                </td>
+                <td>
+                    <input type="submit" value="수정">
+                </td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
 <script>
