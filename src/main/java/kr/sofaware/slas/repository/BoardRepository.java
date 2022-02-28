@@ -20,4 +20,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Board> findFirst3ByCategoryAndSyllabus_IdOrderByDateDesc(int category, String syllabus_id);        //지민
 
     Boolean existsByAssignment_IdAndMember_Id(int assignment_id, String member_id);                         //지민
+
+    List<Board> findByCategoryAndSyllabus_IdOrderByDateDesc(int category, String syllabus_id);              //지민
 }

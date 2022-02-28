@@ -111,7 +111,7 @@ public class StudentTotalPageController {
                 finishedQuiz++;
 
 
-        // 강의 영상 & 강의 자료
+        // 강의 영상 목록
 
 
 

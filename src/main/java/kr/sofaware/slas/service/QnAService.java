@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class LectureFileService implements BoardService{
+public class QnAService implements BoardService{
     private final BoardRepository boardRepository;
 
     @Override
@@ -41,7 +41,7 @@ public class LectureFileService implements BoardService{
 
     @Override
     public List<Board> listAll(String SyllabusId) {
-        return boardRepository.findAllByCategoryAndSyllabus_Id(Board.CATEGORY_NOTICE, SyllabusId);          // 이거 videoLecture 테이블에서 찾는 거로 고쳐야 함!
+        return boardRepository.findAllByCategoryAndSyllabus_Id(Board.CATEGORY_QNA, SyllabusId);
     }
 
     @Override
@@ -49,13 +49,7 @@ public class LectureFileService implements BoardService{
 
     }
 
-    /**
-     * 해당 과목의 강의 자료가 몇개 올라와 있는지 count ==> 뭔가 LectureFileService 로 일단 만들긴 했는데.. ㅎㅎ.. 나중에 다른데로 옮기던징...
-     * @author 정지민
-     * @param SyllabusId
-     * @return 강의 자료들의 개수
-     */
-    public int countLectureFiles(String SyllabusId){
-        return boardRepository.countAllByCategoryAndSyllabus_Id(Board.CATEGORY_LECTURE_MATERIAL, SyllabusId);
+    public List<Board> getQnAListOrderByDateDesc(String syllabusId){
+        return boardRepository.findByCategoryAndSyllabus_IdOrderByDateDesc(Board.CATEGORY_QNA,syllabusId);
     }
 }
