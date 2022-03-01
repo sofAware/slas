@@ -11,5 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface LectureRepository extends JpaRepository<Lecture, String> {
+
     List<Lecture> findAllByStudent_Id(@Param(value = "memberId") String id);
 }

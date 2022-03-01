@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="/frame/head.html">
+    <title>출석체크</title>
+</head>
+<body>
+<header th:replace="/frame/sHeader.html"></header>
+
+<div class="d-flex justify-content-center gap-4">
+    <!-- 학기 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${yearSemester}">
+            학기 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="semester">
+            <li th:each="key : ${mapYS.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?year-semester=' + key}"
+                   th:text="${mapYS.get(key)}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 강의 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${selectedSyllabusName}">
+            강의 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="syllabus">
+            <li th:each="s : ${syllabuses}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?syllabus-id=' + s.getId()}"
+                   th:text="${s.getName()}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 주차 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="weeks" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text=주차 선택>
+            주차 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="semester">
+            <li th:each="key : ${week.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?week =' + key}"
+                   th:text="${week.get(key)}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<button class="btn btn-primary" type="button" aria-expanded="false" id="put"
+        sec:authorize="hasRole('PROFESSOR')">
+    완료
+</button>
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>출석</th>
+        <th>결석</th>
+        <th>지각</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr  th:each="attendance : ${attendances}" >
+        <th th:text="${attendance.getStudent().getName()}"></th>
+        <form action='a.jsp'>
+        <td>
+            <input type='radio' name="${attendance.getStudent().getName()}" value='ok' /></td>
+        <td>
+            <input type='radio' name="${attendance.getStudent().getName()}" value='no' /></td>
+        <td>
+            <input type='radio' name="${attendance.getStudent().getName()}" value='late' /></td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+
+    <tbody>
+    <div class="container">
+        <div class="timetable-img text-center">
+            <img src="img/content/timetable.png" alt="">
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+
+                <thead>
+                <tr class="bg-light-gray">
+                    <th class="text-uppercase">회차
+                    </th>
+                    <th class="text-uppercase">1:출석</th>
+                    <th class="text-uppercase">2:결석</th>
+                    <th class="text-uppercase">3:지각</th>
+                </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+    </tbody>
+
+
+
+
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script>
+    const btnPut = document.querySelector('#put');
+    if (btnPut)
+        btnPut.addEventListener('click', evt => {
+            //const sid = document.querySelector('#syllabus').getAttribute('data-sid');
+            location.href = '.';
+        });
+</script>
+</body>
+</html>

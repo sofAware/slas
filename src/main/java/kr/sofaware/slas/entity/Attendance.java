@@ -5,8 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
+
+
+
+
 @Entity
 @Getter
+@Builder
 @ToString
 @IdClass(AttendancePK.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
