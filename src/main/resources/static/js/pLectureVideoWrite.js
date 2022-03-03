@@ -6,12 +6,12 @@ let rememberFileRemove = false;
 const chkFileRemove = document.querySelector('input.form-check-input');
 const syllabusId = document.querySelector('option[selected]').getAttribute('value');
 
-const editor = new toastui.Editor({
-    el: document.querySelector('#inputContent'),
-    previewStyle: 'vertical',
-    height: '560px',
-    initialValue
-});
+const video = document.querySelector("#my-video");
+
+document.querySelector("#file").onchange = (event) => {
+    let blobURL = URL.createObjectURL(event.target.files[0]);
+    video.src = blobURL;
+};
 
 // 파일 수정 이벤트
 if (document.querySelector('div.form-check')) {
