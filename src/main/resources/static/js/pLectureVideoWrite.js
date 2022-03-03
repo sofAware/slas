@@ -11,6 +11,8 @@ const video = document.querySelector("#my-video");
 
 document.querySelector("#file").onchange = (event) => {
     let file = event.target.files[0];
+    if (!file) return;
+
     let blobURL = URL.createObjectURL(file);
     video.src = blobURL;
 
@@ -52,8 +54,6 @@ document.querySelector('#write').addEventListener('submit', e => {
 
     // 폼 데이터 가져오고 안채워진 내용 데이터 채우기
     const formData = new FormData(e.target);
-    // 내용
-    formData.append("content", editor.getMarkdown());
     // 학정번호
     formData.append(
         document.querySelector('select').getAttribute('name'),
@@ -62,6 +62,10 @@ document.querySelector('#write').addEventListener('submit', e => {
     // 파일 삭제 여부
     if (chkFileRemove && chkFileRemove.disabled)
         formData.append("deleteFile", "true");
+
+    // 버튼 비활성화 및 스피너 활성화
+    document.querySelector('button[type=submit]').disabled = true;
+    document.querySelector('div.spinner-border').classList.remove('d-none');
 
     fetch('', {
         method: 'POST',

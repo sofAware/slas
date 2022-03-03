@@ -5,13 +5,19 @@ import kr.sofaware.slas.entity.LectureVideo;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
+import org.mp4parser.IsoFile;
+import org.mp4parser.boxes.iso14496.part12.MovieHeaderBox;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.*;
 
@@ -133,5 +139,49 @@ public class LectureVideoProfessorController {
                 syllabusService.findById(syllabusId).get());
 
         return "/lectureVideo/write";
+    }
+
+    @PostMapping("lv/write")
+    public String postWriting(LectureVideoDto lectureVideoDto, Model model, Principal principal) throws Exception {
+
+        // 작성 권한 없으면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                lectureVideoDto.getSyllabusId(),
+                principal.getName()))
+            return "error/403";
+
+        // 강의 영상 저장
+        String attachmentPath = "";
+        if (!lectureVideoDto.getFile().isEmpty())
+            attachmentPath = fileService.saveOnSyllabus(lectureVideoDto.getFile(), lectureVideoDto.getSyllabusId());
+
+        // 테스트 코드
+        System.out.println("lectureVideoDto = " + lectureVideoDto);
+
+        // 강의영상 엔티티 만들기
+        LectureVideo lectureVideo = new LectureVideo(
+                syllabusService.findById(lectureVideoDto.getSyllabusId()).get(),
+                lectureVideoDto.getId(),
+                lectureVideoDto.getTitle(),
+                lectureVideoDto.getAttendanceStart(),
+                lectureVideoDto.getAttendanceEnd(),
+                (int)getMediaLength(attachmentPath),
+                attachmentPath
+        );
+
+        // 강의 영상 작성
+        lectureVideoService.save(lectureVideo);
+
+        // 작성된 강의영상 번호로 뷰 이동
+        return "redirect:/p/lv/view"
+                + "?syllabus-id=" + lectureVideo.getSyllabus().getId()
+                + "&id=" + lectureVideo.getId();
+    }
+
+    public static long getMediaLength(String path) throws IOException {
+        path = Paths.get(System.getProperty("user.dir"), path).toString();
+        IsoFile isoFile = new IsoFile(path);
+        MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
+        return mhb.getDuration() / mhb.getTimescale();
     }
 }

@@ -21,4 +21,8 @@ public class LectureVideoService {
     public List<LectureVideo> listAll(String syllabusId) {
         return lectureVideoRepository.findAllBySyllabus_Id(syllabusId);
     }
+
+    public void save(LectureVideo lectureVideo) {
+        lectureVideoRepository.save(lectureVideo);
+    }
 }
