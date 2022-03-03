@@ -6,6 +6,7 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+    <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet" />
     <title th:text="'강의영상 - ' + ${lv.getSyllabus().getName()} + ' ' + ${lv.getId()}"></title>
     <style>
         .container-fluid {
@@ -59,7 +60,7 @@
 
     <video
             id="my-video"
-            class="video-js vjs-big-play-centered"
+            class="video-js vjs-big-play-centered vjs-theme-forest"
             controls
             preload="auto"
             data-setup='{"fluid": true, "playbackRates": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]}'
