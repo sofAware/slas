@@ -1,4 +1,5 @@
 const txtCsrf = document.querySelector('#csrf');
+const txtTitle = document.querySelector('#inputTitle');
 const header = txtCsrf.getAttribute('data-header-name');
 const token = txtCsrf.getAttribute('value');
 
@@ -9,8 +10,12 @@ const syllabusId = document.querySelector('option[selected]').getAttribute('valu
 const video = document.querySelector("#my-video");
 
 document.querySelector("#file").onchange = (event) => {
-    let blobURL = URL.createObjectURL(event.target.files[0]);
+    let file = event.target.files[0];
+    let blobURL = URL.createObjectURL(file);
     video.src = blobURL;
+
+    if (!txtTitle.value)
+        txtTitle.value = file.name.substring(0, file.name.length - 4);
 };
 
 // 파일 수정 이벤트
