@@ -182,6 +182,6 @@ public class LectureVideoProfessorController {
         path = Paths.get(System.getProperty("user.dir"), path).toString();
         IsoFile isoFile = new IsoFile(path);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
-        return mhb.getDuration() / mhb.getTimescale();
+        return mhb.getDuration() / mhb.getTimescale() / 60; // 분 단위로 반환
     }
 }
