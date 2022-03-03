@@ -5,15 +5,22 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta th:replace="/frame/head.html">
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title>공지사항 - 글쓰기</title>
+    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+    <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet" />
+    <title>강의영상 - 글쓰기</title>
+    <style>
+        /* 배속 메뉴 */
+        .vjs-playback-rate .vjs-menu {
+            width: 6em;
+        }
+    </style>
 </head>
 <body>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
-    <h2 class="my-4">공지사항</h2>
+    <h2 class="my-4">강의영상</h2>
     <form method="POST" id="write">
         <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
 
@@ -30,24 +37,39 @@
             <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputTitle" name="title"
-                    th:attr="value=${board}?${board.getTitle()}:''">
+                    th:attr="value=${lv}?${lv.getTitle()}:''">
             </div>
         </div>
-        <div class="mb-3 row">
-            <div id="inputContent" name="content"></div>
-        </div>
+
+        <video
+                id="my-video"
+                class="video-js vjs-big-play-centered vjs-theme-forest mb-3 mx-auto"
+                controls
+                preload="auto"
+                data-setup='{"fluid": true, "playbackRates": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]}'
+        >
+            <source th:if="${lv}" th:src="${lv.getAttachmentPath()}" type="video/mp4" />
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank"
+                >supports HTML5 video</a
+                >
+            </p>
+        </video>
+
         <div class="mb-3 row">
             <div class="col">
-                <div class="form-check mb-1" th:if="${board}?${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}:false">
+                <div class="form-check mb-1" th:if="${lv}?${lv.getAttachmentName() != null && !lv.getAttachmentName().isEmpty()}:false">
                     <input class="form-check-input" type="checkbox" value="true" id="deleteFile" name="deleteFile">
-                    <label class="form-check-label" for="deleteFile" th:text="${board.getAttachmentName()}+' (체크시 삭제)'"></label>
+                    <label class="form-check-label" for="deleteFile" th:text="${lv.getAttachmentName()}+' (체크시 삭제)'"></label>
                 </div>
                 <input class="form-control" type="file" id="file" name="file">
             </div>
         </div>
         <div class="mb-3 d-flex justify-content-between gap-3">
-            <a href="/p/notice" type="button" class="btn btn-secondary">목록</a>
-            <button type="submit" class="btn btn-primary" th:text="${board}?'수정완료':'작성완료'"></button>
+            <a href="/p/lv" type="button" class="btn btn-secondary">목록</a>
+            <button type="submit" class="btn btn-primary" th:text="${lv}?'수정완료':'작성완료'"></button>
         </div>
     </form>
 </div>
@@ -56,9 +78,6 @@
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script>
-    const initialValue= `[[${board} ? ${board.getContent()} : '']]`;
-</script>
-<script type="text/javascript" th:src="@{/js/pNoticeWrite.js}"></script>
+<script type="text/javascript" th:src="@{/js/pWrite.js}"></script>
 </body>
 </html>

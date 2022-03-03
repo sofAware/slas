@@ -25,6 +25,7 @@ public class LectureVideoProfessorController {
     private final SyllabusService syllabusService;
     private final FileService fileService;
 
+    // 전체 강의영상 리스트
     @GetMapping("lv")
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
@@ -93,6 +94,7 @@ public class LectureVideoProfessorController {
         return "lectureVideo/list";
     }
 
+    // 열람
     @GetMapping("lv/view")
     public String view(Model model, Principal principal,
                        @RequestParam("syllabus-id") String syllabusId,
@@ -118,5 +120,18 @@ public class LectureVideoProfessorController {
         // 열람
         model.addAttribute("lv", lectureVideo.get());
         return "lectureVideo/view";
+    }
+
+    // 작성
+    @GetMapping("lv/write")
+    public String getWriting(Model model, Principal principal,
+                             @Nullable @RequestParam("syllabus-id") String syllabusId) {
+
+        // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
+        model.addAttribute("syllabus", syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
+                syllabusService.findById(syllabusId).get());
+
+        return "/lectureVideo/write";
     }
 }

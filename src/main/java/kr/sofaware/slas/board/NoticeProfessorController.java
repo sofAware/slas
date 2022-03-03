@@ -99,7 +99,7 @@ public class NoticeProfessorController {
 
     // 작성
     @GetMapping("notice/write")
-    public String GetWriting(Model model, Principal principal,
+    public String getWriting(Model model, Principal principal,
                              @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
         // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
