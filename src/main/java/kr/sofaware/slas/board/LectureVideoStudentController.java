@@ -4,7 +4,6 @@ import kr.sofaware.slas.entity.LectureVideo;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.LectureService;
 import kr.sofaware.slas.service.LectureVideoService;
-import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
