@@ -25,4 +25,8 @@ public class LectureVideoService {
     public void save(LectureVideo lectureVideo) {
         lectureVideoRepository.save(lectureVideo);
     }
+
+    public void delete(LectureVideo entity) {
+        lectureVideoRepository.delete(entity);
+    }
 }

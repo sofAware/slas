@@ -34,19 +34,15 @@ public class LectureVideoDto {
         try {
             return new SimpleDateFormat("yyyy-MM-dd")
                     .parse(attendanceStart);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        } catch (ParseException e) { }
+        return new Date(0);
     }
 
     public Date getAttendanceEnd() {
         try {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                     .parse(attendanceEnd + " 23:59:59");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        } catch (ParseException e) { }
+        return new Date(0);
     }
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.Principal;
@@ -26,7 +25,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class LectureVideoProfessorController {
 
-    private final MemberService memberService;
     private final LectureVideoService lectureVideoService;
     private final SyllabusService syllabusService;
     private final FileService fileService;
@@ -155,9 +153,6 @@ public class LectureVideoProfessorController {
         if (!lectureVideoDto.getFile().isEmpty())
             attachmentPath = fileService.saveOnSyllabus(lectureVideoDto.getFile(), lectureVideoDto.getSyllabusId());
 
-        // 테스트 코드
-        System.out.println("lectureVideoDto = " + lectureVideoDto);
-
         // 강의영상 엔티티 만들기
         LectureVideo lectureVideo = new LectureVideo(
                 syllabusService.findById(lectureVideoDto.getSyllabusId()).get(),
@@ -179,9 +174,35 @@ public class LectureVideoProfessorController {
     }
 
     public static long getMediaLength(String path) throws IOException {
+        if (path.isEmpty()) return 0;
+
         path = Paths.get(System.getProperty("user.dir"), path).toString();
         IsoFile isoFile = new IsoFile(path);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
         return mhb.getDuration() / mhb.getTimescale() / 60; // 분 단위로 반환
+    }
+
+    // 삭제
+    @GetMapping("lv/delete")
+    public String delete(Model model, Principal principal,
+                         @RequestParam("syllabus-id") String syllabusId,
+                         @RequestParam("id") String id) {
+
+        // 강의영상 가져오기
+        Optional<LectureVideo> lv = lectureVideoService.get(syllabusId, id);
+
+        // 없으면 404
+        if (lv.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        if (!lv.get().getSyllabus().getProfessor().getId().equals(principal.getName()))
+            return "error/404";
+
+        // 삭제
+        lectureVideoService.delete(lv.get());
+
+        // 목록 리디렉션
+        return "redirect:/p/lv";
     }
 }

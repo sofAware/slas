@@ -74,10 +74,9 @@
         </thead>
         <tbody>
         <tr th:each="lv : ${lectureVideos}">
-            <td class="text-center data-sid" th:if="${selectedSyllabusId.isEmpty()}" th:text="${lv.getSyllabus().getName()}"
-                th:attr="data-sid=${lv.getSyllabus().getId()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${lv.getSyllabus().getName()}"></td>
             <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${lv.getSyllabus().formatClassTime()}"></td>
-            <td class="text-center data-id" th:text="${lv.getId()}"></td>
+            <td class="text-center data-id data-sid" th:attr="data-sid=${lv.getSyllabus().getId()}" th:text="${lv.getId()}"></td>
             <td th:text="${lv.getName()}"></td>
             <td class="text-center" th:text="${
                 #dates.format(lv.getAttendanceStart(), 'yyyy-MM-dd HH:mm') + ' ~ ' +

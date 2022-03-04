@@ -32,8 +32,7 @@ main input[type="text"] {
     border-bottom-left-radius: 0;
 }
 
-main input[type="password"],
-main .input-group-text {
+main input[type="password"] {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
