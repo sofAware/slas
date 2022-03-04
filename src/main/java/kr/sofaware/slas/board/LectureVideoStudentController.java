@@ -2,39 +2,36 @@ package kr.sofaware.slas.board;
 
 import kr.sofaware.slas.entity.LectureVideo;
 import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.service.*;
+import kr.sofaware.slas.service.LectureService;
+import kr.sofaware.slas.service.LectureVideoService;
+import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
-import org.mp4parser.IsoFile;
-import org.mp4parser.boxes.iso14496.part12.MovieHeaderBox;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/p")
+@RequestMapping("/s")
 @RequiredArgsConstructor
-public class LectureVideoProfessorController {
+public class LectureVideoStudentController {
 
     private final LectureVideoService lectureVideoService;
-    private final SyllabusService syllabusService;
-    private final FileService fileService;
+    private final LectureService lectureService;
 
     // 전체 강의영상 리스트
     @GetMapping("lv")
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
+
         // 교수가 강의한 학기와 과목들 조회
-        Map<String, List<Syllabus>> lectures = syllabusService.mapAllByProfessorId(principal.getName());
+        Map<String, List<Syllabus>> lectures = lectureService.mapAllByStudentId(principal.getName());
 
         // 강의 선택 없으면
         if (syllabusId == null || syllabusId.isEmpty()) {
@@ -115,7 +112,7 @@ public class LectureVideoProfessorController {
             return "error/404";
 
         // 읽을 권한 없으면 403
-        if (!syllabusService.existsByIdAndProfessor_Id(
+        if (!lectureService.existsBySyllabus_IdAndStudent_Id(
                 lectureVideo.get().getSyllabus().getId(),
                 principal.getName()))
             return "error/403";
@@ -123,85 +120,5 @@ public class LectureVideoProfessorController {
         // 열람
         model.addAttribute("lv", lectureVideo.get());
         return "lectureVideo/view";
-    }
-
-    // 작성
-    @GetMapping("lv/write")
-    public String getWriting(Model model, Principal principal,
-                             @Nullable @RequestParam("syllabus-id") String syllabusId) {
-
-        // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
-        model.addAttribute("syllabus", syllabusId == null ?
-                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
-                syllabusService.findById(syllabusId).get());
-
-        return "/lectureVideo/write";
-    }
-
-    @PostMapping("lv/write")
-    public String postWriting(LectureVideoDto lectureVideoDto, Model model, Principal principal) throws Exception {
-
-        // 작성 권한 없으면 403
-        if (!syllabusService.existsByIdAndProfessor_Id(
-                lectureVideoDto.getSyllabusId(),
-                principal.getName()))
-            return "error/403";
-
-        // 강의 영상 저장
-        String attachmentPath = "";
-        if (!lectureVideoDto.getFile().isEmpty())
-            attachmentPath = fileService.saveOnSyllabus(lectureVideoDto.getFile(), lectureVideoDto.getSyllabusId());
-
-        // 강의영상 엔티티 만들기
-        LectureVideo lectureVideo = new LectureVideo(
-                syllabusService.findById(lectureVideoDto.getSyllabusId()).get(),
-                lectureVideoDto.getId(),
-                lectureVideoDto.getTitle(),
-                lectureVideoDto.getAttendanceStart(),
-                lectureVideoDto.getAttendanceEnd(),
-                (int)getMediaLength(attachmentPath),
-                attachmentPath
-        );
-
-        // 강의 영상 작성
-        lectureVideoService.save(lectureVideo);
-
-        // 작성된 강의영상 번호로 뷰 이동
-        return "redirect:/p/lv/view"
-                + "?syllabus-id=" + lectureVideo.getSyllabus().getId()
-                + "&id=" + lectureVideo.getId();
-    }
-
-    public static long getMediaLength(String path) throws IOException {
-        if (path.isEmpty()) return 0;
-
-        path = Paths.get(System.getProperty("user.dir"), path).toString();
-        IsoFile isoFile = new IsoFile(path);
-        MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
-        return mhb.getDuration() / mhb.getTimescale() / 60; // 분 단위로 반환
-    }
-
-    // 삭제
-    @GetMapping("lv/delete")
-    public String delete(Model model, Principal principal,
-                         @RequestParam("syllabus-id") String syllabusId,
-                         @RequestParam("id") String id) {
-
-        // 강의영상 가져오기
-        Optional<LectureVideo> lv = lectureVideoService.get(syllabusId, id);
-
-        // 없으면 404
-        if (lv.isEmpty())
-            return "error/404";
-
-        // 글 작성자가 아니면 403
-        if (!lv.get().getSyllabus().getProfessor().getId().equals(principal.getName()))
-            return "error/404";
-
-        // 삭제
-        lectureVideoService.delete(lv.get());
-
-        // 목록 리디렉션
-        return "redirect:/p/lv";
     }
 }
