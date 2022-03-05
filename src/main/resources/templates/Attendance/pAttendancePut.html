@@ -68,6 +68,7 @@
         <th>출석</th>
         <th>결석</th>
         <th>지각</th>
+        <th>공결</th>
 
     </tr>
     </thead>
@@ -76,11 +77,13 @@
         <th th:text="${attendance.getStudent().getName()}"></th>
         <form action='a.jsp'>
         <td>
-            <input type='radio' name="${attendance.getStudent().getName()}" value='ok' /></td>
+            <input type='radio' name="${attendance.getStudent().getName()}" value='yes' /></td>
         <td>
             <input type='radio' name="${attendance.getStudent().getName()}" value='no' /></td>
         <td>
-            <input type='radio' name="${attendance.getStudent().getName()}" value='late' /></td>
+            <input type='radio' name="${attendance.getStudent().getName()}" value='absent' /></td>
+        <td>
+            <input type='radio' name="${attendance.getStudent().getName()}" value='vacancy' /></td>
         </form>
     </tr>
     </tbody>

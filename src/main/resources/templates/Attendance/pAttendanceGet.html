@@ -64,18 +64,28 @@
 </div>
 
 
-
+*수정하고 싶은 주차를 클릭하세요
 <table class="table table-striped table-hover">
     <thead>
     <tr>
         <th>이름</th>
-        <th>회차</th>
+        <th:block th:each="i : ${#numbers.sequence(1,16)}">
+            <td>
+                <a href="/p/attendance/put" class="link-dark"
+                   th:text="${i+'주차'}">
+                </a>
+            </td>
+        </th:block>
+
     </tr>
     </thead>
     <tbody>
     <tr  th:each="attendance : ${attendances}" >
         <th th:text="${attendance.getStudent().getName()}"></th>
-        <td th:text="${attendance.getWeek1()}"></td>
+       <th:block th:each="i : ${#numbers.sequence(0,15)}">
+           <td th:text="${attendance.formatWeek(attendance.getWeeksByList().get(i))}"></td>
+       </th:block>
+
 
     </tr>
     </tbody>
