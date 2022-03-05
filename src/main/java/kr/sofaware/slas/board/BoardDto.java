@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @ToString
 @AllArgsConstructor
-public class NoticeDto {
+public class BoardDto {
     private String syllabusId;
     private String title;
     private String content;

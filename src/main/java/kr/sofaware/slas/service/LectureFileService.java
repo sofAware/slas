@@ -5,13 +5,12 @@ import kr.sofaware.slas.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class NoticeService implements BoardService {
+public class LectureFileService implements BoardService {
 
     private final BoardRepository boardRepository;
 
@@ -32,7 +31,7 @@ public class NoticeService implements BoardService {
 
     @Override
     public List<Board> listAll(String SyllabusId) {
-        return boardRepository.findAllByCategoryAndSyllabus_Id(Board.CATEGORY_NOTICE, SyllabusId);
+        return boardRepository.findAllByCategoryAndSyllabus_Id(Board.CATEGORY_LECTURE_FILE, SyllabusId);
     }
 
     @Override

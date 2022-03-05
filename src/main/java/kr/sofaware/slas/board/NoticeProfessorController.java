@@ -21,6 +21,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class NoticeProfessorController {
 
+    private static String title = "공지사항";
+
     private final MemberService memberService;
     private final BoardService noticeService;
     private final SyllabusService syllabusService;
@@ -42,7 +44,7 @@ public class NoticeProfessorController {
                 ArrayList<String> yearSemesters = new ArrayList<>(lectures.keySet());
                 // 이 사람이 했던 수업이 없을 경우 그냥 리턴
                 if (yearSemesters.isEmpty())
-                    return "notice/list";
+                    return "board/list";
 
                 // 있으면 최근 학기 입력
                 yearSemester = yearSemesters.get(0);
@@ -93,8 +95,9 @@ public class NoticeProfessorController {
         // 날짜 내림차순 정렬 후 모델에 넣기
         boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
+        model.addAttribute("title", title);
 
-        return "notice/list";
+        return "board/list";
     }
 
     // 작성
@@ -103,36 +106,37 @@ public class NoticeProfessorController {
                              @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
         // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
+        model.addAttribute("title", title);
         model.addAttribute("syllabus", syllabusId == null ?
                 syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
                 syllabusService.findById(syllabusId).get());
 
-        return "/notice/write";
+        return "/board/write";
     }
     @PostMapping("notice/write")
-    public String postWriting(NoticeDto noticeDto, Model model, Principal principal) throws IOException {
+    public String postWriting(BoardDto boardDto, Model model, Principal principal) throws IOException {
 
         // 작성 권한 없으면 403
         if (!syllabusService.existsByIdAndProfessor_Id(
-                noticeDto.getSyllabusId(),
+                boardDto.getSyllabusId(),
                 principal.getName()))
             return "error/403";
 
         // 게시글 만들기
         Board.BoardBuilder builder = Board.builder()
-                .syllabus(syllabusService.findById(noticeDto.getSyllabusId()).get())
+                .syllabus(syllabusService.findById(boardDto.getSyllabusId()).get())
                 .category(Board.CATEGORY_NOTICE)
-                .title(noticeDto.getTitle())
-                .content(noticeDto.getContent())
+                .title(boardDto.getTitle())
+                .content(boardDto.getContent())
                 .member(memberService.loadUserByUsername(principal.getName()))
                 .date(new Date())
                 .view(0);
 
         // 첨부 파일 저장
-        if (!noticeDto.getFile().isEmpty()) {
-            String attachmentPath = fileService.saveOnSyllabus(noticeDto.getFile(), noticeDto.getSyllabusId());
+        if (!boardDto.getFile().isEmpty()) {
+            String attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
             builder
-                    .attachmentName(noticeDto.getFile().getOriginalFilename())
+                    .attachmentName(boardDto.getFile().getOriginalFilename())
                     .attachmentPath(attachmentPath);
         }
 
@@ -168,7 +172,7 @@ public class NoticeProfessorController {
 
         // 열람
         model.addAttribute("board", board.get());
-        return "notice/view";
+        return "board/view";
     }
 
     // 수정
@@ -189,12 +193,13 @@ public class NoticeProfessorController {
             return "error/403";
 
         // 페이지 전송
+        model.addAttribute("title", title);
         model.addAttribute("syllabus", board.get().getSyllabus());
         model.addAttribute("board", board.get());
-        return "/notice/write";
+        return "/board/write";
     }
     @PostMapping("notice/edit/{boardIdStr:[0-9]+}")
-    public String postEditing(NoticeDto noticeDto,
+    public String postEditing(BoardDto boardDto,
                               Model model, Principal principal,
                               @PathVariable String boardIdStr) throws IOException {
 
@@ -213,24 +218,24 @@ public class NoticeProfessorController {
         String attachmentPath = board.getAttachmentPath();
 
         // 새로운 파일을 업로드하면
-        if (!noticeDto.getFile().isEmpty()) {
+        if (!boardDto.getFile().isEmpty()) {
             if (attachmentName != null && !attachmentName.isEmpty()) {
                 /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
             }
 
-            attachmentName = noticeDto.getFile().getOriginalFilename();
-            attachmentPath = fileService.saveOnSyllabus(noticeDto.getFile(), noticeDto.getSyllabusId());
+            attachmentName = boardDto.getFile().getOriginalFilename();
+            attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
         }
         // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
         else if (attachmentName != null && !attachmentName.isEmpty() &&
-                noticeDto.getDeleteFile() != null && !noticeDto.getDeleteFile().isEmpty()) {
+                boardDto.getDeleteFile() != null && !boardDto.getDeleteFile().isEmpty()) {
             attachmentName = "";
             attachmentPath = "";
             /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
         }
 
         // 새로운 값들로 세팅
-        board.update(noticeDto.getTitle(), noticeDto.getContent(), attachmentName, attachmentPath);
+        board.update(boardDto.getTitle(), boardDto.getContent(), attachmentName, attachmentPath);
         noticeService.save(board);
 
         // 수정된 포스트 번호로 뷰 이동

@@ -1,7 +1,6 @@
 package kr.sofaware.slas.entity;
 
 import lombok.*;
-import org.thymeleaf.util.DateUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Board implements Serializable {
     public static final int CATEGORY_NOTICE = 1;            // 공지사항
-    public static final int CATEGORY_LECTURE_MATERIAL = 2;  // 강의자료
+    public static final int CATEGORY_LECTURE_FILE = 2;      // 강의자료
     public static final int CATEGORY_ASSIGNMENT = 3;        // 제출과제
     public static final int CATEGORY_QNA = 4;               // 질문
 

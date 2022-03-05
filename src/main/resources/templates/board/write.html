@@ -6,14 +6,14 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title>공지사항 - 글쓰기</title>
+    <title th:text="${title} + ' - 글쓰기'"></title>
 </head>
 <body>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
-    <h2 class="my-4">공지사항</h2>
+    <h2 class="my-4" th:text="${title}"></h2>
     <form method="POST" id="write">
         <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
 

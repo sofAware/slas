@@ -18,6 +18,9 @@ import java.util.function.Function;
 @RequestMapping("/s")
 @RequiredArgsConstructor
 public class NoticeStudentController {
+
+    private static String title = "공지사항";
+
     private final BoardService noticeService;
     private final LectureService lectureService;
 
@@ -89,8 +92,9 @@ public class NoticeStudentController {
         // 날짜 내림차순 정렬 후 모델에 넣기
         boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
+        model.addAttribute("title", title);
 
-        return "notice/list";
+        return "board/list";
     }
 
     // 열람
@@ -116,7 +120,8 @@ public class NoticeStudentController {
         noticeService.increaseViewCount(boardId);
 
         // 열람
+        model.addAttribute("title", title);
         model.addAttribute("board", board.get());
-        return "notice/view";
+        return "board/view";
     }
 }
