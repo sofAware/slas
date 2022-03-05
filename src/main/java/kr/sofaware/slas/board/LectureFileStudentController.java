@@ -1,27 +1,29 @@
 package kr.sofaware.slas.board;
 
+import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.BoardService;
 import kr.sofaware.slas.service.LectureService;
-import kr.sofaware.slas.entity.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.*;
-import java.util.function.Function;
 
 @Controller
-@RequestMapping("/s/" + NoticeStudentController.ROOT_URL)
+@RequestMapping("/s/" + LectureFileStudentController.ROOT_URL)
 @RequiredArgsConstructor
-public class NoticeStudentController {
+public class LectureFileStudentController {
 
-    public static final String ROOT_URL = "notice";
-    private static final String TITLE = "공지사항";
-    private final BoardService noticeService;
+    public static final String ROOT_URL = "lf";
+    private static final String TITLE = "강의자료";
+    private final BoardService lectureFileService;
 
     private final LectureService lectureService;
 
@@ -68,13 +70,13 @@ public class NoticeStudentController {
         List<Board> boards = new ArrayList<>();
         if (syllabusId == null || syllabusId.isEmpty()) {
             lectures.get(yearSemester).forEach(syllabus ->
-                    boards.addAll(noticeService.listAll(syllabus.getId())));
+                    boards.addAll(lectureFileService.listAll(syllabus.getId())));
 
             model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
         }
         else {
-            boards.addAll(noticeService.listAll(syllabusId));
+            boards.addAll(lectureFileService.listAll(syllabusId));
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력
             Syllabus syllabus = lectures
@@ -106,7 +108,7 @@ public class NoticeStudentController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = noticeService.read(boardId);
+        Optional<Board> board = lectureFileService.read(boardId);
 
         // 없으면 404
         if (board.isEmpty())
@@ -119,7 +121,7 @@ public class NoticeStudentController {
             return "error/403";
 
         // 조회 수 증가
-        noticeService.increaseViewCount(boardId);
+        lectureFileService.increaseViewCount(boardId);
 
         // 열람
         model.addAttribute("rootURL", ROOT_URL);

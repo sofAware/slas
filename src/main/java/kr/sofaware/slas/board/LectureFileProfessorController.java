@@ -1,8 +1,8 @@
 package kr.sofaware.slas.board;
 
+import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.BoardService;
-import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.service.FileService;
 import kr.sofaware.slas.service.MemberService;
 import kr.sofaware.slas.service.SyllabusService;
@@ -17,13 +17,13 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/p/" + NoticeProfessorController.ROOT_URL)
+@RequestMapping("/p/" + LectureFileProfessorController.ROOT_URL)
 @RequiredArgsConstructor
-public class NoticeProfessorController {
+public class LectureFileProfessorController {
 
-    public static final String ROOT_URL = "notice";
-    private static final String TITLE = "공지사항";
-    private final BoardService noticeService;
+    public static final String ROOT_URL = "lf";
+    private static final String TITLE = "강의자료";
+    private final BoardService lectureFileService;
 
     private final MemberService memberService;
     private final SyllabusService syllabusService;
@@ -72,14 +72,14 @@ public class NoticeProfessorController {
         List<Board> boards = new ArrayList<>();
         if (syllabusId == null || syllabusId.isEmpty()) {
             lectures.get(yearSemester).forEach(syllabus ->
-                    boards.addAll(noticeService.listAll(syllabus.getId())));
+                    boards.addAll(lectureFileService.listAll(syllabus.getId())));
 
             // 템플릿에서 강의명과 강의시간을 표시하기 위해 (isEmpty 판별) 추가
             model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
         }
         else {
-            boards.addAll(noticeService.listAll(syllabusId));
+            boards.addAll(lectureFileService.listAll(syllabusId));
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력
             Syllabus syllabus = lectures
@@ -144,7 +144,7 @@ public class NoticeProfessorController {
 
         // 게시글 작성
         Board board = builder.build();
-        noticeService.save(board);
+        lectureFileService.save(board);
 
         // 작성된 포스트 번호로 뷰 이동
         return "redirect:/p/" + ROOT_URL + "/" + board.getId();
@@ -157,7 +157,7 @@ public class NoticeProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = noticeService.read(boardId);
+        Optional<Board> board = lectureFileService.read(boardId);
 
         // 없으면 404
         if (board.isEmpty())
@@ -170,7 +170,7 @@ public class NoticeProfessorController {
             return "error/403";
 
         // 조회 수 증가
-        noticeService.increaseViewCount(boardId);
+        lectureFileService.increaseViewCount(boardId);
 
         // 열람
         model.addAttribute("rootURL", ROOT_URL);
@@ -186,7 +186,7 @@ public class NoticeProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = noticeService.read(boardId);
+        Optional<Board> board = lectureFileService.read(boardId);
 
         // 없으면 404
         if (board.isEmpty())
@@ -209,7 +209,7 @@ public class NoticeProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> oBoard = noticeService.read(boardId);
+        Optional<Board> oBoard = lectureFileService.read(boardId);
 
         // 글 작성자가 아니면 403
         if (oBoard.isEmpty() ||
@@ -240,7 +240,7 @@ public class NoticeProfessorController {
 
         // 새로운 값들로 세팅
         board.update(boardDto.getTitle(), boardDto.getContent(), attachmentName, attachmentPath);
-        noticeService.save(board);
+        lectureFileService.save(board);
 
         // 수정된 포스트 번호로 뷰 이동
         return "redirect:/p/" + ROOT_URL + "/" + boardIdStr;
@@ -253,7 +253,7 @@ public class NoticeProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = noticeService.read(boardId);
+        Optional<Board> board = lectureFileService.read(boardId);
 
         // 없으면 404
         if (board.isEmpty())
@@ -264,7 +264,7 @@ public class NoticeProfessorController {
             return "error/403";
 
         // 삭제
-        noticeService.delete(boardId);
+        lectureFileService.delete(boardId);
         /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
 
         // 목록으로 리디렉션

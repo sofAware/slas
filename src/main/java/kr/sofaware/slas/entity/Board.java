@@ -13,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board implements Serializable {
+
     public static final int CATEGORY_NOTICE = 1;            // 공지사항
     public static final int CATEGORY_LECTURE_FILE = 2;      // 강의자료
     public static final int CATEGORY_ASSIGNMENT = 3;        // 제출과제
@@ -45,6 +46,10 @@ public class Board implements Serializable {
 
     private String attachmentName;      // 첨부 파일 이름
     private String attachmentPath;      // 첨부 파일 경로
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
 
     public void increaseViewCount() {
         view++;

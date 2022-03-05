@@ -17,6 +17,7 @@ public class NoticeService implements BoardService {
 
     @Override
     public void save(Board board) {
+        board.setCategory(Board.CATEGORY_NOTICE);
         boardRepository.save(board);
     }
 

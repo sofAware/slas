@@ -16,6 +16,7 @@ public class LectureFileService implements BoardService {
 
     @Override
     public void save(Board board) {
+        board.setCategory(Board.CATEGORY_LECTURE_FILE);
         boardRepository.save(board);
     }
 
