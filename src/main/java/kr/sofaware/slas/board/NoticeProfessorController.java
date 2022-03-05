@@ -17,11 +17,12 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/p")
+@RequestMapping("/p/" + NoticeProfessorController.ROOT_URL)
 @RequiredArgsConstructor
 public class NoticeProfessorController {
 
-    private static String title = "공지사항";
+    public static final String ROOT_URL = "notice";
+    private static final String TITLE = "공지사항";
 
     private final MemberService memberService;
     private final BoardService noticeService;
@@ -29,7 +30,7 @@ public class NoticeProfessorController {
     private final FileService fileService;
 
     // 전체 공지사항 리스트
-    @GetMapping("notice")
+    @GetMapping("")
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
@@ -95,26 +96,28 @@ public class NoticeProfessorController {
         // 날짜 내림차순 정렬 후 모델에 넣기
         boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
-        model.addAttribute("title", title);
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
 
         return "board/list";
     }
 
     // 작성
-    @GetMapping("notice/write")
+    @GetMapping("write")
     public String getWriting(Model model, Principal principal,
                              @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
         // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
-        model.addAttribute("title", title);
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
         model.addAttribute("syllabus", syllabusId == null ?
                 syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
                 syllabusService.findById(syllabusId).get());
 
         return "/board/write";
     }
-    @PostMapping("notice/write")
-    public String postWriting(BoardDto boardDto, Model model, Principal principal) throws IOException {
+    @PostMapping("write")
+    public String postWriting(BoardDto boardDto, Principal principal) throws IOException {
 
         // 작성 권한 없으면 403
         if (!syllabusService.existsByIdAndProfessor_Id(
@@ -149,7 +152,7 @@ public class NoticeProfessorController {
     }
 
     // 열람
-    @GetMapping("notice/{boardIdStr:[0-9]+}")
+    @GetMapping("{boardIdStr:[0-9]+}")
     public String view(Model model, Principal principal,
                        @PathVariable String boardIdStr) {
 
@@ -171,12 +174,14 @@ public class NoticeProfessorController {
         noticeService.increaseViewCount(boardId);
 
         // 열람
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
         model.addAttribute("board", board.get());
         return "board/view";
     }
 
     // 수정
-    @GetMapping("notice/edit/{boardIdStr:[0-9]+}")
+    @GetMapping("edit/{boardIdStr:[0-9]+}")
     public String GetEditing(Model model, Principal principal,
                              @PathVariable String boardIdStr) {
 
@@ -193,14 +198,14 @@ public class NoticeProfessorController {
             return "error/403";
 
         // 페이지 전송
-        model.addAttribute("title", title);
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
         model.addAttribute("syllabus", board.get().getSyllabus());
         model.addAttribute("board", board.get());
         return "/board/write";
     }
-    @PostMapping("notice/edit/{boardIdStr:[0-9]+}")
-    public String postEditing(BoardDto boardDto,
-                              Model model, Principal principal,
+    @PostMapping("edit/{boardIdStr:[0-9]+}")
+    public String postEditing(BoardDto boardDto, Principal principal,
                               @PathVariable String boardIdStr) throws IOException {
 
         // 게시글 가져오기
@@ -243,8 +248,8 @@ public class NoticeProfessorController {
     }
 
     // 삭제
-    @GetMapping("notice/delete/{boardIdStr:[0-9]+}")
-    public String delete(Model model, Principal principal,
+    @GetMapping("delete/{boardIdStr:[0-9]+}")
+    public String delete(Principal principal,
                          @PathVariable String boardIdStr) {
 
         // 게시글 가져오기

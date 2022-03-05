@@ -15,17 +15,18 @@ import java.util.*;
 import java.util.function.Function;
 
 @Controller
-@RequestMapping("/s")
+@RequestMapping("/s/" + NoticeStudentController.ROOT_URL)
 @RequiredArgsConstructor
 public class NoticeStudentController {
 
-    private static String title = "공지사항";
+    public static final String ROOT_URL = "notice";
+    private static final String TITLE = "공지사항";
 
     private final BoardService noticeService;
     private final LectureService lectureService;
 
     // 전체 공지사항 리스트
-    @GetMapping("notice")
+    @GetMapping()
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
@@ -40,7 +41,7 @@ public class NoticeStudentController {
                 ArrayList<String> yearSemesters = new ArrayList<>(lectures.keySet());
                 // 이 사람이 했던 수업이 없을 경우 그냥 리턴
                 if (yearSemesters.isEmpty())
-                    return "notice/list";
+                    return "board/list";
 
                 // 있으면 최근 학기 입력
                 yearSemester = yearSemesters.get(0);
@@ -92,13 +93,14 @@ public class NoticeStudentController {
         // 날짜 내림차순 정렬 후 모델에 넣기
         boards.sort(Comparator.comparing(Board::getDate).reversed());
         model.addAttribute("boards", boards);
-        model.addAttribute("title", title);
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
 
         return "board/list";
     }
 
     // 열람
-    @GetMapping("notice/{boardIdStr:[0-9]+}")
+    @GetMapping("/{boardIdStr:[0-9]+}")
     public String view(Model model, Principal principal,
                        @PathVariable String boardIdStr) {
 
@@ -120,7 +122,8 @@ public class NoticeStudentController {
         noticeService.increaseViewCount(boardId);
 
         // 열람
-        model.addAttribute("title", title);
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
         model.addAttribute("board", board.get());
         return "board/view";
     }

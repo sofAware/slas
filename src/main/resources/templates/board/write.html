@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="mb-3 d-flex justify-content-between gap-3">
-            <a href="/p/notice" type="button" class="btn btn-secondary">목록</a>
+            <a th:attr="href='/p/' + ${rootURL}" type="button" class="btn btn-secondary">목록</a>
             <button type="submit" class="btn btn-primary" th:text="${board}?'수정완료':'작성완료'"></button>
         </div>
     </form>
@@ -59,6 +59,6 @@
 <script>
     const initialValue= `[[${board} ? ${board.getContent()} : '']]`;
 </script>
-<script type="text/javascript" th:src="@{/js/pNoticeWrite.js}"></script>
+<script type="text/javascript" th:src="@{/js/pBoardWrite.js}"></script>
 </body>
 </html>

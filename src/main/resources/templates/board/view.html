@@ -6,7 +6,7 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title th:text="'공지사항 - ' + ${board.getSyllabus().getName()}"></title>
+    <title th:text="${title} + ' - ' + ${board.getSyllabus().getName()}"></title>
     <style>
         .container-fluid {
             padding-top: 4rem;
@@ -52,7 +52,7 @@
 <div class="container">
 <!--    작성자 버튼-->
     <div class="d-flex justify-content-end gap-2 mt-3 mb-5">
-        <a class="btn btn-secondary" href="../notice">목록</a>
+        <a class="btn btn-secondary" th:attr="href='../' + ${rootURL}">목록</a>
         <a class="btn btn-primary" th:attr="href='./edit/' + ${board.getId()}"
            th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
         <a class="btn btn-danger" th:attr="href='./delete/' + ${board.getId()}"
