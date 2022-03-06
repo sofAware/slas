@@ -37,15 +37,17 @@
             <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputTitle" name="title"
-                    th:attr="value=${lv}?${lv.getTitle()}:''">
+                    th:attr="value=${lv}?${lv.getName()}:''">
             </div>
         </div>
         <div class="mb-3 row">
             <label for="inputWeek" class="col-sm-2 col-form-label">주회차</label>
             <div class="col-sm-10">
                 <div class="input-group col-sm-10">
-                    <input type="number" class="form-control" id="inputWeek" name="week" value="1">
-                    <input type="number" class="form-control" id="inputTime" name="time" value="1">
+                    <input type="number" class="form-control" id="inputWeek" name="week"
+                           th:value="${lv}?${lv.getId().split('-')[0]}:1">
+                    <input type="number" class="form-control" id="inputTime" name="time"
+                           th:value="${lv}?${lv.getId().split('-')[1]}:1">
                 </div>
             </div>
         </div>
@@ -53,8 +55,10 @@
             <label for="inputAttendanceStart" class="col-sm-2 col-form-label">출석기간</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="date" class="form-control" id="inputAttendanceStart" name="attendanceStart">
-                    <input type="date" class="form-control" id="inputAttendanceEnd" name="attendanceEnd">
+                    <input type="date" class="form-control" id="inputAttendanceStart" name="attendanceStart"
+                           th:value="${lv}?${#dates.format(lv.getAttendanceStart(), 'yyyy-MM-dd')}:''">
+                    <input type="date" class="form-control" id="inputAttendanceEnd" name="attendanceEnd"
+                           th:value="${lv}?${#dates.format(lv.getAttendanceEnd(), 'yyyy-MM-dd')}:''">
                 </div>
             </div>
         </div>
@@ -78,9 +82,9 @@
 
         <div class="mb-3 row">
             <div class="col">
-                <div class="form-check mb-1" th:if="${lv}?${lv.getAttachmentName() != null && !lv.getAttachmentName().isEmpty()}:false">
+                <div class="form-check mb-1" th:if="${lv}?${lv.getAttachmentPath() != null && !lv.getAttachmentPath().isEmpty()}:false">
                     <input class="form-check-input" type="checkbox" value="true" id="deleteFile" name="deleteFile">
-                    <label class="form-check-label" for="deleteFile" th:text="${lv.getAttachmentName()}+' (체크시 삭제)'"></label>
+                    <label class="form-check-label" for="deleteFile" th:text="${lv.getName()}+' (체크시 삭제)'"></label>
                 </div>
                 <input class="form-control" type="file" id="file" name="file" accept=".mp4">
             </div>

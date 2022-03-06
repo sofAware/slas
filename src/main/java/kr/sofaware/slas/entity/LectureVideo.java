@@ -30,4 +30,13 @@ public class LectureVideo {
     private int duration;               // 강의영상 길이(분)
 
     private String attachmentPath;      // 강의영상 경로
+
+    public void update(String id, String name, Date attendanceStart, Date attendanceEnd, int duration, String attachmentPath) {
+        this.id = id;
+        this.name = name;
+        this.attendanceStart = attendanceStart;
+        this.attendanceEnd = attendanceEnd;
+        this.duration = duration;
+        this.attachmentPath = attachmentPath;
+    }
 }
