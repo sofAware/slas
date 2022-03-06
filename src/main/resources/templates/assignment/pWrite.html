@@ -71,7 +71,7 @@
 <script th:replace="/frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
-    const initialValue= `[[${assignment} ? ${assignment.getContent()} : '']]`;
+    const initialValue= `[(${assignment} ? ${assignment.getContent()} : '')]`;
 </script>
 <script type="text/javascript" th:src="@{/js/pBoardWrite.js}"></script>
 </body>
