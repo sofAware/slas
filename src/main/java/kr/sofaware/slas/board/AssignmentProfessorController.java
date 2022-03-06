@@ -1,17 +1,17 @@
 package kr.sofaware.slas.board;
 
 import kr.sofaware.slas.entity.Assignment;
+import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.LectureVideo;
 import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.service.AssignmentService;
-import kr.sofaware.slas.service.SyllabusService;
+import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
@@ -20,9 +20,12 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AssignmentProfessorController {
 
+    private final AssignmentSubmitService assignmentSubmitService;
     private final AssignmentService assignmentService;
     private final SyllabusService syllabusService;
+    private final FileService fileService;
 
+    // 리스트
     @GetMapping
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
@@ -89,5 +92,160 @@ public class AssignmentProfessorController {
         assignments.sort(Comparator.comparing(Assignment::getSubmitStart).reversed());
         model.addAttribute("assignments", assignments);
         return "assignment/list";
+    }
+
+    // 열람
+    @GetMapping("{assignmentIdStr:[0-9]+}")
+    public String view(Model model, Principal principal,
+                       @PathVariable String assignmentIdStr) {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> assignment = assignmentService.read(assignmentId);
+
+        // 없으면 404
+        if (assignment.isEmpty())
+            return "error/404";
+
+        // 읽을 권한 없으면 403
+        String syllabusId = assignment.get().getSyllabus().getId();
+        if (!syllabusService.existsByIdAndProfessor_Id(syllabusId, principal.getName()))
+            return "error/403";
+
+        // 열람
+        model.addAttribute("assignment", assignment);
+        model.addAttribute("infos", assignmentSubmitService.listSubmitInfo(syllabusId));
+        return "assignment/pView";
+    }
+
+    // 작성
+    @GetMapping("write")
+    public String getWriting(Model model, Principal principal,
+                             @Nullable @RequestParam("syllabus-id") String syllabusId) {
+
+        // 학정번호가 넘어왔으면 그걸로 강의 아니면 교수한 강의 최근 1개
+        Optional<Syllabus> syllabus = syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()) :
+                syllabusService.findById(syllabusId);
+
+        // 해당 강의가 없다면 잘못된 요청
+        if (syllabus.isEmpty())
+            return "error/400";
+
+        // 작성
+        model.addAttribute("syllabus", syllabus.get());
+        return "assignment/pWrite";
+    }
+
+    @PostMapping("write")
+    public String postWriting(AssignmentDto assignmentDto, Model model, Principal principal) throws Exception {
+
+        // 작성 권한 없으면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                assignmentDto.getSyllabusId(),
+                principal.getName()))
+            return "error/403";
+
+        // 첨부파일 저장
+        String attachmentPath = "";
+        if (!assignmentDto.getFile().isEmpty())
+            attachmentPath = fileService.saveOnSyllabus(assignmentDto.getFile(), assignmentDto.getSyllabusId());
+
+        // 과제 엔티티 만들기
+        Assignment.AssignmentBuilder builder = Assignment.builder()
+                .syllabus(syllabusService.findById(assignmentDto.getSyllabusId()).get())
+                .name(assignmentDto.getTitle())
+                .content(assignmentDto.getContent())
+                .submitStart(assignmentDto.getSubmitStart())
+                .submitEnd(assignmentDto.getSubmitEnd());
+
+        // 파일이 있을경우 파일 정보도 빌더에 추가
+        if (assignmentDto.getFile() != null)
+            builder.attachmentName(assignmentDto.getFile().getOriginalFilename())
+                    .attachmentPath(attachmentPath);
+
+        // 과제 작성
+        Assignment assignment = builder.build();
+        assignmentService.save(assignment);
+
+        // 작성된 과제로 리디렉션
+        return "redirect:/p/assignment/" + assignment.getId();
+    }
+
+    // 수정
+    @GetMapping("edit/{assignmentIdStr:[0-9]+}")
+    public String GetEditing(Model model, Principal principal,
+                             @PathVariable String assignmentIdStr) {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> assignment = assignmentService.read(assignmentId);
+
+        // 없으면 404
+        if (assignment.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                assignment.get().getSyllabus().getId(),
+                principal.getName()))
+            return "error/403";
+
+        // 페이지 전송
+        model.addAttribute("syllabus", assignment.get().getSyllabus());
+        model.addAttribute("assignment", assignment.get());
+        return "/assignment/pWrite";
+    }
+    @PostMapping("edit/{assignmentIdStr:[0-9]+}")
+    public String postEditing(AssignmentDto assignmentDto, Principal principal,
+                              @PathVariable String assignmentIdStr) throws IOException {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
+
+        // 없으면 404
+        if (oAssignment.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        Assignment assignment = oAssignment.get();
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                oAssignment.get().getSyllabus().getId(),
+                principal.getName()))
+            return "error/403";
+
+        // 첨부파일 가져오기
+        String attachmentName = assignment.getAttachmentName();
+        String attachmentPath = assignment.getAttachmentPath();
+
+        // 새로운 파일을 업로드하면
+        if (!assignmentDto.getFile().isEmpty()) {
+            if (attachmentName != null && !attachmentName.isEmpty()) {
+                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+            }
+
+            attachmentName = assignmentDto.getFile().getOriginalFilename();
+            attachmentPath = fileService.saveOnSyllabus(assignmentDto.getFile(), assignmentDto.getSyllabusId());
+        }
+        // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
+        else if (attachmentName != null && !attachmentName.isEmpty() &&
+                assignmentDto.getDeleteFile() != null && !assignmentDto.getDeleteFile().isEmpty()) {
+            attachmentName = "";
+            attachmentPath = "";
+            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+        }
+
+        // 새로운 값들로 세팅
+        assignment.update(
+                assignmentDto.getTitle(),
+                assignmentDto.getSubmitStart(),
+                assignmentDto.getSubmitEnd(),
+                assignmentDto.getContent(),
+                attachmentName, attachmentPath);
+        assignmentService.save(assignment);
+
+        // 수정된 포스트 번호로 뷰 이동
+        return "redirect:/p/assignment/" + assignmentIdStr;
     }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class AssignmentService {
         return assignmentRepository.save(assignment);
     }
 
-    public Assignment read(int assignmentId) {
-        return assignmentRepository.getById(assignmentId);
+    public Optional<Assignment> read(int assignmentId) {
+        return assignmentRepository.findById(assignmentId);
     }
 
     public void delete(int assignmentId) {

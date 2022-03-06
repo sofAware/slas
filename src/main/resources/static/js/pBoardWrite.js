@@ -9,7 +9,7 @@ const syllabusId = document.querySelector('option[selected]').getAttribute('valu
 const editor = new toastui.Editor({
     el: document.querySelector('#inputContent'),
     previewStyle: 'vertical',
-    height: '560px',
+    height: '550px',
     initialValue
 });
 

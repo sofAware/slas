@@ -16,7 +16,7 @@ public class Board implements Serializable {
 
     public static final int CATEGORY_NOTICE = 1;            // 공지사항
     public static final int CATEGORY_LECTURE_FILE = 2;      // 강의자료
-    public static final int CATEGORY_ASSIGNMENT = 3;        // 제출과제
+    public static final int CATEGORY_ASSIGNMENT_SUBMIT = 3; // 제출과제
     public static final int CATEGORY_QNA = 4;               // 질문
 
     @Id
@@ -58,10 +58,10 @@ public class Board implements Serializable {
     /**
      * 게시글 수정 때 사용할 업데이트 함수
      * @author 양경호
-     * @param title
-     * @param content
-     * @param attachmentName
-     * @param attachmentPath
+     * @param title 제목
+     * @param content 내용
+     * @param attachmentName 첨부파일 이름
+     * @param attachmentPath 첨부파일 경로
      */
     public void update(String title, String content, String attachmentName, String attachmentPath) {
         this.title = title;

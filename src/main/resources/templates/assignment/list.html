@@ -73,18 +73,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="as : ${assignments}">
-            <td class="text-center" th:text="${as.getId()}"></td>
-            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${as.getSyllabus().getName()}"></td>
-            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${as.getSyllabus().formatClassTime()}"></td>
-            <td th:text="${as.getName()}"></td>
+        <tr th:each="a : ${assignments}">
+            <td class="text-center" th:text="${a.getId()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${a.getSyllabus().getName()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${a.getSyllabus().formatClassTime()}"></td>
+            <td th:text="${a.getName()}"></td>
             <td class="text-end">
-                <i class="far fa-image" th:if="${as.getContent().contains('![image](')}"></i>
-                <i class="fa fa-paperclip" th:if="${as.getAttachmentName() != null && !as.getAttachmentName().isEmpty()}"></i>
+                <i class="far fa-image" th:if="${a.getContent().contains('![image](')}"></i>
+                <i class="fa fa-paperclip" th:if="${a.getAttachmentName() != null && !a.getAttachmentName().isEmpty()}"></i>
             </td>
             <td class="text-center" th:text="${
-                #dates.format(as.getSubmitStart(), 'yyyy-MM-dd HH:mm') + ' ~ ' +
-                #dates.format(as.getSubmitEnd(),   'yyyy-MM-dd HH:mm')}"></td>
+                #dates.format(a.getSubmitStart(), 'yyyy-MM-dd HH:mm') + ' ~ ' +
+                #dates.format(a.getSubmitEnd(),   'yyyy-MM-dd HH:mm')}"></td>
         </tr>
         </tbody>
     </table>

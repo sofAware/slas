@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta th:replace="/frame/head.html">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+    <title>과제 - 글쓰기</title>
+</head>
+<body>
+<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
+
+<div class="container">
+    <h2 class="my-4">✒️ 과제</h2>
+    <form method="POST" id="write">
+        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+
+        <div class="mb-3 row">
+            <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="syllabus" name="syllabusId" disabled>
+                    <option th:text="${syllabus.getName()} + ' (' + ${syllabus.getId()} + ') [' + ${syllabus.formatClassTime()} + ']'"
+                            th:value="${syllabus.getId()}" selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputTitle" name="title"
+                    th:attr="value=${assignment}?${assignment.getName()}:''">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="inputSubmitStart" class="col-sm-2 col-form-label">제출기한</label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    <input type="date" class="form-control" id="inputSubmitStart" name="submitStart"
+                           th:value="${assignment}?${#dates.format(assignment.getSubmitStart(), 'yyyy-MM-dd')}">
+                    <input type="date" class="form-control" id="inputSubmitEnd" name="submitEnd"
+                           th:value="${assignment}?${#dates.format(assignment.getSubmitEnd(), 'yyyy-MM-dd')}">
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <div id="inputContent" name="content"></div>
+        </div>
+
+        <div class="mb-3 row">
+            <div class="col">
+                <div class="form-check mb-1" th:if="${assignment}?${assignment.getAttachmentName() != null && !assignment.getAttachmentName().isEmpty()}:false">
+                    <input class="form-check-input" type="checkbox" value="true" id="deleteFile" name="deleteFile">
+                    <label class="form-check-label" for="deleteFile" th:text="${assignment.getAttachmentName()}+' (체크시 삭제)'"></label>
+                </div>
+                <input class="form-control" type="file" id="file" name="file">
+            </div>
+        </div>
+        <div class="mb-3 d-flex gap-3">
+            <a href="/p/assignment" type="button" class="btn btn-secondary me-auto">목록</a>
+            <div class="spinner-border text-primary d-none" role="status"></div>
+            <button type="submit" class="btn btn-primary" th:text="${assignment}?'수정완료':'작성완료'"></button>
+        </div>
+    </form>
+</div>
+<!-- Copy & Edit here! -->
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const initialValue= `[[${assignment} ? ${assignment.getContent()} : '']]`;
+</script>
+<script type="text/javascript" th:src="@{/js/pBoardWrite.js}"></script>
+</body>
+</html>

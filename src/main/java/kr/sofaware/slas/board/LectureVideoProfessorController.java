@@ -130,11 +130,17 @@ public class LectureVideoProfessorController {
     public String getWriting(Model model, Principal principal,
                              @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
-        // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
-        model.addAttribute("syllabus", syllabusId == null ?
-                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
-                syllabusService.findById(syllabusId).get());
+        // 학정번호가 넘어왔으면 그걸로 강의 아니면 교수한 강의 최근 1개
+        Optional<Syllabus> syllabus = syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()) :
+                syllabusService.findById(syllabusId);
 
+        // 해당 강의가 없다면 잘못된 요청
+        if (syllabus.isEmpty())
+            return "error/400";
+
+        // 작성
+        model.addAttribute("syllabus", syllabus.get());
         return "/lectureVideo/write";
     }
 
