@@ -113,7 +113,7 @@ public class FileController {
             // 헤더 헤팅
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             response.setContentLengthLong(path.toFile().length());
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" +encodedFilename);
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + encodedFilename);
 
             // 전송
             try (RandomAccessFile randomFile = new RandomAccessFile(path.toFile(), "r")) {

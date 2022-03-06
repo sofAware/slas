@@ -42,7 +42,7 @@
 
         <tr><th class="table-active text-center">첨부파일</th>
             <td><a class="text-decoration-none text-primary" target="_blank"
-                   th:attr="href=${assignment.get().getAttachmentPath()}"
+                   th:attr="href=${assignment.get().getAttachmentPath()} + '?filename=' + ${assignment.get().getAttachmentName()}"
                    th:text="${assignment.get().getAttachmentName()}"></a></td></tr>
     </table>
 
@@ -54,7 +54,8 @@
             <th>전공</th>
             <th>이름</th>
             <th>제출일</th>
-            <th>첨부파일</th>
+            <th>첨부파일  <a class="text-decoration-none text-primary"
+                th:href="'./submit-files/' + ${assignment.get().getId()}">전체다운로드</a></th>
         </tr>
         </thead>
         <tbody>
@@ -72,7 +73,7 @@
             <th:block th:if="${!info.getBoard().isEmpty()}">
                 <td th:text="${#dates.format(info.getBoard().get().getDate(), 'yyyy-MM-dd')}"></td>
                 <td><a class="text-decoration-none text-primary"
-                       th:attr="href=${info.getBoard().get().getAttachmentPath()}"
+                       th:attr="href=${info.getBoard().get().getAttachmentPath()} + '?filename=' + ${info.getBoard().get().getAttachmentName()}"
                        th:text="${info.getBoard().get().getAttachmentName()}"></a></td>
             </th:block>
         </tr>
