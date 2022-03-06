@@ -22,7 +22,7 @@ import java.util.*;
 public class LectureFileProfessorController {
 
     public static final String ROOT_URL = "lf";
-    private static final String TITLE = "강의자료";
+    private static final String TITLE = "\uD83E\uDDF7 강의자료";
     private final BoardService lectureFileService;
 
     private final MemberService memberService;
@@ -30,7 +30,7 @@ public class LectureFileProfessorController {
     private final FileService fileService;
 
     // 전체 공지사항 리스트
-    @GetMapping("")
+    @GetMapping
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
@@ -77,8 +77,7 @@ public class LectureFileProfessorController {
             // 템플릿에서 강의명과 강의시간을 표시하기 위해 (isEmpty 판별) 추가
             model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
-        }
-        else {
+        } else {
             boards.addAll(lectureFileService.listAll(syllabusId));
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력

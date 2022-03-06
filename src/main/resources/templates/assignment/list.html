@@ -5,7 +5,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta th:replace="/frame/head.html">
-    <title>강의영상</title>
+    <title>과제</title>
     <style>
         tbody > tr {
             cursor: pointer;
@@ -16,7 +16,7 @@
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
-    <h2 class="my-4">🎬 강의영상</h2>
+    <h2 class="my-4">✒️ 과제</h2>
     <div class="d-flex justify-content-center gap-4 mb-4">
         <!-- 학기 선택 -->
         <div class="dropdown">
@@ -56,7 +56,7 @@
 
         <button class="btn btn-primary" type="button" aria-expanded="false" id="write"
                 sec:authorize="hasRole('PROFESSOR')">
-            업로드
+            글쓰기
         </button>
     </div>
 
@@ -64,24 +64,27 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
+            <th class="text-center">글 번호</th>
             <th class="text-center" th:if="${selectedSyllabusId.isEmpty()}">강의명</th>
             <th class="text-center" th:if="${selectedSyllabusId.isEmpty()}">강의시간</th>
-            <th class="text-center">주회차</th>
             <th class="text-center">제목</th>
-            <th class="text-center">출석기간</th>
-            <th class="text-center">길이</th>
+            <th></th>
+            <th class="text-center">제출기한</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="lv : ${lectureVideos}">
-            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${lv.getSyllabus().getName()}"></td>
-            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${lv.getSyllabus().formatClassTime()}"></td>
-            <td class="text-center data-id data-sid" th:attr="data-sid=${lv.getSyllabus().getId()}" th:text="${lv.getId()}"></td>
-            <td th:text="${lv.getName()}"></td>
+        <tr th:each="as : ${assignments}">
+            <td class="text-center" th:text="${as.getId()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${as.getSyllabus().getName()}"></td>
+            <td class="text-center" th:if="${selectedSyllabusId.isEmpty()}" th:text="${as.getSyllabus().formatClassTime()}"></td>
+            <td th:text="${as.getName()}"></td>
+            <td class="text-end">
+                <i class="far fa-image" th:if="${as.getContent().contains('![image](')}"></i>
+                <i class="fa fa-paperclip" th:if="${as.getAttachmentName() != null && !as.getAttachmentName().isEmpty()}"></i>
+            </td>
             <td class="text-center" th:text="${
-                #dates.format(lv.getAttendanceStart(), 'yyyy-MM-dd HH:mm') + ' ~ ' +
-                #dates.format(lv.getAttendanceEnd(),   'yyyy-MM-dd HH:mm')}"></td>
-            <td class="text-center" th:text="${lv.getDuration()} + '분'"></td>
+                #dates.format(as.getSubmitStart(), 'yyyy-MM-dd HH:mm') + ' ~ ' +
+                #dates.format(as.getSubmitEnd(),   'yyyy-MM-dd HH:mm')}"></td>
         </tr>
         </tbody>
     </table>
@@ -94,15 +97,13 @@
 
     // 게시글 리스트 각각 이동 이벤트
     document.querySelectorAll('tbody > tr').forEach(e => e.addEventListener('click', evt =>
-        location.href = './lv/view?syllabus-id=' +
-            e.querySelector('td.data-sid').getAttribute('data-sid') + '&id=' +
-            e.querySelector('td.data-id').innerText));
+        location.href = './assignment/' + e.querySelector('td').innerText));
 
     // 글쓰기 버튼 이벤트
     if (btnWrite)
         btnWrite.addEventListener('click', evt => {
             const sid = document.querySelector('#syllabus').getAttribute('data-sid');
-            location.href = './lv/write' + (sid ? '?syllabus-id=' + sid : '');
+            location.href = './assignment/write' + (sid ? '?syllabus-id=' + sid : '');
         });
 </script>
 </body>

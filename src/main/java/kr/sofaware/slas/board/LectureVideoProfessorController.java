@@ -20,7 +20,7 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/p")
+@RequestMapping("/p/lv")
 @RequiredArgsConstructor
 public class LectureVideoProfessorController {
 
@@ -29,7 +29,7 @@ public class LectureVideoProfessorController {
     private final FileService fileService;
 
     // 전체 강의영상 리스트
-    @GetMapping("lv")
+    @GetMapping
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
@@ -90,7 +90,7 @@ public class LectureVideoProfessorController {
                     syllabus.getName() + " (" + syllabus.formatClassTime() + ")");
         }
 
-        // 날짜 내림차순 정렬 후 모델에 넣기
+        // 출석기한 시작일 내림차순 정렬 후 모델에 넣기
         lectureVideos.sort(Comparator.comparing(LectureVideo::getAttendanceStart).reversed());
         model.addAttribute("lectureVideos", lectureVideos);
 
@@ -98,7 +98,7 @@ public class LectureVideoProfessorController {
     }
 
     // 열람
-    @GetMapping("lv/view")
+    @GetMapping("view")
     public String view(Model model, Principal principal,
                        @RequestParam("syllabus-id") String syllabusId,
                        @RequestParam("id") String id) {
@@ -126,7 +126,7 @@ public class LectureVideoProfessorController {
     }
 
     // 작성
-    @GetMapping("lv/write")
+    @GetMapping("write")
     public String getWriting(Model model, Principal principal,
                              @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
@@ -138,7 +138,7 @@ public class LectureVideoProfessorController {
         return "/lectureVideo/write";
     }
 
-    @PostMapping("lv/write")
+    @PostMapping("write")
     public String postWriting(LectureVideoDto lectureVideoDto, Model model, Principal principal) throws Exception {
 
         // 작성 권한 없으면 403
@@ -182,7 +182,7 @@ public class LectureVideoProfessorController {
     }
 
     // 삭제
-    @GetMapping("lv/delete")
+    @GetMapping("delete")
     public String delete(Model model, Principal principal,
                          @RequestParam("syllabus-id") String syllabusId,
                          @RequestParam("id") String id) {

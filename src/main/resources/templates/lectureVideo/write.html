@@ -20,7 +20,7 @@
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
-    <h2 class="my-4">강의영상</h2>
+    <h2 class="my-4">🎬 강의영상</h2>
     <form method="POST" id="write">
         <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
 

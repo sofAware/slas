@@ -5,7 +5,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta th:replace="/frame/head.html">
-    <title th:text="${title}"></title>
+    <title th:text="${title.substring(3)}"></title>
     <style>
         tbody > tr {
             cursor: pointer;

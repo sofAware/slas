@@ -6,7 +6,7 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title th:text="${title} + ' - 글쓰기'"></title>
+    <title th:text="${title.substring(3)} + ' - 글쓰기'"></title>
 </head>
 <body>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>

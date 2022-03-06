@@ -6,7 +6,7 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title th:text="${title} + ' - ' + ${board.getSyllabus().getName()}"></title>
+    <title th:text="${title.substring(3)} + ' - ' + ${board.getSyllabus().getName()}"></title>
     <style>
         .container-fluid {
             padding-top: 4rem;

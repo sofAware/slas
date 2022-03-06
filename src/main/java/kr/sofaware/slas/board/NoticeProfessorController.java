@@ -22,7 +22,7 @@ import java.util.*;
 public class NoticeProfessorController {
 
     public static final String ROOT_URL = "notice";
-    private static final String TITLE = "공지사항";
+    private static final String TITLE = "\uD83D\uDCE2 공지사항";
     private final BoardService noticeService;
 
     private final MemberService memberService;
@@ -30,7 +30,7 @@ public class NoticeProfessorController {
     private final FileService fileService;
 
     // 전체 공지사항 리스트
-    @GetMapping("")
+    @GetMapping
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {

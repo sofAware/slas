@@ -1,15 +1,14 @@
 package kr.sofaware.slas.board;
 
-import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.service.BoardService;
-import kr.sofaware.slas.service.LectureService;
+import kr.sofaware.slas.service.AssignmentService;
+import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -17,24 +16,20 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/s/" + LectureFileStudentController.ROOT_URL)
+@RequestMapping("/p/assignment")
 @RequiredArgsConstructor
-public class LectureFileStudentController {
+public class AssignmentProfessorController {
 
-    public static final String ROOT_URL = "lf";
-    private static final String TITLE = "\uD83E\uDDF7 강의자료";
-    private final BoardService lectureFileService;
+    private final AssignmentService assignmentService;
+    private final SyllabusService syllabusService;
 
-    private final LectureService lectureService;
-
-    // 전체 공지사항 리스트
     @GetMapping
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
-        // 사용자의 수강 학기와 과목들 조회
-        Map<String, List<Syllabus>> lectures = lectureService.mapAllByStudentId(principal.getName());
+        // 교수가 강의한 학기와 과목들 조회
+        Map<String, List<Syllabus>> lectures = syllabusService.mapAllByProfessorId(principal.getName());
 
         // 강의 선택 없으면
         if (syllabusId == null || syllabusId.isEmpty()) {
@@ -66,17 +61,17 @@ public class LectureFileStudentController {
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));
 
-        // 강의 선택 없으면 해당 학기 전체 강의에 대한 공지사항 긁어오기
-        List<Board> boards = new ArrayList<>();
+        // 강의 선택 없으면 해당 학기 전체 과제 긁어오기
+        List<Assignment> assignments = new ArrayList<>();
         if (syllabusId == null || syllabusId.isEmpty()) {
             lectures.get(yearSemester).forEach(syllabus ->
-                    boards.addAll(lectureFileService.listAll(syllabus.getId())));
+                    assignments.addAll(assignmentService.listAll(syllabus.getId())));
 
+            // 템플릿에서 강의명과 강의시간을 표시하기 위해 (isEmpty 판별) 추가
             model.addAttribute("selectedSyllabusId", "");
             model.addAttribute("selectedSyllabusName", "전체");
-        }
-        else {
-            boards.addAll(lectureFileService.listAll(syllabusId));
+        } else {
+            assignments.addAll(assignmentService.listAll(syllabusId));
 
             // 선택된 강의 lectures에서 찾아서 강의명 입력
             Syllabus syllabus = lectures
@@ -87,46 +82,12 @@ public class LectureFileStudentController {
                     .get();
             model.addAttribute("selectedSyllabusId", syllabus.getId());
             model.addAttribute("selectedSyllabusName",
-                    syllabus.getName() + " (" +
-                            syllabus.formatClassTime() + ") - " +
-                            syllabus.getProfessor().getName());
+                    syllabus.getName() + " (" + syllabus.formatClassTime() + ")");
         }
 
-        // 날짜 내림차순 정렬 후 모델에 넣기
-        boards.sort(Comparator.comparing(Board::getDate).reversed());
-        model.addAttribute("boards", boards);
-        model.addAttribute("rootURL", ROOT_URL);
-        model.addAttribute("title", TITLE);
-
-        return "board/list";
-    }
-
-    // 열람
-    @GetMapping("/{boardIdStr:[0-9]+}")
-    public String view(Model model, Principal principal,
-                       @PathVariable String boardIdStr) {
-
-        // 게시글 가져오기
-        int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = lectureFileService.read(boardId);
-
-        // 없으면 404
-        if (board.isEmpty())
-            return "error/404";
-
-        // 읽을 권한 없으면 403
-        if (!lectureService.existsBySyllabus_IdAndStudent_Id(
-                board.get().getSyllabus().getId(),
-                principal.getName()))
-            return "error/403";
-
-        // 조회 수 증가
-        lectureFileService.increaseViewCount(boardId);
-
-        // 열람
-        model.addAttribute("rootURL", ROOT_URL);
-        model.addAttribute("title", TITLE);
-        model.addAttribute("board", board.get());
-        return "board/view";
+        // 제출기한 시작일 내림차순 정렬 후 모델에 넣기
+        assignments.sort(Comparator.comparing(Assignment::getSubmitStart).reversed());
+        model.addAttribute("assignments", assignments);
+        return "assignment/list";
     }
 }

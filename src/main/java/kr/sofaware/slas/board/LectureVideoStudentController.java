@@ -16,7 +16,7 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/s")
+@RequestMapping("/s/lv")
 @RequiredArgsConstructor
 public class LectureVideoStudentController {
 
@@ -24,7 +24,7 @@ public class LectureVideoStudentController {
     private final LectureService lectureService;
 
     // 전체 강의영상 리스트
-    @GetMapping("lv")
+    @GetMapping
     public String readList(Model model, Principal principal,
                            @Nullable @RequestParam("year-semester") String yearSemester,
                            @Nullable @RequestParam("syllabus-id") String syllabusId) {
@@ -86,7 +86,7 @@ public class LectureVideoStudentController {
                     syllabus.getName() + " (" + syllabus.formatClassTime() + ")");
         }
 
-        // 날짜 내림차순 정렬 후 모델에 넣기
+        // 출석기한 시작일 내림차순 정렬 후 모델에 넣기
         lectureVideos.sort(Comparator.comparing(LectureVideo::getAttendanceStart).reversed());
         model.addAttribute("lectureVideos", lectureVideos);
 
@@ -94,7 +94,7 @@ public class LectureVideoStudentController {
     }
 
     // 열람
-    @GetMapping("lv/view")
+    @GetMapping("view")
     public String view(Model model, Principal principal,
                        @RequestParam("syllabus-id") String syllabusId,
                        @RequestParam("id") String id) {
