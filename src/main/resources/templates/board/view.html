@@ -69,8 +69,10 @@
 <div class="container" th:if="${board.getCategory() == board.CATEGORY_QNA}" style="margin-top: 4rem;">
     <h4 class="my-4" th:text="${board.getComments().size()} + '개의 댓글'"></h4>
 <!--    댓글 작성-->
-    <form method="POST">
-        <textarea class="form-control"></textarea>
+    <form method="POST" action="./add-comment">
+        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+
+        <textarea class="form-control" name="comment"></textarea>
         <div class="d-flex mt-3 mb-5">
             <button type="submit" class="btn btn-primary ms-auto">댓글 작성</button>
         </div>

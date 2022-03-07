@@ -2,19 +2,15 @@ package kr.sofaware.slas.board;
 
 import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.service.BoardService;
-import kr.sofaware.slas.service.LectureService;
-import kr.sofaware.slas.service.SyllabusService;
+import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -29,8 +25,10 @@ public class QnaController {
     private static final String TITLE = "\uD83D\uDE4B 질문";
     private final BoardService qnaService;
 
-    private final LectureService lectureService;
     private final SyllabusService syllabusService;
+    private final LectureService lectureService;
+    private final MemberService memberService;
+    private final FileService fileService;
 
     // 전체 질문 리스트
     @GetMapping
@@ -140,5 +138,76 @@ public class QnaController {
         return "board/view";
     }
 
+    // 작성
+    @GetMapping("write")
+    public String getWriting(Model model, Principal principal, HttpServletRequest request,
+                             @Nullable @RequestParam("syllabus-id") String syllabusId) {
 
+        // 학정번호가 넘어왔으면 그걸로 강의 모델에 추가 아니면 교수한 강의 최근 1개 추가
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
+
+        Function<String, Optional<Syllabus>> findFirstSyllabus = request.isUserInRole("ROLE_PROFESSOR") ?
+                syllabusService::findFirstByProfessor_IdOrderByIdDesc :
+                lectureService::findFirstByStudent_IdOrderBySyllabusDesc;
+        model.addAttribute("syllabus", syllabusId == null ?
+                findFirstSyllabus.apply(principal.getName()).get() :
+                syllabusService.findById(syllabusId).get());
+
+        return "/board/write";
+    }
+    @PostMapping("write")
+    public String postWriting(BoardDto boardDto, Principal principal,
+                              HttpServletRequest request) throws IOException {
+
+        // 작성 권한 없으면 403
+        BiPredicate<String, String> auth = request.isUserInRole("ROLE_PROFESSOR") ?
+                syllabusService::existsByIdAndProfessor_Id :
+                lectureService::existsBySyllabus_IdAndStudent_Id;
+        if (!auth.test(boardDto.getSyllabusId(), principal.getName()))
+            return "error/403";
+
+        // 게시글 만들기
+        Board.BoardBuilder builder = Board.builder()
+                .syllabus(syllabusService.findById(boardDto.getSyllabusId()).get())
+                .title(boardDto.getTitle())
+                .content(boardDto.getContent())
+                .member(memberService.loadUserByUsername(principal.getName()))
+                .date(new Date())
+                .view(0);
+
+        // 첨부 파일 저장
+        if (!boardDto.getFile().isEmpty()) {
+            String attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
+            builder
+                    .attachmentName(boardDto.getFile().getOriginalFilename())
+                    .attachmentPath(attachmentPath);
+        }
+
+        // 게시글 작성
+        Board board = builder.build();
+        qnaService.save(board);
+
+        // 작성된 포스트 번호로 뷰 이동
+        return String.format("redirect:/%c/%s/%d",
+                request.isUserInRole("ROLE_PROFESSOR") ? 'p' : 's',
+                ROOT_URL, board.getId());
+    }
+
+
+
+    // 댓글 작성
+    @PostMapping("add-comment")
+    @ResponseBody
+    public String addComment(String comment, Principal principal, HttpServletRequest request) {
+        return "아직 안만듬";
+    }
+
+    // 댓글 삭제
+    @GetMapping("delete-comment/{commentIdStr:[0-9]+}")
+    @ResponseBody
+    public String deleteComment(String comment, Principal principal, HttpServletRequest request,
+                             @PathVariable String commentIdStr) {
+        return "아직 안만듬";
+    }
 }

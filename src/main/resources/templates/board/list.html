@@ -55,7 +55,8 @@
         </div>
 
         <button class="btn btn-primary" type="button" aria-expanded="false" id="write"
-                sec:authorize="hasRole('PROFESSOR')">
+                th:if="${#authorization.expression('hasRole(''PROFESSOR'')') ||
+                         #httpServletRequest.getRequestURI().endsWith('qna')}">
             글쓰기
         </button>
     </div>
