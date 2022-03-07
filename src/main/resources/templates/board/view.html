@@ -13,6 +13,9 @@
             padding-bottom: 3rem;
             background-color: #fafafa;
         }
+        .comment {
+            border-top: 1px solid rgb(241, 243, 245);
+        }
     </style>
 </head>
 <body>
@@ -61,6 +64,31 @@
     </div>
 
     <div id="viewer"></div>
+</div>
+
+<div class="container" th:if="${board.getCategory() == board.CATEGORY_QNA}" style="margin-top: 4rem;">
+    <h4 class="my-4" th:text="${board.getComments().size()} + '개의 댓글'"></h4>
+<!--    댓글 작성-->
+    <form method="POST">
+        <textarea class="form-control"></textarea>
+        <div class="d-flex mt-3 mb-5">
+            <button type="submit" class="btn btn-primary ms-auto">댓글 작성</button>
+        </div>
+    </form>
+
+<!--    작성된 댓글들-->
+    <div th:each="comment : ${board.getComments()}" class="py-4 comment">
+        <div class="d-flex justify-content-between gap-1 my-1">
+            <b th:text="${comment.getMember().getName()}"></b>
+            <span class="me-auto" th:text="'(' + ${#dates.createToday().compareTo(comment.getDate()) < 0 ?
+                  #dates.format(comment.getDate(), 'HH:mm') :
+                  #dates.format(comment.getDate(), 'yyyy-MM-dd')} + ')'"></span>
+            <a class="text-decoration-none text-danger"
+                th:if="${#authentication.getName()}==${comment.getMember().getId()}"
+                th:href="'./delete-comment/' + ${comment.getId()}"><b>삭제</b></a>
+        </div>
+        <div th:text="${comment.getContent()}"></div>
+    </div>
 </div>
 
 <footer th:replace="/frame/footer.html"></footer>

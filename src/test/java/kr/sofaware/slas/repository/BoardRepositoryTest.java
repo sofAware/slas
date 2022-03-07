@@ -1,6 +1,7 @@
 package kr.sofaware.slas.repository;
 
 import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.Comment;
 import kr.sofaware.slas.entity.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @SpringBootTest
-@Transactional
 class BoardRepositoryTest {
 
     @Autowired private MemberRepository memberRepository;
     @Autowired private BoardRepository boardRepository;
+    @Autowired private CommentRepository commentRepository;
 
     Random rand = new Random();
 
@@ -60,5 +62,15 @@ class BoardRepositoryTest {
     public void findAllByCategoryAndSyllabus_Id() {
         List<Board> boards = boardRepository.findAllByCategoryAndSyllabus_Id(1, "21-2-0101-3-0001-01");
         boards.forEach(board -> System.out.println("board = " + board));
+    }
+
+    @Test
+    public void addCommentTest() {
+        Board board = boardRepository.findById(1).get();
+
+        board.getComments().add(commentRepository.findById(1).get());
+        board.getComments().add(commentRepository.findById(2).get());
+
+        boardRepository.save(board);
     }
 }

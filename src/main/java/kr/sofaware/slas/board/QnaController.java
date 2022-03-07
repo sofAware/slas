@@ -10,12 +10,15 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 @Controller
 @RequestMapping({ "/p/qna", "/s/qna" })
@@ -105,4 +108,37 @@ public class QnaController {
 
         return "board/list";
     }
+
+    // 열람
+    @GetMapping("{boardIdStr:[0-9]+}")
+    public String view(Model model, Principal principal, HttpServletRequest request,
+                       @PathVariable String boardIdStr) {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = qnaService.read(boardId);
+
+        // 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 읽을 권한 없으면 403
+        Board board = oBoard.get();
+        BiPredicate<String, String> auth = request.isUserInRole("ROLE_PROFESSOR") ?
+                syllabusService::existsByIdAndProfessor_Id :
+                lectureService::existsBySyllabus_IdAndStudent_Id;
+        if (!auth.test(board.getSyllabus().getId(), principal.getName()))
+            return "error/403";
+
+        // 조회 수 증가
+        qnaService.increaseViewCount(boardId);
+
+        // 열람
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
+        model.addAttribute("board", board);
+        return "board/view";
+    }
+
+
 }

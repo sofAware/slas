@@ -4,12 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
 @Builder
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board implements Serializable {
@@ -46,6 +47,10 @@ public class Board implements Serializable {
 
     private String attachmentName;      // 첨부 파일 이름
     private String attachmentPath;      // 첨부 파일 경로
+
+    @Builder.Default
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Comment> comments = new ArrayList<>();     // 댓글들
 
     public void setCategory(int category) {
         this.category = category;
