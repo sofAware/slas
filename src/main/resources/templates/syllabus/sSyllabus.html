@@ -39,12 +39,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="syllabus : ${syllabuses}" style="cursor: pointer;">
-        <td th:text="${syllabus.getId()}" onclick="event.cancelBubble = true;"></td>
-        <td th:text="${syllabus.getName()}" onclick="event.cancelBubble = true;"></td>
-        <td th:text="${syllabus.getCategory()}" onclick="event.cancelBubble = true;"></td>
-        <td th:text="${syllabus.getCredit()}" onclick="event.cancelBubble = true;"></td>
-        <td th:text="${syllabus.getProfessor().getName()}" onclick="event.cancelBubble = true;"></td>
+    <tr th:each="syllabus : ${syllabuses}" style="cursor: pointer;" th:attr="href=${'/s/syllabusDetail/' + syllabus.getId()}">
+        <td th:text="${syllabus.getId()}" name="syllabus-id"></td>
+        <td th:text="${syllabus.getName()}"></td>
+        <td th:text="${syllabus.getCategory()}"></td>
+        <td th:text="${syllabus.getCredit()}"></td>
+        <td th:text="${syllabus.getProfessor().getName()}"></td>
     </tr>
     </tbody>
 </table>

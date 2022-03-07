@@ -40,4 +40,9 @@ public class SyllabusService {
     {
         return syllabusRepository.findAllByNameOrProfessor_Name(syllabusName, professorName);
     }
+
+    public Optional<Syllabus> findBySyllabusId(String syllabusId)
+    {
+        return syllabusRepository.findById(syllabusId);
+    }
 }

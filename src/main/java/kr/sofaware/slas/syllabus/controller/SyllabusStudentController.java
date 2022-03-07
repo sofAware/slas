@@ -9,11 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -37,5 +39,16 @@ public class SyllabusStudentController {
         }
 
         return "syllabus/sSyllabus";
+    }
+
+    @GetMapping("syllabusDetail/{syllabus-id}")
+    public String getStudentSyllabusDetail(Authentication authentication, Principal principal, Model model,
+                                           @PathVariable("syllabus-id") String syllabusId)
+    {
+        Optional<Syllabus> syllabusInfo = syllabusService.findBySyllabusId(syllabusId);
+        model.addAttribute("syllabusYear", Syllabus.formatYearSemester(syllabusId));
+        model.addAttribute("syllabusInfo", syllabusInfo);
+
+        return "syllabus/sSyllabusDetail";
     }
 }
