@@ -3,19 +3,14 @@ package kr.sofaware.slas.board;
 import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.service.AssignmentService;
-import kr.sofaware.slas.service.AssignmentSubmitService;
-import kr.sofaware.slas.service.FileService;
-import kr.sofaware.slas.service.LectureService;
+import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
@@ -27,6 +22,7 @@ public class AssignmentStudentController {
     private final AssignmentSubmitService assignmentSubmitService;
     private final AssignmentService assignmentService;
     private final LectureService lectureService;
+    private final MemberService memberService;
     private final FileService fileService;
 
     // 리스트
@@ -144,7 +140,7 @@ public class AssignmentStudentController {
         if (oAssignment.isEmpty())
             return "error/404";
 
-        // 읽을 권한 없으면 403
+        // 과제가 등록된 강의를 듣지 않는다면 403
         String syllabusId = oAssignment.get().getSyllabus().getId();
         if (!lectureService.existsBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()))
             return "error/403";
@@ -155,5 +151,168 @@ public class AssignmentStudentController {
                 assignmentId, principal.getName());
 
         return "assignment/sWrite";
+    }
+
+    @PostMapping("write/{assignmentIdStr:[0-9]+}")
+    public String postWriting(BoardDto boardDto, Principal principal,
+                              @PathVariable String assignmentIdStr) throws IOException {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
+
+        // 과제가 없으면 404
+        if (oAssignment.isEmpty())
+            return "error/404";
+
+        // 과제가 등록된 강의를 듣지 않는다면 403
+        Assignment assignment = oAssignment.get();
+        Syllabus syllabus = assignment.getSyllabus();
+        if (!lectureService.existsBySyllabus_IdAndStudent_Id(syllabus.getId(), principal.getName()))
+            return "error/403";
+
+        // 첨부파일 저장
+        String attachmentPath = "";
+        if (!boardDto.getFile().isEmpty())
+            attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
+
+        // 과제 제출 엔티티 (Board) 만들기
+        Board.BoardBuilder builder = Board.builder()
+                .syllabus(syllabus)
+                .title(boardDto.getTitle())
+                .content(boardDto.getContent())
+                .member(memberService.loadUserByUsername(principal.getName()))
+                .view(0)
+                .assignment(assignment);
+
+        // 첨부파일이 있을 경우 보드에 추가
+        if (!boardDto.getFile().isEmpty())
+            builder.attachmentName(boardDto.getFile().getOriginalFilename())
+                    .attachmentPath(attachmentPath);
+
+        // 과제 제출
+        Board board = builder.build();
+        assignmentSubmitService.save(board);
+
+        // 과제로 리디렉션
+        return "redirect:/s/assignment/" + assignment.getId();
+    }
+
+    // 수정
+    @GetMapping("edit/{assignmentIdStr:[0-9]+}")
+    public String getEditing(Model model, Principal principal,
+                       @PathVariable String assignmentIdStr) {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
+
+        // 과제가 없으면 404
+        if (oAssignment.isEmpty())
+            return "error/404";
+
+        // 제출한 과제 가져오기
+        Optional<Board> oBoard = assignmentSubmitService.findByAssignment_IdAndMember_Id(assignmentId, principal.getName());
+
+        // 제출한 과제가 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 과제가 등록된 강의를 듣지 않는다면 403
+        String syllabusId = oAssignment.get().getSyllabus().getId();
+        if (!lectureService.existsBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()))
+            return "error/403";
+
+        // 페이지 전송
+        model.addAttribute("assignment", oAssignment.get());
+        model.addAttribute("board", oBoard.get());
+        return "assignment/sWrite";
+    }
+
+    @PostMapping("edit/{assignmentIdStr:[0-9]+}")
+    public String postEditing(BoardDto boardDto, Principal principal,
+                              @PathVariable String assignmentIdStr) throws IOException {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
+
+        // 과제가 없으면 404
+        if (oAssignment.isEmpty())
+            return "error/404";
+
+        // 과제가 등록된 강의를 듣지 않는다면 403
+        Assignment assignment = oAssignment.get();
+        if (!lectureService.existsBySyllabus_IdAndStudent_Id(assignment.getSyllabus().getId(), principal.getName()))
+            return "error/403";
+
+        // 제출한 과제 가져오기
+        Optional<Board> oBoard = assignmentSubmitService.findByAssignment_IdAndMember_Id(assignmentId, principal.getName());
+
+        // 제출한 과제가 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 첨부파일 가져오기
+        Board board = oBoard.get();
+        String attachmentName = board.getAttachmentName();
+        String attachmentPath = board.getAttachmentPath();
+
+        // 새로운 파일을 업로드하면
+        if (!boardDto.getFile().isEmpty()) {
+            if (attachmentName != null && !attachmentName.isEmpty()) {
+                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+            }
+
+            attachmentName = boardDto.getFile().getOriginalFilename();
+            attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
+        }
+        // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
+        else if (attachmentName != null && !attachmentName.isEmpty() &&
+                boardDto.getDeleteFile() != null && !boardDto.getDeleteFile().isEmpty()) {
+            attachmentName = "";
+            attachmentPath = "";
+            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+        }
+
+        // 새로운 값들로 세팅 후 과제 다시 제출
+        board.update(boardDto.getTitle(), boardDto.getContent(), attachmentName, attachmentPath);
+        assignmentSubmitService.save(board);
+
+        // 과제로 리디렉션
+        return "redirect:/s/assignment/" + assignment.getId();
+    }
+
+    // 삭제
+    @GetMapping("delete/{assignmentIdStr:[0-9]+}")
+    public String delete(Principal principal,
+                         @PathVariable String assignmentIdStr) {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
+
+        // 없으면 404
+        if (oAssignment.isEmpty())
+            return "error/404";
+
+        // 과제가 등록된 강의를 듣지 않는다면 403
+        Syllabus syllabus = oAssignment.get().getSyllabus();
+        if (!lectureService.existsBySyllabus_IdAndStudent_Id(syllabus.getId(), principal.getName()))
+            return "error/403";
+
+        // 제출한 과제 가져오기
+        Optional<Board> oBoard = assignmentSubmitService.findByAssignment_IdAndMember_Id(assignmentId, principal.getName());
+
+        // 제출한 과제가 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 삭제
+        assignmentSubmitService.delete(oBoard.get().getId());
+        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
+
+        // 목록으로 리디렉션
+        return "redirect:/s/assignment/" + assignmentId;
     }
 }

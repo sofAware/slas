@@ -50,6 +50,9 @@ public class Board implements Serializable {
     public void setCategory(int category) {
         this.category = category;
     }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public void increaseViewCount() {
         view++;

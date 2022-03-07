@@ -138,7 +138,7 @@ public class AssignmentProfessorController {
     }
 
     @PostMapping("write")
-    public String postWriting(AssignmentDto assignmentDto, Model model, Principal principal) throws Exception {
+    public String postWriting(AssignmentDto assignmentDto, Principal principal) throws Exception {
 
         // 작성 권한 없으면 403
         if (!syllabusService.existsByIdAndProfessor_Id(
@@ -174,7 +174,7 @@ public class AssignmentProfessorController {
 
     // 수정
     @GetMapping("edit/{assignmentIdStr:[0-9]+}")
-    public String GetEditing(Model model, Principal principal,
+    public String getEditing(Model model, Principal principal,
                              @PathVariable String assignmentIdStr) {
 
         // 과제 가져오기

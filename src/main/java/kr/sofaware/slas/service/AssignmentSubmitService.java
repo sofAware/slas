@@ -9,6 +9,7 @@ import kr.sofaware.slas.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -25,6 +26,7 @@ public class AssignmentSubmitService implements BoardService {
     @Override
     public void save(Board board) {
         board.setCategory(Board.CATEGORY_ASSIGNMENT_SUBMIT);
+        board.setDate(new Date());
         boardRepository.save(board);
     }
 
