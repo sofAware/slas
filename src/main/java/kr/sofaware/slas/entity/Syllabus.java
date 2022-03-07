@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@Data
 @Entity
 @Getter
 @Builder
@@ -25,6 +26,7 @@ public class Syllabus {
     private String time1;           // 교시1 (1, 2, ...)
     private String dayOfWeek2;
     private String time2;
+    private String introduction;
 
     @ManyToOne
     @JoinColumn(name = "professor_id")

@@ -6,6 +6,7 @@ import kr.sofaware.slas.repository.SyllabusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -41,8 +42,18 @@ public class SyllabusService {
         return syllabusRepository.findAllByNameOrProfessor_Name(syllabusName, professorName);
     }
 
+    public List<Syllabus> findAllByProfessorId(String professorId)
+    {
+        return syllabusRepository.findAllByProfessor_Id(professorId);
+    }
+
     public Optional<Syllabus> findBySyllabusId(String syllabusId)
     {
         return syllabusRepository.findById(syllabusId);
+    }
+
+    @Transactional
+    public Syllabus saveByPost(Syllabus syllabus){
+        return syllabusRepository.save(syllabus);
     }
 }
