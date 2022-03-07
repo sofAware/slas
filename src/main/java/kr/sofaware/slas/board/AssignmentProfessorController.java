@@ -248,4 +248,31 @@ public class AssignmentProfessorController {
         // 수정된 포스트 번호로 뷰 이동
         return "redirect:/p/assignment/" + assignmentIdStr;
     }
+
+    // 삭제
+    @GetMapping("delete/{assignmentIdStr:[0-9]+}")
+    public String delete(Principal principal,
+                         @PathVariable String assignmentIdStr) {
+
+        // 과제 가져오기
+        int assignmentId = Integer.parseInt(assignmentIdStr);
+        Optional<Assignment> assignment = assignmentService.read(assignmentId);
+
+        // 없으면 404
+        if (assignment.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        if (!syllabusService.existsByIdAndProfessor_Id(
+                assignment.get().getSyllabus().getId(),
+                principal.getName()))
+            return "error/403";
+
+        // 삭제
+        assignmentService.delete(assignmentId);
+        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
+
+        // 목록으로 리디렉션
+        return "redirect:/p/assignment";
+    }
 }
