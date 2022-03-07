@@ -26,8 +26,3 @@ public class   Attendance {//implements Serializable {
     private int week11, week12, week13, week14, week15, week16;                         // 출석 11~16주차
 }
 
-@EqualsAndHashCode
-class AttendancePK implements Serializable{
-    private Member student;        // 학생
-    private Syllabus syllabus;      // 강의
-}

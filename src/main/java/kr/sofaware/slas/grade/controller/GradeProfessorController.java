@@ -89,7 +89,8 @@ public class GradeProfessorController {
         log.error("GRADE : " + grade);
 
         Optional<Lecture> lecture = lectureService.findByStudentIdAndSyllabusId(studentId, syllabusId);
-
+/*
+        //밑 방법이 더 가독성이 좋아서 교체
         Lecture.LectureBuilder lectureBuilder = Lecture.builder()
                 .student(lecture.get().getStudent())
                 .syllabus(lecture.get().getSyllabus())
@@ -97,23 +98,22 @@ public class GradeProfessorController {
 
         Lecture lectureForSave = lectureBuilder.build();
         lectureService.saveByPutMethod(lectureForSave);
+*/
 
-        /*
         lecture.ifPresent(selectLecture -> {
             selectLecture.setGrade(grade);
             lectureService.saveByPutMethod(selectLecture);
         });
-         */
 
 
+        //위 방법이 더 update에 특화된 코드이기에 새로 만들어주고 삭제하는 작업은 구조상 맞지 않다고 판단.
         //Lecture newLecture = new Lecture(lecture.getStudent(), lecture.getSyllabus(), grade);
-
         //기존꺼 제거
         //lectureService.deleteByStudentId(studentId);
         //새로운 학점 추가
         //lectureService.saveByPutMethod(newLecture);
 
-        return "redirect:/grade";
+        return "redirect:grade";
     }
 }
 
