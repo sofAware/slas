@@ -6,31 +6,61 @@
 <head>
     <meta th:replace="/frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title th:text="${title.substring(3)} + ' - 글쓰기'"></title>
+    <title th:text="'과제 - ' + ${assignment.getSyllabus().getName()}"></title>
 </head>
 <body>
 <header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
 <header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
 
 <div class="container">
-    <h2 class="my-4" th:text="${title}"></h2>
+
+    <div class="d-flex justify-content-end align-items-end gap-2 my-4">
+        <h2 class="me-auto">✒️ 과제</h2>
+        <a class="btn btn-secondary" th:attr="href='../../assignment'">목록</a>
+    </div>
+
+    <table class="table table-bordered" style="margin-bottom: 4rem;">
+        <colgroup>
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 80%;">
+        </colgroup>
+
+        <tr><th class="table-active text-center">강의</th>
+            <td th:text="${assignment.getSyllabus().formatDetailName()}"></td></tr>
+
+        <tr><th class="table-active text-center">제목</th>
+            <td th:text="${assignment.getName()}"></td></tr>
+
+        <tr><th class="table-active text-center">제출기한</th>
+            <td th:text="${
+                #dates.format(assignment.getSubmitStart(), 'yyyy-MM-dd HH시 mm분') + ' ~ ' +
+                #dates.format(assignment.getSubmitEnd(),   'yyyy-MM-dd HH시 mm분')}"></td></tr>
+
+        <tr><th class="table-active text-center">내용</th>
+            <td><div id="viewer"></div></td></tr>
+
+        <tr><th class="table-active text-center">첨부파일</th>
+            <td><a class="text-decoration-none text-primary" target="_blank"
+                   th:attr="href=${assignment.getAttachmentPath()} + '?filename=' + ${assignment.getAttachmentName()}"
+                   th:text="${assignment.getAttachmentName()}"></a></td></tr>
+    </table>
+
+
+    <div class="d-flex justify-content-between align-items-end gap-2 my-4">
+        <h4 class="me-auto">내 제출</h4>
+    </div>
+
     <form method="POST" id="write">
         <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+        <select class="form-control d-none" id="syllabus" name="syllabusId" disabled>
+            <option th:value="${assignment.getSyllabus().getId()}" selected></option>
+        </select>
 
-        <div class="mb-3 row">
-            <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
-            <div class="col-sm-10">
-                <select class="form-control" id="syllabus" name="syllabusId" disabled>
-                    <option th:text="${syllabus.formatDetailName()}"
-                            th:value="${syllabus.getId()}" selected></option>
-                </select>
-            </div>
-        </div>
         <div class="mb-3 row">
             <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputTitle" name="title"
-                    th:attr="value=${board}?${board.getTitle()}:''">
+                       th:value="${board}?${board.getTitle()}:''">
             </div>
         </div>
         <div class="mb-3 row">
@@ -46,17 +76,23 @@
             </div>
         </div>
         <div class="mb-3 d-flex justify-content-between gap-3">
-            <a th:attr="href='/p/' + ${rootURL}" type="button" class="btn btn-secondary">목록</a>
+            <a href="/s/assignment" type="button" class="btn btn-secondary">목록</a>
             <button type="submit" class="btn btn-primary" th:text="${board}?'수정완료':'작성완료'"></button>
         </div>
     </form>
 </div>
-<!-- Copy & Edit here! -->
 
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
+    // Toast UI 뷰어 - 과제
+    const viewer = new toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true,
+        initialValue: `[(${assignment.getContent()})]`
+    });
+
     const initialValue= `[(${board} ? ${board.getContent()} : '')]`;
 </script>
 <script type="text/javascript" th:src="@{/js/pBoardWrite.js}"></script>

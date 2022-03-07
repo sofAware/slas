@@ -15,12 +15,8 @@
 <div class="container">
 
     <div class="d-flex justify-content-end align-items-end gap-2 my-4">
-        <h2 class=" me-auto">✒️ 과제</h2>
-
+        <h2 class="me-auto">✒️ 과제</h2>
         <a class="btn btn-secondary" th:attr="href='../assignment'">목록</a>
-        <a class="btn btn-primary" th:attr="href='./edit/' + ${assignment.getId()}">수정</a>
-        <a class="btn btn-danger" th:attr="href='./delete/' + ${assignment.getId()}"
-           data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨">삭제</a>
     </div>
 
     <table class="table table-bordered" style="margin-bottom: 4rem;">
@@ -49,38 +45,34 @@
                    th:text="${assignment.getAttachmentName()}"></a></td></tr>
     </table>
 
-    <h4 class="my-4">제출 현황 및 채점</h4>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>학번</th>
-            <th>전공</th>
-            <th>이름</th>
-            <th>제출일</th>
-            <th>첨부파일  <a class="text-decoration-none text-primary"
-                th:href="'./submit-files/' + ${assignment.getId()}">전체다운로드</a></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="info : ${infos}">
-            <td th:text="${info.getMember().getId()}"></td>
-            <td th:text="${info.getMember().getMajor()}"></td>
-            <td th:text="${info.getMember().getName()}"></td>
 
-<!--            제출하지 않았으면 빈칸으로 기재 -->
-            <th:block th:if="${info.getBoard().isEmpty()}">
-                <td></td>
-                <td></td>
-            </th:block>
-<!--            제출을 했으면 정보들로 기재 -->
-            <th:block th:if="${!info.getBoard().isEmpty()}">
-                <td th:text="${#dates.format(info.getBoard().get().getDate(), 'yyyy-MM-dd')}"></td>
-                <td><a class="text-decoration-none text-primary"
-                       th:attr="href=${info.getBoard().get().getAttachmentPath()} + '?filename=' + ${info.getBoard().get().getAttachmentName()}"
-                       th:text="${info.getBoard().get().getAttachmentName()}"></a></td>
-            </th:block>
-        </tr>
-        </tbody>
+    <div class="d-flex justify-content-between align-items-end gap-2 my-4">
+        <h4 class="me-auto">내 제출</h4>
+
+        <a class="btn btn-primary" th:attr="href='./edit/' + ${assignment.getId()}">수정</a>
+        <a class="btn btn-danger" th:attr="href='./delete/' + ${assignment.getId()}"
+           data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨">삭제</a>
+    </div>
+
+    <table class="table table-bordered">
+        <colgroup>
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 80%;">
+        </colgroup>
+
+        <tr><th class="table-active text-center">제목</th>
+            <td th:text="${board.getTitle()}"></td></tr>
+
+        <tr><th class="table-active text-center">제출일</th>
+            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd HH시 mm분')}"></td></tr>
+
+        <tr><th class="table-active text-center">내용</th>
+            <td><div id="viewerSubmit"></div></td></tr>
+
+        <tr><th class="table-active text-center">첨부파일</th>
+            <td><a class="text-decoration-none text-primary" target="_blank"
+                   th:href="${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}"
+                   th:text="${board.getAttachmentName()}"></a></td></tr>
     </table>
 </div>
 
@@ -94,11 +86,18 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 
-    // Toast UI 뷰어
+    // Toast UI 뷰어 - 과제
     const viewer = new toastui.Editor.factory({
         el: document.querySelector('#viewer'),
         viewer: true,
         initialValue: `[(${assignment.getContent()})]`
+    });
+
+    // Toast UI 뷰어 - 내 제출
+    const viewerSubmit = new toastui.Editor.factory({
+        el: document.querySelector('#viewerSubmit'),
+        viewer: true,
+        initialValue: `[(${board.getContent()})]`
     });
 </script>
 </body>

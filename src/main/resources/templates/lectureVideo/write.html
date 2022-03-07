@@ -28,7 +28,7 @@
             <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
             <div class="col-sm-10">
                 <select class="form-control" id="syllabus" name="syllabusId" disabled>
-                    <option th:text="${syllabus.getName()} + ' (' + ${syllabus.getId()} + ') [' + ${syllabus.formatClassTime()} + ']'"
+                    <option th:text="${syllabus.formatDetailName()}"
                             th:value="${syllabus.getId()}" selected></option>
                 </select>
             </div>

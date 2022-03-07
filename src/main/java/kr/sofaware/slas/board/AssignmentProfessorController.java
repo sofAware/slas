@@ -101,19 +101,19 @@ public class AssignmentProfessorController {
 
         // 과제 가져오기
         int assignmentId = Integer.parseInt(assignmentIdStr);
-        Optional<Assignment> assignment = assignmentService.read(assignmentId);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
 
         // 없으면 404
-        if (assignment.isEmpty())
+        if (oAssignment.isEmpty())
             return "error/404";
 
         // 읽을 권한 없으면 403
-        String syllabusId = assignment.get().getSyllabus().getId();
+        String syllabusId = oAssignment.get().getSyllabus().getId();
         if (!syllabusService.existsByIdAndProfessor_Id(syllabusId, principal.getName()))
             return "error/403";
 
         // 열람
-        model.addAttribute("assignment", assignment);
+        model.addAttribute("assignment", oAssignment.get());
         model.addAttribute("infos", assignmentSubmitService.listSubmitInfo(syllabusId));
         return "assignment/pView";
     }

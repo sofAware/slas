@@ -50,6 +50,10 @@ public class AssignmentSubmitService implements BoardService {
 
     }
 
+    public Optional<Board> findByAssignment_IdAndMember_Id(int assignmentId, String studentId) {
+        return boardRepository.findByAssignment_IdAndMember_Id(assignmentId, studentId);
+    }
+
     /**
      * 해당 수업을 듣는 모든 학생들 정보 + 제출한 파일이 있으면 그것 까지 반환
      * @param syllabusId 학정번호

@@ -75,4 +75,8 @@ public class Syllabus {
 
         return result += ", " + translateDayOfWeek(dayOfWeek2) + time2;
     }
+
+    public String formatDetailName() {
+        return name + " (" + id + ") [" + formatClassTime() + "]";
+    }
 }
