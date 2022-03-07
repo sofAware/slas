@@ -49,7 +49,7 @@
                 <li sec:authorize="hasRole('STUDENT')" th:each="s : ${syllabuses}">
                     <a class="dropdown-item"
                        th:attr="href=${'?syllabus-id=' + s.getId()}"
-                       th:text="${s.getName() + ' (' + s.formatClassTime() + ') - ' + s.getProfessor().getName()}"></a>
+                       th:text="${s.getName() + ' - ' + s.getProfessor().getName() + ' (' + s.formatClassTime() + ')'}"></a>
                 </li>
             </ul>
         </div>
