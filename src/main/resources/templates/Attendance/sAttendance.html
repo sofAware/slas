@@ -68,11 +68,11 @@
 
             <thead>
             <tr class="bg-light-gray">
-                <th class="text-uppercase">회차
-                </th>
-                <th class="text-uppercase">1:출석</th>
-                <th class="text-uppercase">2:결석</th>
-                <th class="text-uppercase">3:지각</th>
+
+                <th class="text-uppercase">O:출석</th>
+                <th class="text-uppercase">X:결석</th>
+                <th class="text-uppercase">L:지각</th>
+                <th class="text-uppercase">A:공결</th>
             </tr>
             </thead>
 
@@ -89,80 +89,92 @@
     </tr>
     </thead>
 
+    <th:block th:each="i : ${#numbers.sequence(1,16)}">
+        <td
+               th:text="${i+'주차'}">
+        </td>
+    </th:block>
     <tbody>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>1</th>
-        <th th:text="${attendance.getWeek1()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>2</th>
-        <th th:text="${attendance.getWeek2()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>3</th>
-        <th th:text="${attendance.getWeek3()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>4</th>
-        <th th:text="${attendance.getWeek4()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>5</th>
-        <th th:text="${attendance.getWeek5()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>6</th>
-        <th th:text="${attendance.getWeek6()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>7</th>
-        <th th:text="${attendance.getWeek7()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>8</th>
-        <th th:text="${attendance.getWeek8()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>9</th>
-        <th th:text="${attendance.getWeek9()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>10</th>
-        <th th:text="${attendance.getWeek10()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>11</th>
-        <th th:text="${attendance.getWeek11()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>12</th>
-        <th th:text="${attendance.getWeek12()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>13</th>
-        <th th:text="${attendance.getWeek13()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>14</th>
-        <th th:text="${attendance.getWeek14()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>15</th>
-        <th th:text="${attendance.getWeek15()}"></th>
-    </tr>
-    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">
-        <th>16</th>
-        <th th:text="${attendance.getWeek16()}"></th>
-    </tr>
+    <tr  th:each="attendance : ${attendances}" >
+        <th:block th:each="i : ${#numbers.sequence(0,15)}">
+            <td th:text="${attendance.formatWeek(attendance.getWeeksByList().get(i))}"></td>
+        </th:block>
 
+
+    </tr>
     </tbody>
+
+<!--    <tbody>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>1</th>-->
+<!--        <th th:text="${attendance.getWeek1()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>2</th>-->
+<!--        <th th:text="${attendance.getWeek2()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>3</th>-->
+<!--        <th th:text="${attendance.getWeek3()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>4</th>-->
+<!--        <th th:text="${attendance.getWeek4()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>5</th>-->
+<!--        <th th:text="${attendance.getWeek5()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>6</th>-->
+<!--        <th th:text="${attendance.getWeek6()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>7</th>-->
+<!--        <th th:text="${attendance.getWeek7()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>8</th>-->
+<!--        <th th:text="${attendance.getWeek8()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>9</th>-->
+<!--        <th th:text="${attendance.getWeek9()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>10</th>-->
+<!--        <th th:text="${attendance.getWeek10()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>11</th>-->
+<!--        <th th:text="${attendance.getWeek11()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>12</th>-->
+<!--        <th th:text="${attendance.getWeek12()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>13</th>-->
+<!--        <th th:text="${attendance.getWeek13()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>14</th>-->
+<!--        <th th:text="${attendance.getWeek14()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>15</th>-->
+<!--        <th th:text="${attendance.getWeek15()}"></th>-->
+<!--    </tr>-->
+<!--    <tr style="cursor: pointer;" th:each="attendance : ${attendances}" th:attr="href=${'/s/notice/' + attendance.getSyllabus().getId()}">-->
+<!--        <th>16</th>-->
+<!--        <th th:text="${attendance.getWeek16()}"></th>-->
+<!--    </tr>-->
+
+<!--    </tbody>-->
 </table>
 
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
-<script>
-    document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
-        location.href = e.getAttribute("href")));
-</script>
+
 </body>
 </html>

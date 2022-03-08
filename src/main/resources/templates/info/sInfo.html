@@ -13,7 +13,7 @@
     <thead>
     <tr>
         <th>
-            <h3>개인 정보 수정</h3>
+            <h3>개인 정보</h3>
         </th>
     </tr>
     </thead>
@@ -23,13 +23,24 @@
         <th>학번</th>
     </tr>
     </thead>
-    <tbody>
-    <tr  th:each="attendance : ${attendances}" >
+    <tbody th:each="attendance : ${attendances}">
+    <tr>
+        <th>이름</th>
         <th th:text="${attendance.getStudent().getName()}"></th>
-        <td th:text="${attendance.getStudent().getId()}"></td>
-        <td th:text="${attendance.getStudent().getMajor()}"></td>
-        <td th:text="${attendance.getStudent().getSemester()}"></td>
     </tr>
+    <tr>
+        <th>학번</th>
+        <th th:text="${attendance.getStudent().getId()}"></th>
+    </tr>
+    <tr>
+        <th>전공</th>
+        <th th:text="${attendance.getStudent().getMajor()}"></th>
+    </tr>
+    <tr>
+        <th>학기</th>
+        <th th:text="${attendance.getStudent().getSemester()}"></th>
+    </tr>
+
     </tbody>
 </table>
 
