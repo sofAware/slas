@@ -267,7 +267,7 @@ public class QnaController {
 
     // 삭제
     @GetMapping("delete/{boardIdStr:[0-9]+}")
-    public String delete(Principal principal,
+    public String delete(Principal principal, HttpServletRequest request,
                          @PathVariable String boardIdStr) {
 
         // 게시글 가져오기
@@ -283,16 +283,18 @@ public class QnaController {
         if (!board.getMember().getId().equals(principal.getName()))
             return "error/403";
 
-        // 연과된 댓글 삭제
-        board.getComments().forEach(comment ->
-                commentService.deleteById(comment.getId()));
-
         // 삭제
         qnaService.delete(boardId);
         /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
 
+        // 연과된 댓글 삭제
+        board.getComments().forEach(comment ->
+                commentService.deleteById(comment.getId()));
+
         // 목록으로 리디렉션
-        return "redirect:/p/" + ROOT_URL;
+        return String.format("redirect:/%c/%s",
+                request.isUserInRole("ROLE_PROFESSOR") ? 'p' : 's',
+                ROOT_URL);
     }
 
     // 댓글 작성
