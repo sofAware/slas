@@ -18,7 +18,6 @@ public interface LectureRepository extends JpaRepository<Lecture, LecturePK> {
     boolean existsBySyllabus_IdAndStudent_Id(String studentId, String syllabusId);
 
     Optional<Lecture> findFirstByStudent_IdOrderBySyllabusDesc(String studentId);
-    List<Lecture> findAllBySyllabus_Id(String syllabusId);
 
     Optional<Lecture> findByStudent_IdAndSyllabus_Id(String studentId, String syllabusId);
     Lecture deleteByStudent_Id(String studentId);
