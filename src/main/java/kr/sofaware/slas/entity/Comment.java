@@ -21,5 +21,5 @@ public class Comment {
     private Member member;      // 작성자
 
     private String content;     // 내용
-    private Date date;
+    private Date date;          // 작성일
 }
