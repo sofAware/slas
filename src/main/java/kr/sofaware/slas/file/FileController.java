@@ -47,7 +47,8 @@ public class FileController {
 
         // 파일 위치 세팅 후 유무 체크
         Path path = Paths.get(System.getProperty("user.dir"), request.getRequestURI());
-        if (!Files.exists(path)) {
+        // 파일이 삭제 대기중일 경우 리턴
+        if (!Files.exists(path) || fileService.existDeletingFile(path)) {
             response.setStatus(404);
             return;
         }
@@ -67,45 +68,46 @@ public class FileController {
             boolean isPart = false;
 
             try (RandomAccessFile randomFile = new RandomAccessFile(path.toFile(), "r")) {
-                long movieSize = randomFile.length();
-                String range = request.getHeader("range");
+                try (ServletOutputStream sos = response.getOutputStream()) {
+                    long movieSize = randomFile.length();
+                    String range = request.getHeader("range");
 
-                // Request 에서 범위 가져와서 변수 세팅
-                if (range == null) {
-                    rangeStart = 0;
-                    rangeEnd = movieSize - 1;
-                } else {
-                    if (range.endsWith("-"))
-                        range += + (movieSize - 1);
+                    // Request 에서 범위 가져와서 변수 세팅
+                    if (range == null) {
+                        rangeStart = 0;
+                        rangeEnd = movieSize - 1;
+                    } else {
+                        if (range.endsWith("-"))
+                            range += +(movieSize - 1);
 
-                    String[] rangeSplits = range.substring(6).split("-");
-                    rangeStart = Long.parseLong(rangeSplits[0]);
-                    rangeEnd = Long.parseLong(rangeSplits[1]);
+                        String[] rangeSplits = range.substring(6).split("-");
+                        rangeStart = Long.parseLong(rangeSplits[0]);
+                        rangeEnd = Long.parseLong(rangeSplits[1]);
 
-                    if (rangeStart > 0)
-                        isPart = true;
+                        if (rangeStart > 0)
+                            isPart = true;
+                    }
+
+                    // 전송 크기
+                    long partSize = rangeEnd - rangeStart + 1;
+
+                    // 전송 시작
+                    response.reset();
+                    response.setStatus(isPart ? 206 : 200);
+                    response.setContentType("video/mp4");
+                    response.setHeader("Content-Range", "bytes " + rangeStart + "-" + rangeEnd + "/" + movieSize);
+                    response.setHeader("Accept-Ranges", "bytes");
+                    response.setHeader("Content-Length", "" + partSize);
+
+                    randomFile.seek(rangeStart);
+
+                    do {
+                        int block = partSize > BUFFER_SIZE ? BUFFER_SIZE : (int) partSize;
+                        int len = randomFile.read(buf, 0, block);
+                        sos.write(buf, 0, len);
+                        partSize -= block;
+                    } while (partSize > 0 && !fileService.existDeletingFile(path));
                 }
-
-                // 전송 크기
-                long partSize = rangeEnd - rangeStart + 1;
-
-                // 전송 시작
-                response.reset();
-                response.setStatus(isPart ? 206 : 200);
-                response.setContentType("video/mp4");
-                response.setHeader("Content-Range", "bytes " + rangeStart + "-" + rangeEnd + "/" + movieSize);
-                response.setHeader("Accept-Ranges", "bytes");
-                response.setHeader("Content-Length", "" + partSize);
-
-                ServletOutputStream sos = response.getOutputStream();
-                randomFile.seek(rangeStart);
-
-                do {
-                    int block = partSize > BUFFER_SIZE ? BUFFER_SIZE : (int)partSize;
-                    int len = randomFile.read(buf, 0, block);
-                    sos.write(buf, 0, len);
-                    partSize -= block;
-                } while (partSize > 0);
             }
         }
         // 파일 다운로드 및 이미지 등
@@ -117,16 +119,17 @@ public class FileController {
 
             // 전송
             try (RandomAccessFile randomFile = new RandomAccessFile(path.toFile(), "r")) {
-                ServletOutputStream sos = response.getOutputStream();
-                File file = path.toFile();
-                long partSize = file.length();
+                try (ServletOutputStream sos = response.getOutputStream()) {
+                    File file = path.toFile();
+                    long partSize = file.length();
 
-                do {
-                    int block = partSize > BUFFER_SIZE ? BUFFER_SIZE : (int)partSize;
-                    int len = randomFile.read(buf, 0, block);
-                    sos.write(buf, 0, len);
-                    partSize -= block;
-                } while (partSize > 0);
+                    do {
+                        int block = partSize > BUFFER_SIZE ? BUFFER_SIZE : (int)partSize;
+                        int len = randomFile.read(buf, 0, block);
+                        sos.write(buf, 0, len);
+                        partSize -= block;
+                    } while (partSize > 0 && !fileService.existDeletingFile(path));
+                }
             }
         }
     }

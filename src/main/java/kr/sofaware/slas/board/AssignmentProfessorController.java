@@ -221,19 +221,18 @@ public class AssignmentProfessorController {
 
         // 새로운 파일을 업로드하면
         if (!assignmentDto.getFile().isEmpty()) {
-            if (attachmentName != null && !attachmentName.isEmpty()) {
-                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
-            }
-
+            if (attachmentName != null && !attachmentName.isEmpty())
+                // 기존 파일 삭제
+                fileService.deleteOnSyllabus(attachmentPath);
             attachmentName = assignmentDto.getFile().getOriginalFilename();
             attachmentPath = fileService.saveOnSyllabus(assignmentDto.getFile(), assignmentDto.getSyllabusId());
         }
         // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
         else if (attachmentName != null && !attachmentName.isEmpty() &&
                 assignmentDto.getDeleteFile() != null && !assignmentDto.getDeleteFile().isEmpty()) {
+            fileService.deleteOnSyllabus(attachmentPath);
             attachmentName = "";
             attachmentPath = "";
-            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
         }
 
         // 새로운 값들로 세팅
@@ -256,21 +255,35 @@ public class AssignmentProfessorController {
 
         // 과제 가져오기
         int assignmentId = Integer.parseInt(assignmentIdStr);
-        Optional<Assignment> assignment = assignmentService.read(assignmentId);
+        Optional<Assignment> oAssignment = assignmentService.read(assignmentId);
 
         // 없으면 404
-        if (assignment.isEmpty())
+        if (oAssignment.isEmpty())
             return "error/404";
 
         // 글 작성자가 아니면 403
+        String syllabusId = oAssignment.get().getSyllabus().getId();
         if (!syllabusService.existsByIdAndProfessor_Id(
-                assignment.get().getSyllabus().getId(),
+                syllabusId,
                 principal.getName()))
             return "error/403";
 
-        // 삭제
+        // 학생들이 제출한 과제 전부 삭제
+        List<AssignmentSubmitInfo> infos = assignmentSubmitService
+                .listSubmitInfo(syllabusId);
+        infos.forEach(info ->
+            // 제출정보에 게시글이 있을 경우 삭제
+            info.getBoard().ifPresent(board -> {
+                // 게시글에 첨부파일이 있을 경우 삭제
+                if (!board.getAttachmentName().isEmpty())
+                    fileService.deleteOnSyllabus(syllabusId);
+                // 게시글 삭제
+                assignmentSubmitService.delete(board.getId());
+            }));
+
+        // 파일 및 게시글 삭제
+        fileService.deleteOnSyllabus(oAssignment.get().getAttachmentPath());
         assignmentService.delete(assignmentId);
-        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
 
         // 목록으로 리디렉션
         return "redirect:/p/assignment";

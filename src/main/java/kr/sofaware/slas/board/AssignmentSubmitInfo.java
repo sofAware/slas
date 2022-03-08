@@ -11,6 +11,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AssignmentSubmitInfo {
 
-    Member member;
-    Optional<Board> board;
+    private Member member;
+    private Optional<Board> board;
 }

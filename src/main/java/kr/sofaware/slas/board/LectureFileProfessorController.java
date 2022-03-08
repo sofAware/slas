@@ -156,15 +156,15 @@ public class LectureFileProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = lectureFileService.read(boardId);
+        Optional<Board> oBoard = lectureFileService.read(boardId);
 
         // 없으면 404
-        if (board.isEmpty())
+        if (oBoard.isEmpty())
             return "error/404";
 
         // 읽을 권한 없으면 403
         if (!syllabusService.existsByIdAndProfessor_Id(
-                board.get().getSyllabus().getId(),
+                oBoard.get().getSyllabus().getId(),
                 principal.getName()))
             return "error/403";
 
@@ -174,7 +174,7 @@ public class LectureFileProfessorController {
         // 열람
         model.addAttribute("rootURL", ROOT_URL);
         model.addAttribute("title", TITLE);
-        model.addAttribute("board", board.get());
+        model.addAttribute("board", oBoard.get());
         return "board/view";
     }
 
@@ -185,21 +185,21 @@ public class LectureFileProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = lectureFileService.read(boardId);
+        Optional<Board> oBoard = lectureFileService.read(boardId);
 
         // 없으면 404
-        if (board.isEmpty())
+        if (oBoard.isEmpty())
             return "error/404";
 
         // 글 작성자가 아니면 403
-        if (!board.get().getMember().getId().equals(principal.getName()))
+        if (!oBoard.get().getMember().getId().equals(principal.getName()))
             return "error/403";
 
         // 페이지 전송
         model.addAttribute("rootURL", ROOT_URL);
         model.addAttribute("title", TITLE);
-        model.addAttribute("syllabus", board.get().getSyllabus());
-        model.addAttribute("board", board.get());
+        model.addAttribute("syllabus", oBoard.get().getSyllabus());
+        model.addAttribute("board", oBoard.get());
         return "/board/write";
     }
     @PostMapping("edit/{boardIdStr:[0-9]+}")
@@ -222,9 +222,9 @@ public class LectureFileProfessorController {
 
         // 새로운 파일을 업로드하면
         if (!boardDto.getFile().isEmpty()) {
-            if (attachmentName != null && !attachmentName.isEmpty()) {
-                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
-            }
+            if (attachmentName != null && !attachmentName.isEmpty())
+                // 기존 파일 삭제
+                fileService.deleteOnSyllabus(attachmentPath);
 
             attachmentName = boardDto.getFile().getOriginalFilename();
             attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
@@ -232,9 +232,10 @@ public class LectureFileProfessorController {
         // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
         else if (attachmentName != null && !attachmentName.isEmpty() &&
                 boardDto.getDeleteFile() != null && !boardDto.getDeleteFile().isEmpty()) {
+            // 기존 파일 삭제
+            fileService.deleteOnSyllabus(attachmentPath);
             attachmentName = "";
             attachmentPath = "";
-            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
         }
 
         // 새로운 값들로 세팅
@@ -252,19 +253,19 @@ public class LectureFileProfessorController {
 
         // 게시글 가져오기
         int boardId = Integer.parseInt(boardIdStr);
-        Optional<Board> board = lectureFileService.read(boardId);
+        Optional<Board> oBoard = lectureFileService.read(boardId);
 
         // 없으면 404
-        if (board.isEmpty())
+        if (oBoard.isEmpty())
             return "error/404";
 
         // 글 작성자가 아니면 403
-        if (!board.get().getMember().getId().equals(principal.getName()))
+        if (!oBoard.get().getMember().getId().equals(principal.getName()))
             return "error/403";
 
-        // 삭제
+        // 파일 및 게시글 삭제
+        fileService.deleteOnSyllabus(oBoard.get().getAttachmentPath());
         lectureFileService.delete(boardId);
-        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
 
         // 목록으로 리디렉션
         return "redirect:/p/" + ROOT_URL;

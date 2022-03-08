@@ -260,9 +260,9 @@ public class AssignmentStudentController {
 
         // 새로운 파일을 업로드하면
         if (!boardDto.getFile().isEmpty()) {
-            if (attachmentName != null && !attachmentName.isEmpty()) {
-                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
-            }
+            if (attachmentName != null && !attachmentName.isEmpty())
+                // 기존 파일 삭제
+                fileService.deleteOnSyllabus(attachmentPath);
 
             attachmentName = boardDto.getFile().getOriginalFilename();
             attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
@@ -270,9 +270,9 @@ public class AssignmentStudentController {
         // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
         else if (attachmentName != null && !attachmentName.isEmpty() &&
                 boardDto.getDeleteFile() != null && !boardDto.getDeleteFile().isEmpty()) {
+            fileService.deleteOnSyllabus(attachmentPath);
             attachmentName = "";
             attachmentPath = "";
-            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
         }
 
         // 새로운 값들로 세팅 후 과제 다시 제출
@@ -308,9 +308,9 @@ public class AssignmentStudentController {
         if (oBoard.isEmpty())
             return "error/404";
 
-        // 삭제
+        // 파일 및 제출한 과제 삭제
+        fileService.deleteOnSyllabus(oBoard.get().getAttachmentPath());
         assignmentSubmitService.delete(oBoard.get().getId());
-        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
 
         // 목록으로 리디렉션
         return "redirect:/s/assignment/" + assignmentId;

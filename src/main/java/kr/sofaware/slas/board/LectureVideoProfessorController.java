@@ -228,19 +228,19 @@ public class LectureVideoProfessorController {
         LectureVideo lectureVideo = oLectureVideo.get();
         String attachmentPath = lectureVideo.getAttachmentPath();
 
-        // 새로운 파일을 업로드하면
+        // 새로운 영상이 업로드하면
         if (!lectureVideoDto.getFile().isEmpty()) {
-            if (attachmentPath != null && !attachmentPath.isEmpty()) {
-                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
-            }
+            if (attachmentPath != null && !attachmentPath.isEmpty())
+                // 기존 영상 삭제
+                fileService.deleteOnSyllabus(attachmentPath);
 
             attachmentPath = fileService.saveOnSyllabus(lectureVideoDto.getFile(), lectureVideoDto.getSyllabusId());
         }
         // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
         else if (attachmentPath != null && !attachmentPath.isEmpty() &&
                 lectureVideoDto.getDeleteFile() != null && !lectureVideoDto.getDeleteFile().isEmpty()) {
-
-            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+            // 기존 영상 삭제
+            fileService.deleteOnSyllabus(attachmentPath);
             attachmentPath = "";
         }
 
@@ -277,7 +277,8 @@ public class LectureVideoProfessorController {
         if (!lv.get().getSyllabus().getProfessor().getId().equals(principal.getName()))
             return "error/404";
 
-        // 삭제
+        // 영상 및 게시글 삭제
+        fileService.deleteOnSyllabus(lv.get().getAttachmentPath());
         lectureVideoService.delete(lv.get());
 
         // 목록 리디렉션
