@@ -5,11 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Data
 @Entity
 @Getter
+@Builder
 @ToString
 @IdClass(LecturePK.class)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Lecture implements Serializable {
     @Id
@@ -25,8 +27,3 @@ public class Lecture implements Serializable {
     private double grade;                  // 학점
 }
 
-@EqualsAndHashCode
-class LecturePK implements Serializable{
-    private Member student;            // 학생
-    private Syllabus syllabus;          // 강의
-}

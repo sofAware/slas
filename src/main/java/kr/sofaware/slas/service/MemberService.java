@@ -2,6 +2,7 @@ package kr.sofaware.slas.service;
 
 import kr.sofaware.slas.auth.MemberDto;
 import kr.sofaware.slas.entity.Member;
+import kr.sofaware.slas.repository.LectureRepository;
 import kr.sofaware.slas.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;

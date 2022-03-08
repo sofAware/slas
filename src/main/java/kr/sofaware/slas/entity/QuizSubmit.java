@@ -31,8 +31,3 @@ public class QuizSubmit {
     private boolean isCorrect;  // 정답 유무
 }
 
-@EqualsAndHashCode
-class QuizSubmitPK implements Serializable {
-    private Quiz quiz;          // 퀴즈
-    private Member student;
-}

@@ -1,19 +1,18 @@
 package kr.sofaware.slas.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.security.core.parameters.P;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.DayOfWeek;
+//import org.springframework.security.core.parameters.P;
 
+@Data
 @Entity
 @Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +28,7 @@ public class Syllabus {
     private String time1;           // 교시1 (1, 2, ...)
     private String dayOfWeek2;
     private String time2;
+    private String introduction;
 
     @ManyToOne
     @JoinColumn(name = "professor_id")
@@ -78,5 +78,22 @@ public class Syllabus {
 
     public String formatDetailName() {
         return name + " (" + id + ") [" + formatClassTime() + "]";
+    }
+
+    public static int formatDayToInt(String dayOfWeek){
+        if("MON".equals(dayOfWeek))
+            return 0;
+        else if("TUE".equals(dayOfWeek))
+            return 1;
+        else if("WED".equals(dayOfWeek))
+            return 2;
+        else if("THU".equals(dayOfWeek))
+            return 3;
+        else if("FRI".equals(dayOfWeek))
+            return 4;
+        else if("SAT".equals(dayOfWeek))
+            return 5;
+        else
+            return -1;
     }
 }

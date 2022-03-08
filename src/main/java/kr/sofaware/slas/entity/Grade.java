@@ -29,10 +29,3 @@ public class Grade {
     private double majorGradeAvg;       // 전공 학점
     private int totalCredit;            // 신청 학점
 }
-
-@EqualsAndHashCode
-class GradePK implements Serializable{
-    private Member student;            // 학생
-    private int year;                   // 년도
-    private int semester;
-}

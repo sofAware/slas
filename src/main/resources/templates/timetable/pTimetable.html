@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="/frame/head.html">
+    <link rel="stylesheet" type="text/css" href="/css/timetable.css">
+    <title>공지사항</title>
+</head>
+<body>
+<header th:replace="/frame/pHeader.html"></header>
+
+<h2>교수 시간표 페이지</h2>
+
+ID : <span sec:authentication="name"></span> <br>
+소유 권한 : <span sec:authentication="authorities"></span> <br>
+<span th:text="'userId : '+ ${id}">id empty</span> <br>
+<span th:text="'auth : '+ ${auth}">auth empty</span>
+<tr th:each="auths : ${auth}">
+    <td th:text="${auths}"></td>
+</tr>
+
+<form id="logout" th:action="@{/logout}" method="GET">
+    <input type="submit" value="로그아웃"/>
+</form> <br>
+
+<a href="/">홈으로 이동 -></a>
+
+<!--학기 리스트 선택-->
+<div class="d-flex justify-content-center gap-4">
+    <!-- 학기 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${yearSemester}">
+            학기 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="semester">
+            <li th:each="key : ${mapYS.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?year-semester=' + key}"
+                   th:text="${mapYS.get(key)}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--시간표 https://www.bootdey.com/snippets/view/time-table#html -->
+<div class="container">
+    <div class="timetable-img text-center">
+        <img src="img/content/timetable.png" alt="">
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+
+            <thead>
+            <tr class="bg-light-gray">
+                <th class="text-uppercase">Time
+                </th>
+                <th class="text-uppercase">Monday</th>
+                <th class="text-uppercase">Tuesday</th>
+                <th class="text-uppercase">Wednesday</th>
+                <th class="text-uppercase">Thursday</th>
+                <th class="text-uppercase">Friday</th>
+                <th class="text-uppercase">Saturday</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="align-middle">09:00am</td>
+                <td th:if="${period != null}" th:each="period : ${t1}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "9:00-10:15" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+
+                <!--
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">9:00-10:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">9:00-10:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td>
+                    <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Dance</span>
+                    <div class="margin-10px-top font-size14">9:00-10:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td>
+                    <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Art</span>
+                    <div class="margin-10px-top font-size14">9:00-10:00</div>
+                    <div class="font-size13 text-light-gray">Kate Alley</div>
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">9:00-10:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                -->
+            </tr>
+
+            <tr>
+                <td class="align-middle">10:30am</td>
+                <td th:if="${period != null}" th:each="period : ${t2}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "10:30-11:45" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">10:00-11:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Art</span>
+                    <div class="margin-10px-top font-size14">10:00-11:00</div>
+                    <div class="font-size13 text-light-gray">Kate Alley</div>
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">10:00-11:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">10:00-11:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                -->
+            </tr>
+
+            <tr>
+                <td class="align-middle">12:00am</td>
+                <td th:if="${period != null}" th:each="period : ${t3}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "12:00-13:15" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
+                    <div class="margin-10px-top font-size14">11:00-12:00</div>
+                </td>
+                <td>
+                    <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
+                    <div class="margin-10px-top font-size14">11:00-12:00</div>
+                </td>
+                <td>
+                    <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
+                    <div class="margin-10px-top font-size14">11:00-12:00</div>
+                </td>
+                <td>
+                    <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
+                    <div class="margin-10px-top font-size14">11:00-12:00</div>
+                </td>
+                <td>
+                    <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
+                    <div class="margin-10px-top font-size14">11:00-12:00</div>
+                </td>
+                <td>
+                    <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
+                    <div class="margin-10px-top font-size14">11:00-12:00</div>
+                </td>
+                -->
+            </tr>
+
+            <tr>
+                <td class="align-middle">13:30pm</td>
+                <td th:if="${period != null}" th:each="period : ${t4}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "13:30-14:45" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td class="bg-light-gray">
+                </td>
+                <td>
+                    <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Art</span>
+                    <div class="margin-10px-top font-size14">12:00-1:00</div>
+                    <div class="font-size13 text-light-gray">Kate Alley</div>
+                </td>
+                <td>
+                    <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Dance</span>
+                    <div class="margin-10px-top font-size14">12:00-1:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">12:00-1:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">12:00-1:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                -->
+
+            </tr>
+
+            <tr>
+                <td class="align-middle">15:00pm</td>
+                <td th:if="${period != null}" th:each="period : ${t5}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "15:00-16:15" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                -->
+            </tr>
+
+            <tr>
+                <td class="align-middle">16:30pm</td>
+                <td th:if="${period != null}" th:each="period : ${t6}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "16:30-17:45" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                -->
+            </tr>
+
+            <tr th:remove="${t7 == null ? 'all' : 'none'}">
+                <td class="align-middle">18:00pm</td>
+                <td th:if="${period != null}" th:each="period : ${t7}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "18:00-19:00" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                -->
+            </tr>
+
+            <tr th:remove="${t8 == null ? 'all' : 'none'}">
+                <td class="align-middle">19:00pm</td>
+                <td th:if="${period != null}" th:each="period : ${t8}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "19:00-20:00" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                -->
+            </tr>
+
+            <tr th:remove="${t9 == null ? 'all' : 'none'}">
+                <td class="align-middle">20:00pm</td>
+                <td th:if="${period != null}" th:each="period : ${t9}">
+                    <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                    <div th:text='${period.getProfessorName() != "" ? "20:00-21:00" : ""}' class="margin-10px-top font-size14"></div>
+                    <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
+                </td>
+                <!--
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                <td class="bg-light-gray">
+
+                </td>
+                <td>
+                    <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">English</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">James Smith</div>
+                </td>
+                <td>
+                    <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Yoga</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray">Marta Healy</div>
+                </td>
+                <td>
+                    <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Music</span>
+                    <div class="margin-10px-top font-size14">1:00-2:00</div>
+                    <div class="font-size13 text-light-gray"></div>
+                </td>
+                -->
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script>
+    document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
+        location.href = e.getAttribute("href")));
+</script>
+</body>
+</html>
