@@ -21,11 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberService memberService;
 
-    // 인증 실패 핸들링 필드
-    private AuthenticationFailureHandler authenticationFailureHandler = (request, response, exception) -> {
-        response.sendError(HttpStatus.UNAUTHORIZED.value());
-    };
-
     // 인가 거부 핸들링 필드
     private AccessDeniedHandler accessDeniedHandler = (request, response, accessDeniedException) -> {
         response.sendError(HttpStatus.FORBIDDEN.value());
@@ -36,9 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 기본 인가 범위
                 .authorizeRequests()
-                .antMatchers("/login", "/signup").permitAll() // 누구나 접근 가능
-                .antMatchers("/p/**").hasRole("PROFESSOR")
-                .antMatchers("/s/**").hasRole("STUDENT")
+                .antMatchers("/login", "/signup").permitAll()   // 누구나 접근 허용
+                .antMatchers("/p/**").hasRole("PROFESSOR")      // 교수만 접근 허용
+                .antMatchers("/s/**").hasRole("STUDENT")        // 학생만 접근 허용
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
                 .anyRequest().authenticated() //나머지는 로그인만 하면 접근 가능
 
@@ -48,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")// 로그인 페이지 링크
                 .loginProcessingUrl("/login")//로그인 HTML에서 SUBMIT POST 요청시
                 .defaultSuccessUrl("/")//로그인 성공시 연결되는 주소
-                .failureHandler(authenticationFailureHandler) // 로그인 실패 핸들링
 
                 // 로그아웃
                 .and()
@@ -64,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 인증 및 실패 핸들링
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .accessDeniedHandler(accessDeniedHandler)
         ;
     }

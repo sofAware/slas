@@ -34,12 +34,12 @@ public class MemberController {
     // 회원가입 요청
     @PostMapping("/signup")
     @ResponseBody
-    public AuthDto postSignup(@RequestBody MemberDto memberDTO) {
+    public SuccessDto postSignup(@RequestBody MemberDto memberDTO) {
         if (memberService.isUserExist(memberDTO.getId())) {
-            return new AuthDto(false, "이미 등록된 학번 입니다.<br>" + memberDTO.getId());
+            return new SuccessDto(false, "이미 등록된 학번 입니다.<br>" + memberDTO.getId());
         } else {
             memberService.save(memberDTO);
-            return new AuthDto(true, "");
+            return new SuccessDto(true, "");
         }
     }
 

@@ -26,6 +26,8 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.projectlombok:lombok:1.18.22'
 	implementation 'org.springframework.boot:spring-boot-devtools:2.6.3'
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+	implementation 'org.mp4parser:isoparser:1.9.27'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'

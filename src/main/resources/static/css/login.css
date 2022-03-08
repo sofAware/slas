@@ -36,3 +36,7 @@ main input[type="password"] {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+label[for='floatingPassword'] {
+    z-index: 1040;
+}

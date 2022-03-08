@@ -16,7 +16,8 @@ public class NoticeService implements BoardService {
     private final BoardRepository boardRepository;
 
     @Override
-    public void create(Board board) {
+    public void save(Board board) {
+        board.setCategory(Board.CATEGORY_NOTICE);
         boardRepository.save(board);
     }
 
@@ -26,18 +27,8 @@ public class NoticeService implements BoardService {
     }
 
     @Override
-    public void update(Board board) {
-
-    }
-
-    @Override
     public void delete(int boardId) {
-
-    }
-
-    @Override
-    public List<Board> listAll() {
-        return boardRepository.findAll();
+        boardRepository.deleteById(boardId);
     }
 
     @Override
@@ -46,7 +37,12 @@ public class NoticeService implements BoardService {
     }
 
     @Override
-    public void increaseViewCount(int boardId, HttpSession session) {
+    public void increaseViewCount(int boardId) {
+        Optional<Board> oBoard = boardRepository.findById(boardId);
+        if (oBoard.isEmpty()) return;
+        Board board = oBoard.get();
 
+        board.increaseViewCount();
+        boardRepository.save(board);
     }
 }

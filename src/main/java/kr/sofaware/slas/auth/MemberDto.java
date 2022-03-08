@@ -14,14 +14,4 @@ public class MemberDto {
     private Integer semester;       // 학기
 
     private String role;        // 권한
-
-    public static MemberDto from(Member member) {
-        return new MemberDto(
-                member.getId(),
-                member.getPassword(),
-                member.getName(),
-                member.getMajor(),
-                member.getSemester(),
-                member.getRole());
-    }
 }

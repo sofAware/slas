@@ -1,6 +1,5 @@
 package kr.sofaware.slas.entity;
 
-import kr.sofaware.slas.entity.Syllabus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,6 +8,7 @@ import java.util.Date;
 @Entity
 @Getter
 @ToString
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Assignment {
@@ -30,4 +30,23 @@ public class Assignment {
 
     private String attachmentName;      // 과제 자료 이름
     private String attachmentPath;      // 과제 자료 경로
+
+    /**
+     * 과제 수정 때 사용할 업데이트 함수
+     * @author 양경호
+     * @param name 제목
+     * @param submitStart 제출시작일
+     * @param submitEnd 제출마감일
+     * @param content 내용
+     * @param attachmentName 첨부파일 이름
+     * @param attachmentPath 첨부파일 경로
+     */
+    public void update(String name, Date submitStart, Date submitEnd, String content, String attachmentName, String attachmentPath) {
+        this.name = name;
+        this.submitStart = submitStart;
+        this.submitEnd = submitEnd;
+        this.content = content;
+        this.attachmentName = attachmentName;
+        this.attachmentPath = attachmentPath;
+    }
 }

@@ -1,6 +1,20 @@
+const txtId = document.querySelector('#floatingId');
+const txtPw = document.querySelector('#floatingPassword');
+
 const btnFindId = document.querySelector('#findId');
 const btnFindPw = document.querySelector('#findPw');
 const btnSignup = document.querySelector('#signup');
+
+// 비밀번호 보이기 및 숨기기 토글
+const tglPw = document.querySelector("#togglePassword");
+
+tglPw.addEventListener("click", function () {
+    const type = txtPw.getAttribute("type") === "password" ? "text" : "password";
+    txtPw.setAttribute("type", type);
+
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+});
 
 // 회원 가입 창 시작
 function signup() {
@@ -82,9 +96,7 @@ if (new URL(window.location).hash === "#signup") {
 }
 
 // 로그인 이벤트
-document.forms['login'].addEventListener("submit", (event) => {
-    event.preventDefault();
-
+document.forms['login'].addEventListener("submit", () =>
     Swal.fire({
         title: "로그인 중",
         timer: 100000,
@@ -93,18 +105,11 @@ document.forms['login'].addEventListener("submit", (event) => {
             Swal.showLoading();
             Swal.stopTimer();
         },
-    });
-
-    fetch(event.target.action, {
-        method: 'POST',
-        body: new URLSearchParams(new FormData(event.target))
-    }).then((res) => {
-        if (res.ok) {
-            location.href = "/";
-        } else {
-            Swal.fire(`로그인에 실패하였습니다.`, '', 'error');
-        }
-    }).then((body) => {
-
     })
-});
+);
+
+// 로그인 실패 URL 감지해서 인풋 하이라이팅
+if (new URL(window.location).search.startsWith("?error")) {
+    txtId.classList.add('is-invalid');
+    txtPw.classList.add('is-invalid');
+}
