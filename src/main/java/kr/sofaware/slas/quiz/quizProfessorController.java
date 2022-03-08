@@ -130,8 +130,7 @@ public class quizProfessorController {
     public String makeQuiz(Model model, Authentication authentication, Principal principal,
                                 @Nullable @RequestParam("year-semester") String yearSemester,
                                 @Nullable @RequestParam("syllabus-id") String syllabusId,
-                                @Nullable @RequestParam("week-list") String week,
-                                @PathVariable String Quiz_id) {
+                                @Nullable @RequestParam("week-list") String week) {
         Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
         String Id = principal.getName();
 
