@@ -1,6 +1,7 @@
 package kr.sofaware.slas.board;
 
 import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.Comment;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class QnaController {
 
     private final SyllabusService syllabusService;
     private final LectureService lectureService;
+    private final CommentService commentService;
     private final MemberService memberService;
     private final FileService fileService;
 
@@ -157,8 +159,8 @@ public class QnaController {
         return "/board/write";
     }
     @PostMapping("write")
-    public String postWriting(BoardDto boardDto, Principal principal,
-                              HttpServletRequest request) throws IOException {
+    public String postWriting(BoardDto boardDto, Principal principal, HttpServletRequest request)
+            throws IOException {
 
         // 작성 권한 없으면 403
         BiPredicate<String, String> auth = request.isUserInRole("ROLE_PROFESSOR") ?
@@ -194,20 +196,172 @@ public class QnaController {
                 ROOT_URL, board.getId());
     }
 
+    // 수정
+    @GetMapping("edit/{boardIdStr:[0-9]+}")
+    public String GetEditing(Model model, Principal principal,
+                             @PathVariable String boardIdStr) {
 
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = qnaService.read(boardId);
+
+        // 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        if (!oBoard.get().getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 페이지 전송
+        model.addAttribute("rootURL", ROOT_URL);
+        model.addAttribute("title", TITLE);
+        model.addAttribute("syllabus", oBoard.get().getSyllabus());
+        model.addAttribute("board", oBoard.get());
+        return "/board/write";
+    }
+    @PostMapping("edit/{boardIdStr:[0-9]+}")
+    public String postEditing(BoardDto boardDto, Principal principal, HttpServletRequest request,
+                              @PathVariable String boardIdStr) throws IOException {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = qnaService.read(boardId);
+
+        // 글 작성자가 아니면 403
+        if (oBoard.isEmpty() ||
+                !oBoard.get().getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 기본 board 값 가져오기
+        Board board = oBoard.get();
+        String attachmentName = board.getAttachmentName();
+        String attachmentPath = board.getAttachmentPath();
+
+        // 새로운 파일을 업로드하면
+        if (!boardDto.getFile().isEmpty()) {
+            if (attachmentName != null && !attachmentName.isEmpty()) {
+                /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+            }
+
+            attachmentName = boardDto.getFile().getOriginalFilename();
+            attachmentPath = fileService.saveOnSyllabus(boardDto.getFile(), boardDto.getSyllabusId());
+        }
+        // 새로운 파일을 업로드 하지는 않았지만 게시글에 파일이 존재하고 파일 삭제를 원했다면 삭제!
+        else if (attachmentName != null && !attachmentName.isEmpty() &&
+                boardDto.getDeleteFile() != null && !boardDto.getDeleteFile().isEmpty()) {
+            attachmentName = "";
+            attachmentPath = "";
+            /* 기존 파일이 있을 경우 삭제 (일단 삭제는 위험하니 추후에...) */
+        }
+
+        // 새로운 값들로 세팅
+        board.update(boardDto.getTitle(), boardDto.getContent(), attachmentName, attachmentPath);
+        qnaService.save(board);
+
+        // 수정된 포스트 번호로 뷰 이동
+        return String.format("redirect:/%c/%s/%d",
+                request.isUserInRole("ROLE_PROFESSOR") ? 'p' : 's',
+                ROOT_URL, board.getId());
+    }
+
+    // 삭제
+    @GetMapping("delete/{boardIdStr:[0-9]+}")
+    public String delete(Principal principal,
+                         @PathVariable String boardIdStr) {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = qnaService.read(boardId);
+
+        // 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 글 작성자가 아니면 403
+        Board board = oBoard.get();
+        if (!board.getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 연과된 댓글 삭제
+        board.getComments().forEach(comment ->
+                commentService.deleteById(comment.getId()));
+
+        // 삭제
+        qnaService.delete(boardId);
+        /* 게시글에 작성된 이미지, 파일 들도 삭제해줘야하긴함...! */
+
+        // 목록으로 리디렉션
+        return "redirect:/p/" + ROOT_URL;
+    }
 
     // 댓글 작성
-    @PostMapping("add-comment")
-    @ResponseBody
-    public String addComment(String comment, Principal principal, HttpServletRequest request) {
-        return "아직 안만듬";
+    @PostMapping("add-comment/{boardIdStr:[0-9]+}")
+    public String addComment(Principal principal, HttpServletRequest request,
+                             @PathVariable String boardIdStr,
+                             @RequestParam String content) {
+
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = qnaService.read(boardId);
+
+        // 없으면 404
+        if (oBoard.isEmpty())
+            return "error/404";
+
+        // 읽을 권한 없으면 403
+        Board board = oBoard.get();
+        BiPredicate<String, String> auth = request.isUserInRole("ROLE_PROFESSOR") ?
+                syllabusService::existsByIdAndProfessor_Id :
+                lectureService::existsBySyllabus_IdAndStudent_Id;
+        if (!auth.test(board.getSyllabus().getId(), principal.getName()))
+            return "error/403";
+
+        // 게시글에 댓글 추가
+        Comment comment = new Comment(0,
+                memberService.loadUserByUsername(principal.getName()),
+                content,
+                new Date());
+        board.getComments().add(commentService.save(comment));
+        qnaService.save(board);
+
+        // 수정된 포스트 번호로 뷰 이동
+        return String.format("redirect:/%c/%s/%d",
+                request.isUserInRole("ROLE_PROFESSOR") ? 'p' : 's',
+                ROOT_URL, board.getId());
     }
 
     // 댓글 삭제
-    @GetMapping("delete-comment/{commentIdStr:[0-9]+}")
-    @ResponseBody
-    public String deleteComment(String comment, Principal principal, HttpServletRequest request,
-                             @PathVariable String commentIdStr) {
-        return "아직 안만듬";
+    @GetMapping("delete-comment/{boardIdStr:[0-9]+}")
+    public String deleteComment(Principal principal, HttpServletRequest request,
+                                @PathVariable String boardIdStr,
+                                @RequestParam("comment-id") String commentIdStr) {
+        // 게시글 가져오기
+        int boardId = Integer.parseInt(boardIdStr);
+        Optional<Board> oBoard = qnaService.read(boardId);
+
+        // 댓글 가져오기
+        int commentId = Integer.parseInt(commentIdStr);
+        Optional<Comment> oComment = commentService.findById(commentId);
+
+        // 게시글 or 댓글이 없으면 404
+        if (oBoard.isEmpty() || oComment.isEmpty())
+            return "error/404";
+
+        // 댓글 작성자가 아닐경우 403
+        Board board = oBoard.get();
+        Comment comment = oComment.get();
+        if (!comment.getMember().getId().equals(principal.getName()))
+            return "error/403";
+
+        // 댓글 삭제
+        board.deleteCommentById(comment.getId());
+        qnaService.save(board);
+        commentService.deleteById(comment.getId());
+
+        // 수정된 포스트 번호로 뷰 이동
+        return String.format("redirect:/%c/%s/%d",
+                request.isUserInRole("ROLE_PROFESSOR") ? 'p' : 's',
+                ROOT_URL, board.getId());
     }
 }

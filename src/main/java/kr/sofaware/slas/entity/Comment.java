@@ -1,22 +1,19 @@
 package kr.sofaware.slas.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Getter
+@Builder
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Comment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;             // 댓글 고유 번호
 
     @ManyToOne

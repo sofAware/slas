@@ -77,4 +77,8 @@ public class Board implements Serializable {
         this.attachmentName = attachmentName;
         this.attachmentPath = attachmentPath;
     }
+
+    public void deleteCommentById(int commentId) {
+        comments.removeIf(comment -> comment.getId() == commentId);
+    }
 }

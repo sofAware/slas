@@ -13,8 +13,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public void save(Comment comment) {
-        commentRepository.save(comment);
+    public Comment save(Comment comment) {
+        return commentRepository.save(comment);
     }
 
     public Optional<Comment> findById(int id) {

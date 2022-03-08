@@ -69,10 +69,10 @@
 <div class="container" th:if="${board.getCategory() == board.CATEGORY_QNA}" style="margin-top: 4rem;">
     <h4 class="my-4" th:text="${board.getComments().size()} + '개의 댓글'"></h4>
 <!--    댓글 작성-->
-    <form method="POST" action="./add-comment">
+    <form method="POST" th:action="'./add-comment/' + ${board.getId()}">
         <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
 
-        <textarea class="form-control" name="comment"></textarea>
+        <textarea class="form-control" name="content"></textarea>
         <div class="d-flex mt-3 mb-5">
             <button type="submit" class="btn btn-primary ms-auto">댓글 작성</button>
         </div>
@@ -86,8 +86,9 @@
                   #dates.format(comment.getDate(), 'HH:mm') :
                   #dates.format(comment.getDate(), 'yyyy-MM-dd')} + ')'"></span>
             <a class="text-decoration-none text-danger"
+               data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
                 th:if="${#authentication.getName()}==${comment.getMember().getId()}"
-                th:href="'./delete-comment/' + ${comment.getId()}"><b>삭제</b></a>
+                th:href="'./delete-comment/' + ${board.getId()} + '?comment-id=' + ${comment.getId()}"><b>삭제</b></a>
         </div>
         <div th:text="${comment.getContent()}"></div>
     </div>
