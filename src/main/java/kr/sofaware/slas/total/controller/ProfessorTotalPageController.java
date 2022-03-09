@@ -28,7 +28,7 @@ public class ProfessorTotalPageController {
     private final NoticeService noticeService;
     private final QuizService quizService;
     private final AssignmentService assignmentService;
-    private final QnAService qnAService;
+    private final QnaService qnaService;
 
     //교수 강의 종합 페이지
     @GetMapping("total")
@@ -94,18 +94,12 @@ public class ProfessorTotalPageController {
 
 
         // QnA 게시판
-        List<Board> qnAList=qnAService.getQnAListOrderByDateDesc(syllabusId);
+        List<Board> qnAList= qnaService.getQnAListOrderByDateDesc(syllabusId);
         List<QnADto> qnADtoList=new ArrayList<>();
         qnAList.forEach(qnA -> qnADtoList.add(new QnADto(qnA)));
 
 
         // 강의 영상 목록
-
-
-
-
-
-
         model.addAttribute("noticeList",noticeDtoList);                             // 공지 사항
         model.addAttribute("assignmentList",assignmentDtoList);                     // 과제 목록
         model.addAttribute("quizList",quizDtoList);                                 // 퀴즈 목록

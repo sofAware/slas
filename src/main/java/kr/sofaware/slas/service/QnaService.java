@@ -44,4 +44,8 @@ public class QnaService implements BoardService {
         board.increaseViewCount();
         boardRepository.save(board);
     }
+
+    public List<Board> getQnAListOrderByDateDesc(String syllabusId){
+        return boardRepository.findByCategoryAndSyllabus_IdOrderByDateDesc(Board.CATEGORY_QNA,syllabusId);
+    }
 }

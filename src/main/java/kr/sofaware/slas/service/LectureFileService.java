@@ -52,6 +52,6 @@ public class LectureFileService implements BoardService {
      * @return 강의 자료들의 개수
      */
     public int countLectureFiles(String SyllabusId){
-        return boardRepository.countAllByCategoryAndSyllabus_Id(Board.CATEGORY_LECTURE_MATERIAL, SyllabusId);
+        return boardRepository.countAllByCategoryAndSyllabus_Id(Board.CATEGORY_LECTURE_FILE, SyllabusId);
     }
 }
