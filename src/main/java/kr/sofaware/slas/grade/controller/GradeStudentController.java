@@ -59,13 +59,13 @@ public class GradeStudentController {
                 case "전선":
                 case "전필":
                     majorSubjectCredit.addAndGet(lecture.getSyllabus().getCredit());
-                    majorSubjectGrade.updateAndGet(v -> new Double((double) (v + lecture.getGrade())));
+                    majorSubjectGrade.updateAndGet(v -> (double) (v + lecture.getGrade()));
                     majorSubjectCount.addAndGet(1);
                     break;
                 case "교필":
                 case "교선":
                     geSubjectCredit.addAndGet(lecture.getSyllabus().getCredit());
-                    geSubjectGrade.updateAndGet(v -> new Double((double) (v + lecture.getGrade())));
+                    geSubjectGrade.updateAndGet(v -> (double) (v + lecture.getGrade()));
                     geSubjectCount.addAndGet(1);
                     break;
             }

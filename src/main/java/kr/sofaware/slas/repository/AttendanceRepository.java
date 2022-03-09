@@ -3,7 +3,10 @@ package kr.sofaware.slas.repository;
 import kr.sofaware.slas.entity.Attendance;
 import kr.sofaware.slas.entity.AttendancePK;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Repository
