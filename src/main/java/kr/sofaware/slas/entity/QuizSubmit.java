@@ -29,5 +29,5 @@ public class QuizSubmit {
 
     private String answer;      // 제출한 답안
     private boolean isCorrect;  // 정답 유무
+    private int score;          // 취득 점수
 }
-

@@ -44,4 +44,14 @@ public class LectureFileService implements BoardService {
         board.increaseViewCount();
         boardRepository.save(board);
     }
+
+    /**
+     * 해당 과목의 강의 자료가 몇개 올라와 있는지 count ==> 뭔가 LectureFileService 로 일단 만들긴 했는데.. ㅎㅎ.. 나중에 다른데로 옮기던징...
+     * @author 정지민
+     * @param SyllabusId
+     * @return 강의 자료들의 개수
+     */
+    public int countLectureFiles(String SyllabusId){
+        return boardRepository.countAllByCategoryAndSyllabus_Id(Board.CATEGORY_LECTURE_MATERIAL, SyllabusId);
+    }
 }

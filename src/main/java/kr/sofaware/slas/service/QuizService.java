@@ -1,0 +1,83 @@
+package kr.sofaware.slas.service;
+
+import kr.sofaware.slas.entity.Quiz;
+import kr.sofaware.slas.entity.QuizSubmit;
+import kr.sofaware.slas.repository.QuizRepository;
+import kr.sofaware.slas.repository.QuizSubmitRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+@RequiredArgsConstructor
+@Service
+public class QuizService {
+    private final QuizRepository quizRepository;
+    private final QuizSubmitRepository quizSubmitRepository;
+
+    /**
+     * 해당 과목의 퀴즈들을 quiz_id 별로 묶어서 반환. quizRepository 에서 questionNum 으로 정렬해서 넘겨주기 때문에 문제번호 정렬 됨 + TreeMap 이라서 quiz_id 도 정렬 됨
+     * @author 정지민
+     * @param syllabus_id
+     * @return Map<key: quiz_id, value: 해당 quiz_id 에 해당하는 문항들(Quiz 엔티티)의 리스트>
+     */
+    public Map<String, List<Quiz>> findBySyllabus_IdAndGroupByQuiz_Id(String syllabus_id){
+        Map<String, List<Quiz>> map=new TreeMap<String, List<Quiz>>();
+
+        quizRepository.findBySyllabus_IdOrderByQuestionNumAsc(syllabus_id).forEach(quiz -> {
+            if(!map.containsKey(quiz.getId()))
+                map.put(quiz.getId(), new ArrayList<>());
+
+            map.get(quiz.getId()).add(quiz);
+        });
+
+        return map;
+    }
+
+    /**
+     * quiz_submit 테이블에서 해당 과목의 해당 퀴즈에 대해 학생이 제출한 답안 레코드가 몇개인지 count -> 해당 퀴즈의 총 문항 수와 비교해서 학생의 퀴즈 응시 여부 판단
+     * @author 정지민
+     * @param studentId, syllabusId, quizId, 해당 quizId 퀴즈의 총 문항 수
+     * @return 응시 여부
+     */
+    public boolean isQuizSubmitted(String studentId, String syllabusId, String quizId, int questionCount){
+        if(questionCount==quizSubmitRepository.countByStudent_IdAndQuiz_Syllabus_IdAndQuiz_Id(studentId,syllabusId,quizId))
+            return true;
+        return false;
+    }
+
+    /**
+     * 해당 퀴즈의 총점, 즉 만점이 몇점인지를 구함
+     * @author 정지민
+     * @param syllabusId, quizId
+     * @return 퀴즈 총점
+     */
+    public int getTotalScore(String syllabusId, String quizId){
+        int totalScore=0;
+        List<Quiz> quizList=quizRepository.findBySyllabus_IdAndId(syllabusId,quizId);
+
+        for(Quiz q : quizList)
+            totalScore+=q.getScore();
+
+        return totalScore;
+    }
+
+    /**
+     * 해당 퀴즈에 대해 취득한 점수를 구함
+     * @author 정지민
+     * @param syllabusId, quizId
+     * @return 취득 총점
+     */
+    public int getAcquiredScore(String syllabusId, String quizId){
+        int acquiredScore=0;
+        List<QuizSubmit> quizSubmitList=quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_Id(syllabusId,quizId);
+
+        for(QuizSubmit q : quizSubmitList)
+            acquiredScore+=q.getScore();
+
+        return acquiredScore;
+    }
+}

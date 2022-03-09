@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="/frame/head.html">
+    <title>Title</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+            width : 500px;
+            height: 60px;
+        }
+        th, td {
+            padding: 5px;
+        }
+        th {
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+<header th:replace="/frame/sHeader.html"></header>
+    <!-- Copy & Edit here! -->
+
+    <div class="d-flex justify-content-center gap-4">
+        <!-- 학기 선택 -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                    th:text="${yearSemester}">
+                학기 선택
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="semester">
+                <li th:each="key : ${mapYS.keySet()}">
+                    <a class="dropdown-item"
+                       th:attr="href=${'?year-semester=' + key}"
+                       th:text="${mapYS.get(key)}"></a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 강의 선택 -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
+                    th:text="${selectedSyllabusName}">
+                강의 선택
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="syllabus">
+                <li th:each="s : ${syllabuses}">
+                    <a class="dropdown-item"
+                       th:attr="href=${'?syllabus-id=' + s.getId()}"
+                       th:text="${s.getName()}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div>
+        <h4>공지 사항</h4>
+        <div th:each="i : ${#numbers.sequence(0,noticeList.size()-1)}">
+            <a th:text="${#dates.format(noticeList.get(i).getUploadDate(), 'yyyy-MM-dd')+' '+noticeList.get(i).title}"></a> <br>
+        </div>
+    </div>
+
+    <div>
+        <h4>과제 목록</h4>
+        <table>                                <!-- 이 과목의 과제들을 제출 마감기한 빠른 순으로 보여줌 !! 몇개까지 출력할진 프론트에서 정해주자 ~~ 아직 안 정했음 !!!!!!! 나중에 유아이 꾸미면서 생각해 보자 ~~  -->
+            <thead>
+                <tr>
+                    <th>과제명</th>
+                    <th>제출 기한</th>
+                    <th>제출 상태</th>
+                </tr>
+            </thead>
+            <tbody th:if="${assignmentList.isEmpty() eq false}">                                                            <!-- 과제 목록이 존재하는 경우 -->
+                <tr th:each="i : ${#numbers.sequence(0,assignmentList.size()-1)}">
+                    <td th:text="${assignmentList.get(i).getName()}"></td>
+                    <td th:text="${#dates.format(assignmentList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(assignmentList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:if="${assignmentList.get(i).getSubmitTrue() eq true}" th:text="O"></td>
+                    <td th:unless="${assignmentList.get(i).getSubmitTrue() eq true}" th:text="X"></td>
+                </tr>
+            </tbody>
+            <tbody th:unless="${assignmentList.isEmpty() eq false}">                                                        <!-- 과제 목록이 없는 경우 -->
+                <tr>
+                    <td th:colspan="3">등록된 내용이 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h4>퀴즈 목록</h4>                      <!-- 이 과목의 퀴즈들을 제출 마감기한 빠른 순으로 보여줌 !! 몇개까지 출력할진 프론트에서 정해주자 ~~ 아직 안 정했음 !!!!!!! 나중에 유아이 꾸미면서 생각해 보자 ~~  -->
+        <table>
+            <thead>
+                <tr>
+                    <th>퀴즈명</th>
+                    <th>응시 기간</th>
+                    <th>응시 상태</th>
+                    <th>취득 점수</th>
+                </tr>
+            </thead>
+            <tbody th:if="${quizList.isEmpty() eq false}">                                                            <!-- 퀴즈 목록이 존재하는 경우 -->
+                <tr th:each="i : ${#numbers.sequence(0,quizList.size()-1)}">
+                    <td th:text="${quizList.get(i).getName()}"></td>
+                    <td th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:if="${quizList.get(i).getSubmitted() eq true}" th:text="O"></td>
+                    <td th:unless="${quizList.get(i).getSubmitted() eq true}" th:text="X"></td>
+                    <td th:text="${quizList.get(i).getAcquiredScore()+'/'+quizList.get(i).getTotalScore()}"></td>
+                </tr>
+            </tbody>
+            <tbody th:unless="${quizList.isEmpty() eq false}">                                                        <!-- 퀴즈 목록이 없는 경우 -->
+                <tr>
+                    <td th:colspan="4">등록된 내용이 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h4>과목 현황</h4>
+        <p th:text="${'강의 >> '+subjectStatus.finishedLecture+'/'+subjectStatus.totalLecture}"></p>
+        <p th:text="${'과제 >> '+subjectStatus.finishedAssignment+'/'+subjectStatus.totalAssignment}"></p>
+        <p th:text="${'퀴즈 >> '+subjectStatus.finishedQuiz+'/'+subjectStatus.totalQuiz}"></p>
+        <p th:text="${'자료 >> '+subjectStatus.lectureFiles}"></p>
+    </div>
+
+    <div>
+        <h4>출석 현황</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th th:each="i : ${#numbers.sequence(1,16)}" th:text="${i+'주차'}"></th>
+                </tr>
+            </thead>
+            <tbody th:if="${attendance != null}">                                                            <!-- 출석 내역이 존재하는 경우 -->
+                <tr>
+                    <td th:each="i : ${#numbers.sequence(0,attendance.weeks.size()-1)}" th:text="${attendance.weeks.get(i)}"></td>
+                </tr>
+            </tbody>
+            <tbody th:unless="${attendance != null}">                                                        <!-- 출석 내역이 없는 경우 -->
+                <tr>
+                    <td th:each="i : ${#numbers.sequence(1,16)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h4>강의 영상</h4>
+        <thead>
+            <tr>
+                <th>주차</th>
+                <th>회차</th>
+                <th>강의 제목</th>
+                <th>학습 기간</th>
+                <th>진도율</th>
+            </tr>
+        </thead>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <a>QnA 게시판 보러가기</a><br>
+    <a>강의계획서 보러가기</a><br>
+
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+</body>
+</html>

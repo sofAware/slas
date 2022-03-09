@@ -1,23 +1,19 @@
 package kr.sofaware.slas.service;
 
 import kr.sofaware.slas.entity.Lecture;
-import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.repository.LectureRepository;
-import kr.sofaware.slas.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LectureService {
 
     private final LectureRepository lectureRepository;
-    private final MemberRepository memberRepository;
 
     /**
      * 학생 학번으로 들었던 수업들 '<년도>-<학기>' 형식으로 분류 후 HashMap 으로 반환해줌

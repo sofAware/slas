@@ -1,6 +1,5 @@
 package kr.sofaware.slas.service;
 
-import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.repository.SyllabusRepository;
 import lombok.RequiredArgsConstructor;
