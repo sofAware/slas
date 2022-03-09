@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.DayOfWeek;
-//import org.springframework.security.core.parameters.P;
 
 @Data
 @Entity
@@ -26,9 +25,9 @@ public class Syllabus {
 
     private String dayOfWeek1;      // 요일1 (MON, TUE, ...)
     private String time1;           // 교시1 (1, 2, ...)
-    private String dayOfWeek2;
-    private String time2;
-    private String introduction;
+    private String dayOfWeek2;      // 요일2
+    private String time2;           // 교시2
+    private String introduction;    // 교과목 소개
 
     @ManyToOne
     @JoinColumn(name = "professor_id")
@@ -76,10 +75,18 @@ public class Syllabus {
         return result += ", " + translateDayOfWeek(dayOfWeek2) + time2;
     }
 
+    /**
+     * @author 양경호
+     * @return
+     */
     public String formatDetailName() {
         return name + " (" + id + ") [" + formatClassTime() + "]";
     }
 
+    /**
+     * @author 양경호
+     * @return
+     */
     public static int formatDayToInt(String dayOfWeek){
         if("MON".equals(dayOfWeek))
             return 0;
@@ -95,5 +102,14 @@ public class Syllabus {
             return 5;
         else
             return -1;
+    }
+
+    /**
+     * @param week
+     * @author 박소현
+     * @return
+     */
+    public static String formatWeek(String week) {
+        return String.format("%c주차",  week.charAt(3));
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, QuizPK> {
+    List<Quiz> findAllBySyllabus_Id(String syllabusId);
     List<Quiz> findBySyllabus_IdOrderByQuestionNumAsc(String id);
-
     List<Quiz> findBySyllabus_IdAndId(String syllabus_id, String id);
 }

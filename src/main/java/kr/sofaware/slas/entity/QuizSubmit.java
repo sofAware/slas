@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Data
 @Getter
+@Builder
 @ToString
 @Table(name = "quiz_submit")
 @IdClass(QuizSubmitPK.class)
@@ -30,4 +32,20 @@ public class QuizSubmit {
     private String answer;      // 제출한 답안
     private boolean isCorrect;  // 정답 유무
     private int score;          // 취득 점수
+
+    /**
+     * @author 박소현
+     */
+    public void studentUpdate(String answer){
+        this.answer=answer;
+    }
+
+    /**
+     * @author 박소현
+     */
+    public void professorUpdate(String answer,boolean isCorrect,int score){
+        this.answer=answer;
+        this.isCorrect=isCorrect;
+        this.score=score;
+    }
 }

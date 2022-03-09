@@ -7,10 +7,7 @@ import kr.sofaware.slas.repository.QuizSubmitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -79,5 +76,56 @@ public class QuizService {
             acquiredScore+=q.getScore();
 
         return acquiredScore;
+    }
+
+    /**
+     * @author 박소현
+     */
+    public List<Quiz> listAll() {
+        return quizRepository.findAll();
+    }
+    /**
+     * @author 박소현
+     */
+    public List<Quiz> listAll(String SyllabusId) {
+        return quizRepository.findAllBySyllabus_Id(SyllabusId);
+    }
+    /**
+     * @author 박소현
+     */
+    public List<Quiz> listAll(String Id,String SyllabusId) {
+        return quizRepository.findBySyllabus_IdAndId(SyllabusId,Id);
+    }
+
+    /**
+     * @author 박소현
+     */
+    public List<QuizSubmit> alistAll() {
+        return quizSubmitRepository.findAll();
+    }
+    /**
+     * @author 박소현
+     */
+    public List<QuizSubmit> alistAll(String SyllabusId) {
+        return quizSubmitRepository.findAllByQuiz_Syllabus_Id(SyllabusId);
+    }
+
+    /**
+     * @author 박소현
+     */
+    public void save(QuizSubmit quizSubmit) {
+        quizSubmitRepository.save(quizSubmit);
+    }
+    /**
+     * @author 박소현
+     */
+    public void save(Quiz quiz) {
+        quizRepository.save(quiz);
+    }
+    /**
+     * @author 박소현
+     */
+    public Optional<QuizSubmit> read(String SyllabusId){
+        return quizSubmitRepository.findByQuiz_SyllabusId(SyllabusId);
     }
 }
