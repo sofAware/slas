@@ -1,12 +1,11 @@
 package kr.sofaware.slas.service;
 
 import kr.sofaware.slas.entity.Board;
-import kr.sofaware.slas.mainpage.dto.NoticeDto;
+import kr.sofaware.slas.function.mainpage.dto.NoticeDto;
 import kr.sofaware.slas.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

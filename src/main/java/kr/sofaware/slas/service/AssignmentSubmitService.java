@@ -1,6 +1,6 @@
 package kr.sofaware.slas.service;
 
-import kr.sofaware.slas.board.AssignmentSubmitInfo;
+import kr.sofaware.slas.function.board.AssignmentSubmitInfo;
 import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.repository.BoardRepository;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service

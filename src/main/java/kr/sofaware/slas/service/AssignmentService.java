@@ -1,13 +1,11 @@
 package kr.sofaware.slas.service;
 
-import kr.sofaware.slas.mainpage.dto.AssignmentDto;
 import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.repository.AssignmentRepository;
 import kr.sofaware.slas.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
