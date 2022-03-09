@@ -1,47 +1,41 @@
 package kr.sofaware.slas.entity;
 
-import lombok.Getter;
-import org.hibernate.Hibernate;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.io.Serializable;
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.Date;
 
+@Builder
 @Entity
 @Getter
-public class Quiz implements Serializable {
+@ToString
+@IdClass(QuizPK.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class Quiz {
     @Id
     @ManyToOne
     @JoinColumn(name = "syllabus_id")
     private Syllabus syllabus;          // 강의
 
-    @Id private String id;              // 퀴즈 아이디 (<주차>-<회차>, 1-1, 1-2, ...)
-    @Id private int questionNum;        // 문제 번호
+    @Id
+    @Column(name = "id")
+    private String id;              // 퀴즈 아이디 (<주차>-<회차>, 1-1, 1-2, ...)
+
+    private String name;            // 퀴즈명
+
+    @Id
+    @Column(name = "question_num")
+    private int questionNum;        // 문제 번호
 
     private String question;            // 문제
     private int category;               // 문제 유형 (1: 객관식, 2: 단답식, 3: 주관식)
     private String correctAnswer;       // 정답
+    private int score;                  // 배점
 
     private String attachmentName;      // 첨부 파일 이름
     private String attachmentPath;      // 첨부 파일 경로
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(syllabus, id, questionNum);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || Hibernate.getClass(this) != Hibernate.getClass(obj))
-            return false;
-
-        Quiz o = (Quiz) obj;
-        return Objects.equals(syllabus, o.getSyllabus()) &&
-                Objects.equals(id, o.getId()) &&
-                Objects.equals(questionNum, o.getQuestionNum());
-    }
+    private Date submitStart;           // 제출 시작일
+    private Date submitEnd;             // 제출 마감일
 }

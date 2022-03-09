@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="/frame/head.html">
+    <title>퀴즈</title>
+</head>
+<body>
+<header th:replace="/frame/pHeader.html"></header>
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>문제 번호</th>
+        <th>문제 제목</th>
+        <th>제출 가능 시작 일자</th>
+        <th>제출 가능 마감 일자</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>
+            <input type="text" text="id">
+        </td>
+        <td>
+            <input type="text" text="id">
+        </td>
+        <td>
+            <input type="text" text="id">
+        </td>
+        <td>
+            <input type="text" text="id">
+        </td>
+    </tr>
+
+
+
+
+</table>
+
+<!--<span class="addDoc" style="font-size:17px">▣ 의료진</span>-->
+
+<!--<span style="margin-left:500px">-->
+
+<!--						<input class="btn btn-default btn-sm" type="button" value="의료진 추가">-->
+
+<!--					</span>-->
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr><input type=button value='항목 추가' onclick="addItem()"></tr>
+    <tr>
+        <th>문제 번호</th>
+        <th>카테고리</th>
+        <th>문제 내용</th>
+        <th>모범 답안</th>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" text="id">
+        </td>
+        <td>
+            <input type="text" text="id">
+        </td>
+        <td>
+            <input type="text" text="id">
+        </td>
+        <td>
+            <input type="text" text="id">
+        </td>
+    </tr>
+
+    </thead>
+
+
+
+</table>
+
+<!--<div class="add_doctor" style="margin-top:20px">-->
+<!--    <div class="doctorname">-->
+<!--        <div class="dn">-->
+<!--            <span class="important">* </span>&nbsp; 이름-->
+<!--        </div>-->
+<!--        <div class="inputdname">-->
+<!--            <input type="text" class="indname">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="doctorseol">-->
+<!--        <div class="dss">-->
+<!--            <span class="important">* </span>&nbsp; 설명-->
+<!--        </div>-->
+<!--        <div class="inputdnse">-->
+<!--            <input type="text" class="inds">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="doctorname">-->
+<!--        <div class="dn">-->
+<!--            <span class="important">* </span>&nbsp; 이미지-->
+<!--        </div>-->
+<!--        <div class="inputdname">-->
+<!--            <input type="file" class="indname">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="docList">-->
+<!--</div>-->
+
+
+<!--<script>-->
+<!--    function addItem() {-->
+<!--        if(30 <= noTh)        {-->
+<!--            alert('더이상 추가하실수 없습니다.');-->
+<!--            return;-->
+<!--        }-->
+<!--        noTh = noTh + 1;-->
+
+<!--        <tr>하이</tr>-->
+<!--        layer1.innerHTML=layer1.innerHTML-->
+<!--            +'<table>'-->
+<!--            +'        <tr>'-->
+<!--            +'                  <td><input name=rg_ext20[] type=text class=basic size=20></td>'-->
+<!--            +'                  <td><input name=rg_ext21[] type=text class=basic size=20></td>'-->
+<!--            +'                  <td><input name=rg_ext22[] type=text class=basic size=20></td>'-->
+<!--            +'                  <td><input name=rg_ext23[] type=text class=basic size=20></td>'-->
+<!--            +'                  <td><input name=rg_ext24[] type=text class=basic size=20></td>'-->
+<!--            +'                  <td><input name=rg_ext25[] type=text class=basic size=20></td>'-->
+<!--            +'        </tr>';-->
+<!--        +'</table>';-->
+<!--        layer1.style.display = "";-->
+<!--    }-->
+<!--</script>-->
+
+<script>
+    const btnPut = document.querySelector('#addDoc');
+    if(btnPut)
+        document.getElementById("addDoc").addEventListener("click", function(e){
+        var target = document.querySelector(".add_doctor").cloneNode(true);
+        document.querySelector(".docList").innerHTML += target.innerHTML;
+    });
+</script>
+
+</body>
+</html>
