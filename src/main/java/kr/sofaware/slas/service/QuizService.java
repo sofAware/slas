@@ -1,5 +1,6 @@
 package kr.sofaware.slas.service;
 
+import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Quiz;
 import kr.sofaware.slas.entity.QuizSubmit;
 import kr.sofaware.slas.repository.QuizRepository;
@@ -128,4 +129,12 @@ public class QuizService {
     public Optional<QuizSubmit> read(String SyllabusId){
         return quizSubmitRepository.findByQuiz_SyllabusId(SyllabusId);
     }
+
+    public  List<Quiz> findAllBySyllabus_IdAndId(String SyllabusId,String Id){
+        return quizRepository.findAllBySyllabus_IdAndId(SyllabusId,Id);
+    }
+
+//    public Optional<Quiz> read(String SyllabusId,String Id) {
+//        return quizRepository.findById(Quiz);
+//    }
 }

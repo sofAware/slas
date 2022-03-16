@@ -61,8 +61,9 @@
         <td th:if="${quizList.get(i).getSubmitted() eq true}" th:text="O"></td>
         <td th:unless="${quizList.get(i).getSubmitted() eq true}" th:text="X"></td>
         <td>
-            <button th:unless="${quizList.get(i).getSubmitted() eq true}" type="button" name="button" id="test">응시</button>
+            <button th:unless="${quizList.get(i).getSubmitted() eq true}" type="button" name="button" id="test" th:attr="data-sid=${quizList.get(i).getId()}">응시</button>
         </td>
+
 
     </tr>
     </tbody>
@@ -79,8 +80,9 @@
     const btnPut = document.querySelector('#test');
     if (btnPut)
         btnPut.addEventListener('click', evt => {
-            const sid = document.querySelector('#syllabus').getAttribute('data-sid');
-            location.href = '/s/quiz/detail/' + ( sid ? '?syllabus-id=' + sid : '');
+            const sid = document.querySelector('#test').getAttribute('data-sid');
+            const sidd = document.querySelector('#syllabus').getAttribute('data-sid');
+            location.href = '/s/quiz/detail/' + sid +'&'+sidd;
         });
 </script>
 
