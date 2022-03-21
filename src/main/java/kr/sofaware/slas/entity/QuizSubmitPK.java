@@ -1,11 +1,15 @@
 package kr.sofaware.slas.entity;
 
-import lombok.EqualsAndHashCode;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuizSubmitPK implements Serializable {
-    private Quiz quiz;          // 퀴즈
-    private Member student;
+    private QuizPK quiz;
+    private String student;
 }
