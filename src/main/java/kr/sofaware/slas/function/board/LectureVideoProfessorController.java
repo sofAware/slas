@@ -98,13 +98,14 @@ public class LectureVideoProfessorController {
     @GetMapping("view")
     public String view(Model model, Principal principal,
                        @RequestParam("syllabus-id") String syllabusId,
-                       @RequestParam("id") String id) {
+                       @RequestParam("id") String idStr) {
 
         // 학정번호, 주회차를 입력하지 않았다면 400
-        if (syllabusId == null || id == null)
+        if (syllabusId == null || idStr == null)
             return "error/400";
 
         // 강의영상 가져오기
+        int id = Integer.parseInt(idStr);
         Optional<LectureVideo> lectureVideo = lectureVideoService.get(syllabusId, id);
 
         // 없으면 404
@@ -158,7 +159,7 @@ public class LectureVideoProfessorController {
         // 강의영상 엔티티 만들기
         LectureVideo lectureVideo = new LectureVideo(
                 syllabusService.findById(lectureVideoDto.getSyllabusId()).get(),
-                lectureVideoDto.getId(),
+                lectureVideoDto.getWeek(),
                 lectureVideoDto.getTitle(),
                 lectureVideoDto.getAttendanceStart(),
                 lectureVideoDto.getAttendanceEnd(),
@@ -188,9 +189,10 @@ public class LectureVideoProfessorController {
     @GetMapping("edit")
     public String GetEditing(Model model, Principal principal,
                              @RequestParam("syllabus-id") String syllabusId,
-                             @RequestParam("id") String id) {
+                             @RequestParam("id") String idStr) {
 
         // 게시글 가져오기
+        int id = Integer.parseInt(idStr);
         Optional<LectureVideo> lv = lectureVideoService.get(syllabusId, id);
 
         // 없으면 404
@@ -209,9 +211,10 @@ public class LectureVideoProfessorController {
     @PostMapping("edit")
     public String postEditing(LectureVideoDto lectureVideoDto, Principal principal,
                               @RequestParam("syllabus-id") String syllabusId,
-                              @RequestParam("id") String id) throws IOException {
+                              @RequestParam("id") String idStr) throws IOException {
 
         // 게시글 가져오기
+        int id = Integer.parseInt(idStr);
         Optional<LectureVideo> oLectureVideo = lectureVideoService.get(syllabusId, id);
 
         // 없으면 404
@@ -244,7 +247,7 @@ public class LectureVideoProfessorController {
 
         // 새로운 값들로 세팅
         lectureVideo.update(
-                lectureVideoDto.getId(),
+                lectureVideoDto.getWeek(),
                 lectureVideoDto.getTitle(),
                 lectureVideoDto.getAttendanceStart(),
                 lectureVideoDto.getAttendanceEnd(),
@@ -262,9 +265,10 @@ public class LectureVideoProfessorController {
     @GetMapping("delete")
     public String delete(Model model, Principal principal,
                          @RequestParam("syllabus-id") String syllabusId,
-                         @RequestParam("id") String id) {
+                         @RequestParam("id") String idStr) {
 
         // 강의영상 가져오기
+        int id = Integer.parseInt(idStr);
         Optional<LectureVideo> lv = lectureVideoService.get(syllabusId, id);
 
         // 없으면 404

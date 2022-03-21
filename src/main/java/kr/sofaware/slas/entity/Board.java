@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board implements Serializable {
@@ -31,7 +32,7 @@ public class Board implements Serializable {
     private int category;               // 분류 (1: 공지사항, 2: 강의자료, ...)
     private String title;               // 제목
 
-    @Column(length = 500)
+    @Column(length = 10000)
     private String content;             // 내용
 
     @ManyToOne

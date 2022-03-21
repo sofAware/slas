@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 기본 인가 범위
                 .authorizeRequests()
-                .antMatchers("/login", "/signup").permitAll()   // 누구나 접근 허용
+                .antMatchers("/login", "/signup", "/api/**").permitAll()   // 누구나 접근 허용
                 .antMatchers("/p/**").hasRole("PROFESSOR")      // 교수만 접근 허용
                 .antMatchers("/s/**").hasRole("STUDENT")        // 학생만 접근 허용
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // csrf 일부 비활성화
                 .and()
                 .csrf() //회원가입은 /login 에서 이뤄지므로 /signup 으로 post 날라오면
-                .ignoringAntMatchers("/signup") // csrf 비활성화
+                .ignoringAntMatchers("/signup", "/api/**") // csrf 비활성화
 
                 // 인증 및 실패 핸들링
                 .and()

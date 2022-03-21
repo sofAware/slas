@@ -97,13 +97,14 @@ public class LectureVideoStudentController {
     @GetMapping("view")
     public String view(Model model, Principal principal,
                        @RequestParam("syllabus-id") String syllabusId,
-                       @RequestParam("id") String id) {
+                       @RequestParam("id") String idStr) {
 
         // 학정번호, 주회차를 입력하지 않았다면 400
-        if (syllabusId == null || id == null)
+        if (syllabusId == null || idStr == null)
             return "error/400";
 
         // 강의영상 가져오기
+        int id = Integer.parseInt(idStr);
         Optional<LectureVideo> lectureVideo = lectureVideoService.get(syllabusId, id);
 
         // 없으면 404

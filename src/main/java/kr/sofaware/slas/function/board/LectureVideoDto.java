@@ -18,17 +18,12 @@ public class LectureVideoDto {
     private String title;
 
     private int week;
-    private int time;
 
     private String attendanceStart;
     private String attendanceEnd;
 
     private MultipartFile file;
     private String deleteFile;
-
-    public String getId() {
-        return week + "-" + time;
-    }
 
     public Date getAttendanceStart() {
         try {

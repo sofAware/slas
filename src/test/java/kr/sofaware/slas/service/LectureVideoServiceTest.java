@@ -27,7 +27,7 @@ class LectureVideoServiceTest {
     @Test
     void save() {
         Syllabus s = syllabusRepository.getById("21-2-0101-3-0002-01");
-        LectureVideo lectureVideo = new LectureVideo(s, "3-5", "타이틀틀틀", new Date(), new Date(), 13, "path");
+        LectureVideo lectureVideo = new LectureVideo(s, 3, "타이틀틀틀", new Date(), new Date(), 13, "path");
 
         lectureVideoService.save(lectureVideo);
     }

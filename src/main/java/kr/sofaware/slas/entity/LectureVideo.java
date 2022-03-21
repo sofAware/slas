@@ -20,7 +20,7 @@ public class LectureVideo {
 
     @Id
     @Column
-    private String id;                  // 강의영상 아이디 (<주차>-<회차>, 1-1, 1-2, ...)
+    private int id;                     // 강의영상 주차
 
     private String name;                // 강의영상 제목
 
@@ -31,7 +31,7 @@ public class LectureVideo {
 
     private String attachmentPath;      // 강의영상 경로
 
-    public void update(String id, String name, Date attendanceStart, Date attendanceEnd, int duration, String attachmentPath) {
+    public void update(int id, String name, Date attendanceStart, Date attendanceEnd, int duration, String attachmentPath) {
         this.id = id;
         this.name = name;
         this.attendanceStart = attendanceStart;

@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LectureVideoRepository extends JpaRepository<LectureVideo, LectureVideoPK> {
-    Optional<LectureVideo> findBySyllabus_IdAndId(String syllabusId, String id);
+    Optional<LectureVideo> findBySyllabus_IdAndId(String syllabusId, int id);
     List<LectureVideo> findAllBySyllabus_Id(String syllabusId);
 }

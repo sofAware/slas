@@ -41,13 +41,11 @@
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="inputWeek" class="col-sm-2 col-form-label">주회차</label>
+            <label for="inputWeek" class="col-sm-2 col-form-label">주차</label>
             <div class="col-sm-10">
                 <div class="input-group col-sm-10">
                     <input type="number" class="form-control" id="inputWeek" name="week"
-                           th:value="${lv}?${lv.getId().split('-')[0]}:1">
-                    <input type="number" class="form-control" id="inputTime" name="time"
-                           th:value="${lv}?${lv.getId().split('-')[1]}:1">
+                           th:value="${lv}?${lv.getId()}:1">
                 </div>
             </div>
         </div>
