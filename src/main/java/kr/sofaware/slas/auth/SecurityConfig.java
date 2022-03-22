@@ -31,11 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 기본 인가 범위
                 .authorizeRequests()
-                .antMatchers("/login", "/signup", "/api/**").permitAll()   // 누구나 접근 허용
-                .antMatchers("/p/**").hasRole("PROFESSOR")      // 교수만 접근 허용
-                .antMatchers("/s/**").hasRole("STUDENT")        // 학생만 접근 허용
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스 항상 공개
-                .anyRequest().authenticated() //나머지는 로그인만 하면 접근 가능
+                .antMatchers("/login", "/signup", "/assets/**", "/api/**").permitAll()  // 누구나 접근 가능
+                .antMatchers("/p/**").hasRole("PROFESSOR")                              // 교수만 접근 허용
+                .antMatchers("/s/**").hasRole("STUDENT")                                // 학생만 접근 허용
+                .anyRequest().authenticated()                                                      // 나머지는 로그인만 하면 접근 가능
 
                 // 로그인
                 .and()

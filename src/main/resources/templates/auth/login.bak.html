@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="/frame/head.html">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.css" rel="stylesheet">
+    <title>소파대학교 로그인</title>
+    <style>
+        html, body {
+            background-color: #f5f5f5;
+        }
+
+        html {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        main {
+            width: 100%;
+            max-width: 360px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        main .form-floating:focus-within {
+            z-index: 2;
+        }
+
+        main input[type="text"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        main input[type="password"] {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        label[for='floatingPassword'] {
+            z-index: 1040;
+        }
+    </style>
+</head>
+<body class="text-center">
+
+<!-- section -->
+<main>
+    <form th:action="@{/login}" id="login" method="POST">
+        <img class="mb-5" src="/assets/images/favicon.png" alt="" width="128" height="128">
+
+        <div class="form-floating">
+            <input type="text" name="username" class="form-control" id="floatingId" placeholder=" ">
+            <label for="floatingId">학번</label>
+        </div>
+        <div class="input-group form-floating mb-2">
+            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder=" " style="border-bottom-right-radius: 0;">
+            <label for="floatingPassword">비밀번호</label>
+            <span class="input-group-text" id="togglePassword" style="cursor: pointer; border-bottom-right-radius: 0.25rem;">
+                <i class="far fa-eye"></i>
+            </span>
+            <div id="floatingPasswordFeedback" class="invalid-feedback">
+                학번 혹은 비밀번호가 틀렸습니다.
+            </div>
+        </div>
+
+        <div class="container g-0 mb-2">
+            <div class="row">
+                <div class="col-6">
+                    <span class="float-start">
+                        <input type="checkbox" id="floatingRemember">
+                        <label for="floatingRemember">학번 저장</label>
+                    </span>
+                </div>
+                <div class="col-6">
+                    <button type="button" id="findPw" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="w-100 fw-bold btn btn-lg btn-block btn-primary mb-5">로그인</button>
+
+        <div class="container g-0">
+            <div class="row">
+                <div class="col-sm-6 mb-1">
+                    <button type="button" id="findId" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
+                </div>
+                <div class="col-sm-6 mb-1">
+                    <button type="button" id="signup" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="button" class="w-100 btn btn-sm btn-secondary" onclick="location.href='/privacy-policy'">개인정보 처리방침</button>
+    </form>
+</main>
+
+<div th:replace="/frame/tail.html"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="/assets/js/login.js"></script>
+</body>
+</html>
