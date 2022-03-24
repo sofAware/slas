@@ -152,25 +152,31 @@
 
     <div>
         <h4>강의 영상</h4>
-        <thead>
-            <tr>
-                <th>주차</th>
-                <th>회차</th>
-                <th>강의 제목</th>
-                <th>학습 기간</th>
-                <th>진도율</th>
-            </tr>
-        </thead>
-
-
-
-
-
-
-
-
-
-
+        <table>
+            <thead>
+                <tr>
+                    <th>주회차</th>
+                    <th>제목</th>
+                    <th>출석기간</th>
+                    <th>길이</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody th:if="${lectureVideoList.isEmpty() eq false}">                                                            <!-- 강의 영상 목록이 존재하는 경우 -->
+                <tr th:each="i : ${#numbers.sequence(0,lectureVideoList.size()-1)}">
+                    <td th:text="${lectureVideoList.get(i).getId()}"></td>
+                    <td th:text="${lectureVideoList.get(i).getName()}"></td>
+                    <td th:text="${#dates.format(lectureVideoList.get(i).getAttendanceStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(lectureVideoList.get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${lectureVideoList.get(i).getDuration()}"></td>
+                    <td><a>보러가기</a></td>
+                </tr>
+            </tbody>
+            <tbody th:unless="${lectureVideoList.isEmpty() eq false}">                                                        <!-- 강의 영상 목록이 없는 경우 -->
+                <tr>
+                    <td th:colspan="5">등록된 내용이 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <a>QnA 게시판 보러가기</a><br>
