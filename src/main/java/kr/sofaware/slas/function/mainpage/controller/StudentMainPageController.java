@@ -1,10 +1,9 @@
 package kr.sofaware.slas.function.mainpage.controller;
 
 //import kr.sofaware.slas.service.ProfessorService;
-import kr.sofaware.slas.entity.Assignment;
-import kr.sofaware.slas.entity.Member;
-import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.entity.*;
 import kr.sofaware.slas.function.mainpage.dto.*;
+import kr.sofaware.slas.function.total.dto.LectureVideoDto;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -22,11 +21,12 @@ import java.util.*;
 @RequestMapping("/s")
 public class StudentMainPageController {
 
-        //private final AssignmentBoardService assignmentBoardService;
         private final AssignmentService assignmentService;
         private final LectureService lectureService;
         private final MemberService memberService;
         private final NoticeService noticeService;
+        private final LectureVideoService lectureVideoService;
+        private final AttendanceService attendanceService;
 
         //학생 메인페이지
         @GetMapping("main")
@@ -82,16 +82,35 @@ public class StudentMainPageController {
                     if(assignmentService.existsByAssignment_IdAndMember_Id(a.getId(),username))
                         iter.remove();
                 }
+
                 List<AssignmentDto> assignmentDtoList=new ArrayList<>();                                        // dto 로 변환해서 syllabusDto 내부에 set
                 assignmentList.forEach(assignment -> assignmentDtoList.add(new AssignmentDto(assignment)));
                 s.setAssignmentDtoList(assignmentDtoList);
+
+                // 이 과목에서 제출 마감일 젤 빠른 과제가 여러 개일 경우 처리
+                if(assignmentDtoList.isEmpty()==false)
+                    s.setUrgentAssignments(assignmentDtoList);
             }
 
+            // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 lectureVideoDtoList 에 아직 수강하지 않은 강의들을 마감일 빠른 순으로 (최대 5개? 3개? 까지) 출력
+            for(SyllabusDtoForStu s : syllabusDtoList){
+                List<LectureVideo> lectureVideoList=lectureVideoService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
 
-            // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 videoLectureDtoList 에 아직 수강하지 않은 강의들을 마감일 빠른 순으로 (최대 5개? 3개? 까지) 출력
-            // 이거는 근데 올라온 수업 강의 영상들을 시청했냐 안했냐 가 먼저 판단되야 해서 ***나중에*** 해야 할듯..
-            // 근데 강의 시청했냐 아니냐를 어떻게 알지? 출석체크로 아나?? 출석->수강완료 / 지각->수강완료 / 결석->수강미완료 이렇게 처리?? 강의 몇퍼센트 시청했고 이런 것도 할 건가???!
-            // 강의 영상 시청 여부를 board 의 칼럼으로 추가하는 방안은 ?!?!?!????!?
+                for(Iterator<LectureVideo> iter = lectureVideoList.iterator(); iter.hasNext();){                  // 수강한 강의라면 목록에서 삭제
+                    LectureVideo lv=iter.next();
+                    if(attendanceService.findBySyllabus_IdAndStudent_Id(s.getId(),username).getWeek(Integer.parseInt(lv.getId())) != Attendance.NOINPUT)
+                        iter.remove();
+                }
+
+                List<LectureVideoDto> lectureVideoDtoList=new ArrayList<>();                                // dto 로 변환해서 syllabusDto 내부에 set
+                lectureVideoList.forEach(lv -> lectureVideoDtoList.add(new LectureVideoDto(lv)));
+                s.setLectureVideoDtoList(lectureVideoDtoList);
+
+                // 이 과목에서 수강 마감일 젤 빠른 강의가 여러 개일 경우 처리
+                if(lectureVideoDtoList.isEmpty()==false)
+                    s.setUrgentLectureVideos(lectureVideoDtoList);
+            }
+
 
             model.addAttribute("MainPageDto", StudentMainPageDto.builder()                       // studentMainPageDto 를 view 에 전달
                                                                             .id(username)

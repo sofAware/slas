@@ -24,7 +24,7 @@
 
 </head>
 <body>
-<header th:replace="/frame/sHeader.html"></header>
+<header th:replace="/frame/pHeader.html"></header>
     <!-- Copy & Edit here! -->
 
     <div class="d-flex justify-content-center gap-4">
@@ -137,20 +137,31 @@
 
     <div>
         <h4>강의 영상</h4>
-        <thead>
-            <tr>
-                <th>주차</th>
-                <th>회차</th>
-                <th>강의 제목</th>
-                <th>학습 기간</th>
-            </tr>
-        </thead>
-
-
-
-
-
+        <table>
+            <thead>
+                <tr>
+                    <th>주회차</th>
+                    <th>제목</th>
+                    <th>출석기간</th>
+                    <th>길이</th>
+                </tr>
+            </thead>
+            <tbody th:if="${lectureVideoList.isEmpty() eq false}">                                                            <!-- 강의 영상 목록이 존재하는 경우 -->
+                <tr th:each="i : ${#numbers.sequence(0,lectureVideoList.size()-1)}">
+                    <td th:text="${lectureVideoList.get(i).getId()}"></td>
+                    <td th:text="${lectureVideoList.get(i).getName()}"></td>
+                    <td th:text="${#dates.format(lectureVideoList.get(i).getAttendanceStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(lectureVideoList.get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${lectureVideoList.get(i).getDuration()}"></td>
+                </tr>
+            </tbody>
+            <tbody th:unless="${lectureVideoList.isEmpty() eq false}">                                                        <!-- 강의 영상 목록이 없는 경우 -->
+                <tr>
+                    <td th:colspan="4">등록된 내용이 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+
 
     <a>강의 자료 바로가기</a><br>
     <a>출석 체크 바로가기</a><br>

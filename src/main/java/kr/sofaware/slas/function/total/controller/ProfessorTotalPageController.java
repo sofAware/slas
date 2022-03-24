@@ -1,10 +1,8 @@
 package kr.sofaware.slas.function.total.controller;
 
-import kr.sofaware.slas.entity.Assignment;
-import kr.sofaware.slas.entity.Board;
-import kr.sofaware.slas.entity.Quiz;
-import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.entity.*;
 import kr.sofaware.slas.function.mainpage.dto.NoticeDto;
+import kr.sofaware.slas.function.total.dto.LectureVideoDto;
 import kr.sofaware.slas.service.*;
 import kr.sofaware.slas.function.total.dto.AssignmentDto;
 import kr.sofaware.slas.function.total.dto.QnADto;
@@ -29,6 +27,7 @@ public class ProfessorTotalPageController {
     private final QuizService quizService;
     private final AssignmentService assignmentService;
     private final QnaService qnaService;
+    private final LectureVideoService lectureVideoService;
 
     //교수 강의 종합 페이지
     @GetMapping("total")
@@ -100,12 +99,18 @@ public class ProfessorTotalPageController {
 
 
         // 강의 영상 목록
+        List<LectureVideo> lectureVideoList = new ArrayList<>();
+        lectureVideoList.addAll(lectureVideoService.listAll(syllabusId));
+
+        List<LectureVideoDto> lectureVideoDtoList=new ArrayList<>();
+        lectureVideoList.forEach(lv -> lectureVideoDtoList.add(new LectureVideoDto(lv)));
+
+
         model.addAttribute("noticeList",noticeDtoList);                             // 공지 사항
         model.addAttribute("assignmentList",assignmentDtoList);                     // 과제 목록
         model.addAttribute("quizList",quizDtoList);                                 // 퀴즈 목록
         model.addAttribute("qnAList",qnADtoList);                                   // 질문 게시판 목록
-
-
+        model.addAttribute("lectureVideoList",lectureVideoDtoList);                 // 강의 영상 목록
 
         return "total/professor-totalpage";
     }

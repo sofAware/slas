@@ -1,14 +1,9 @@
 package kr.sofaware.slas.function.total.controller;
 
-import kr.sofaware.slas.entity.Assignment;
-import kr.sofaware.slas.entity.Quiz;
-import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.entity.*;
 import kr.sofaware.slas.function.mainpage.dto.NoticeDto;
+import kr.sofaware.slas.function.total.dto.*;
 import kr.sofaware.slas.service.*;
-import kr.sofaware.slas.function.total.dto.AssignmentDto;
-import kr.sofaware.slas.function.total.dto.AttendanceDto;
-import kr.sofaware.slas.function.total.dto.QuizDto;
-import kr.sofaware.slas.function.total.dto.SubjectStatusDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -30,6 +25,8 @@ public class StudentTotalPageController {
     private final QuizService quizService;
     private final LectureFileService lectureFileService;
     private final AttendanceService attendanceService;
+    private final LectureVideoService lectureVideoService;
+
 
     //학생 강의 종합 페이지
     @GetMapping("total")
@@ -103,26 +100,32 @@ public class StudentTotalPageController {
             a.setSubmitTrue(assignmentService.existsByAssignment_IdAndMember_Id(a.getId(),principal.getName()));
 
 
-        // 과목 현황    ===>  "수강한 강의 개수 / 전체 강의 개수" 는 강의 출석 처리 어떻게 할건지 얘기 듣고 채워주기 ~!~!~!~
+        // 과목 현황 -> 완료한 과제 개수
         int finishedQuiz=0;                                        // quizDtoList 에서 submitted == true 인것들의 개수
         for(QuizDto q : quizDtoList)
             if(q.getSubmitted()==true)
                 finishedQuiz++;
 
-
         // 강의 영상 목록
+        List<LectureVideo> lectureVideoList = new ArrayList<>();
+        lectureVideoList.addAll(lectureVideoService.listAll(syllabusId));
 
+        List<LectureVideoDto> lectureVideoDtoList=new ArrayList<>();
+        lectureVideoList.forEach(lv -> lectureVideoDtoList.add(new LectureVideoDto(lv)));
 
-
-
-
+        // 과목 현황 -> 완료한 강의 개수 (출석 제대로한 강의 & 지각이지만 그래도 들은 강의만 인정)
+        int finishedLectureVideo=0;
+        for(LectureVideoDto lv : lectureVideoDtoList){
+            if(attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()).getWeek(Integer.parseInt(lv.getId()))== Attendance.ATTEND||attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()).getWeek(Integer.parseInt(lv.getId()))== Attendance.LATE)
+                finishedLectureVideo++;
+        }
 
         model.addAttribute("noticeList",noticeDtoList);                             // 공지 사항
         model.addAttribute("assignmentList",assignmentDtoList);                     // 과제 목록
         model.addAttribute("quizList",quizDtoList);                                 // 퀴즈 목록
         model.addAttribute("subjectStatus",SubjectStatusDto.builder()               // 과목 현황
-                                                                        .finishedLecture(0)
-                                                                        .totalLecture(0)
+                                                                        .finishedLecture(finishedLectureVideo)
+                                                                        .totalLecture(lectureVideoList.size())
                                                                         .finishedAssignment(assignmentService.countSubmittedAssignment(syllabusId, principal.getName()))
                                                                         .totalAssignment(assignmentService.countBySyllabus_Id(syllabusId))
                                                                         .finishedQuiz(finishedQuiz)
@@ -130,7 +133,7 @@ public class StudentTotalPageController {
                                                                         .lectureFiles(lectureFileService.countLectureFiles(syllabusId))
                                                                         .build());
         model.addAttribute("attendance",new AttendanceDto(attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName())));       // 출석 내역
-
+        model.addAttribute("lectureVideoList",lectureVideoDtoList);                 // 강의 영상 목록
 
         return "total/student-totalpage";
     }

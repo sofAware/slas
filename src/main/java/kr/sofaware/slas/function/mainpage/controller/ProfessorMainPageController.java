@@ -76,6 +76,10 @@ public class ProfessorMainPageController {
             List<AssignmentDto> assignmentDtoList=new ArrayList<>();                                        // dto 로 변환해서 syllabusDto 내부에 set
             assignmentList.forEach(assignment -> assignmentDtoList.add(new AssignmentDto(assignment)));
             s.setAssignmentDtoList(assignmentDtoList);
+
+            // 이 과목에서 제출 마감일 젤 빠른 과제가 여러 개일 경우 처리
+            if(assignmentDtoList.isEmpty()==false)
+                s.setUrgentAssignments(assignmentDtoList);
         }
 
         model.addAttribute("MainPageDto", ProfessorMainPageDto.builder()                       // ProfessorMainPageDto 를 view 에 전달
