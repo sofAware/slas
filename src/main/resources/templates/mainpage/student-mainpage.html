@@ -141,12 +141,29 @@
 
 
         <h4>남은 강의</h4>
+        <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().isEmpty() eq false}">
+            <p th:text="${'이 과목의 남은 강의 개수는 '+MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()+' 개 입니다.'}"></p>
+            <p th:text="${'가장 빠른 마감일은 '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')+' 입니다.'}"></p>
+            <p>남은 강의들의 목록</p>
+            <!-- 남은 강의들의 목록이 3개 이하인 경우 -->
+            <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()-1)}">
+                <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}"></a>
+            </div>
+            <!-- 남은 강의들의 목록이 3개 넘는 경우 => 3개까지만 보여주기 -->
+            <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,2)}">
+                <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}"></a>
+            </div>
+        </div>
+        <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().isEmpty() eq false}">
+            <p>남은 강의가 없습니다!</p>
+        </div>
 
 
         <h4>남은 과제</h4>
         <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
             <p th:text="${'이 과목의 남은 과제 개수는 '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()+' 개 입니다.'}"></p>
             <p th:text="${'가장 빠른 마감일은 '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' 이고, 과제명은 '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getName()+' 입니다.'}"></p>
+<!--            <p th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).size())}" th:text="${MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).get(i).getName()}"></p>-->
             <p>남은 과제들의 목록</p>
             <!-- 남은 과제들의 목록이 3개 이하인 경우 -->
             <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()-1)}">

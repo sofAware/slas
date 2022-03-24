@@ -6,10 +6,7 @@ import kr.sofaware.slas.repository.GradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,5 +23,20 @@ public class GradeService {
                        .comparing(Grade::getYear).reversed()
                        .thenComparing(Grade::getSemester).reversed())
                .collect(Collectors.toList());
+    }
+
+    public Optional<Grade> findByStudentIdAndYearAndSemester(String studentId, int year, int semester)
+    {
+        return gradeRepository.findByStudent_IdAndYearAndSemester(studentId, year, semester);
+    }
+
+    public List<Optional<Grade>> findAllByYearAndSemesterOrderByGradeAvgDESC(int year, int semester)
+    {
+        return gradeRepository.findAllByYearAndSemesterOrderByGradeAvgDesc(year, semester);
+    }
+
+    public Grade save(Grade grade)
+    {
+        return gradeRepository.save(grade);
     }
 }
