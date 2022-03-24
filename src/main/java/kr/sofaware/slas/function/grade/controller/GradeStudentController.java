@@ -48,6 +48,9 @@ public class GradeStudentController {
         AtomicReference<Double> geSubjectGrade = new AtomicReference<>((double) 0); //교양 성적 학점 총합
         AtomicReference<Double> majorSubjectGrade = new AtomicReference<>((double) 0); //교양 성적 학점 총합
 
+        //0. 모든 학생에 대해서 석차 업데이트 실시
+
+
         //1. 인적 사항 조회
         Member studentInfo = memberService.loadUserByUsername(studentId);
         model.addAttribute("studentInfo", studentInfo);

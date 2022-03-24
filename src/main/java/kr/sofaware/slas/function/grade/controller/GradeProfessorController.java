@@ -1,9 +1,8 @@
 package kr.sofaware.slas.function.grade.controller;
 
-import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Lecture;
-import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.service.GradeService;
 import kr.sofaware.slas.service.LectureService;
 import kr.sofaware.slas.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RequiredArgsConstructor
 @Controller
@@ -26,6 +26,7 @@ public class GradeProfessorController {
 
     private final SyllabusService syllabusService; //강의 정보 가져올 때 사용
     private final LectureService lectureService;
+    private final GradeService gradeService;
 
     @GetMapping("grade")
     public String getProfessorGrade(Authentication authentication, Principal principal, Model model,
@@ -100,11 +101,11 @@ public class GradeProfessorController {
         lectureService.saveByPutMethod(lectureForSave);
 */
 
+
         lecture.ifPresent(selectLecture -> {
             selectLecture.setGrade(grade);
             lectureService.saveByPutMethod(selectLecture);
         });
-
 
         //위 방법이 더 update에 특화된 코드이기에 새로 만들어주고 삭제하는 작업은 구조상 맞지 않다고 판단.
         //Lecture newLecture = new Lecture(lecture.getStudent(), lecture.getSyllabus(), grade);
@@ -112,6 +113,83 @@ public class GradeProfessorController {
         //lectureService.deleteByStudentId(studentId);
         //새로운 학점 추가
         //lectureService.saveByPutMethod(newLecture);
+
+        //Grade 평점/석차 수정
+        int year = 0; int semester = 0;
+        List<Lecture> allLectures;
+        List<Lecture> selectedLectures = new ArrayList<>();
+        List<Lecture> selectedMajorLectures = new ArrayList<>();
+
+        AtomicReference<Double> sumOfGradeAvg = new AtomicReference<>(0.0); AtomicReference<Double> sumOfMajorGradeAvg = new AtomicReference<>(0.0);
+        double gradeAvg; double majorGradeAvg;
+
+        //2. syllabus_id를 토대로 year와 semester 저장
+        year = Integer.parseInt("20" + syllabusId.substring(0,2));
+        semester = Integer.parseInt(syllabusId.substring(3,4));
+
+        log.error(year);
+        log.error(semester);
+
+        //3. lecture 테이블에서 학생 정보를 기반으로 가져와서 list에 저장
+        allLectures = lectureService.findAllByStudentId(studentId);
+        allLectures.forEach(allLecture -> {
+
+            //학기/년도 맞는 지 확인
+            if(allLecture.getSyllabus().getId().substring(0,4).equals(syllabusId.substring(0,4)))
+            {
+                selectedLectures.add(allLecture);
+
+                //만약 전공이라면?
+                if(allLecture.getSyllabus().getCategory() == "전선" || allLecture.getSyllabus().getCategory() == "전필")
+                    selectedMajorLectures.add(allLecture);
+            }
+        });
+
+        //전체 평점 및 전공 평점 업로드
+        selectedLectures.forEach(sl -> {
+            sumOfGradeAvg.updateAndGet(v -> (double) (v + sl.getGrade()));
+        });
+        gradeAvg = sumOfGradeAvg.get() / (double) selectedLectures.size();
+
+        log.error("전체평점? : " + gradeAvg);
+
+        gradeService.findByStudentIdAndYearAndSemester(studentId, year, semester).ifPresent(select -> {
+            select.setGradeAvg(gradeAvg);
+            gradeService.save(select);
+        });
+
+        //만약 전공 교과목이라면
+        Optional<Syllabus> syllabus =syllabusService.findBySyllabusId(syllabusId);
+        if(syllabus.get().getCategory() == "전선" || syllabus.get().getCategory() == "전필")
+        {
+            selectedMajorLectures.forEach(sml -> {
+                sumOfMajorGradeAvg.updateAndGet(v -> (double) (v + sml.getGrade()));
+            });
+            majorGradeAvg = sumOfMajorGradeAvg.get() / (double)selectedMajorLectures.size();
+
+            log.error("전공 평점? : " + majorGradeAvg);
+
+            gradeService.findByStudentIdAndYearAndSemester(studentId, year, semester).ifPresent(select -> {
+                select.setMajorGradeAvg(majorGradeAvg);
+                gradeService.save(select);
+            });
+        }
+
+        //석차 재선정
+        AtomicInteger ranking = new AtomicInteger(1);
+
+        //test
+        gradeService.findAllByYearAndSemesterOrderByGradeAvgDESC(year, semester).forEach(test -> {
+            log.error("석차 순서 : " + test.get().getStudent().getName() + " : " + test.get().getGradeAvg());
+        });
+
+        gradeService.findAllByYearAndSemesterOrderByGradeAvgDESC(year, semester).forEach(g -> {
+            g.ifPresent( selectedGrade -> {
+                selectedGrade.setRanking(ranking.get());
+                gradeService.save(selectedGrade);
+            });
+            ranking.getAndIncrement();
+        });
 
         return "redirect:grade";
     }
