@@ -1,0 +1,8 @@
+.auth-full-bg {
+    background-size: cover;
+    background: url('/assets/images/bg-auth-overlay.jpg') no-repeat center;
+}
+
+.auth-full-bg .bg-overlay {
+    background: rgba(0, 0, 0, 0.8) none;
+}
