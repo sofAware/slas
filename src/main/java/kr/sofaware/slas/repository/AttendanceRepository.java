@@ -20,4 +20,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Attendan
     //Optional<Attendance> findAllBySyllabusAndWeeksByList(String syllabusId,int week);
     //Optional<Attendance> findAllBySyllabus_Id(String syllabusId);
     List<Attendance> findAllBySyllabus_Id(@Param(value = "memberId") String syllabusId);
+    Optional<Attendance> findAllBySyllabus_IdAndStudent_Id(String syllabusId,String id);
+
 }

@@ -63,6 +63,8 @@ public class AttendanceService {
         return attendanceRepository.save(attendance);
     }
 
+    public Optional<Attendance> findAllBySyllabus_IdAndStudent_Id(String syllabusId,String id){return attendanceRepository.findAllBySyllabus_IdAndStudent_Id(syllabusId,id);}
+
     //public Optional update(String SyllabusId,int week) {return attendanceRepository.findAllBySyllabusAndWeeksByList(SyllabusId,week);}
 
 }

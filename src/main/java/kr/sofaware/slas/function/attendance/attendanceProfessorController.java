@@ -2,6 +2,7 @@ package kr.sofaware.slas.function.attendance;
 
 import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Attendance;
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.function.board.AssignmentDto;
 import kr.sofaware.slas.service.AttendanceService;
@@ -205,7 +206,8 @@ public class attendanceProfessorController {
                                 @PathVariable String attendanceWeekStr,
                                 @Nullable @RequestParam("year-semester") String yearSemester,
                                 @Nullable @RequestParam("syllabus-id") String syllabusId,
-                                 AttendanceDto attendanceDto){
+                                 @RequestParam("weekValue") int weekValue,
+                                 @RequestParam("student-id") String studentId){
 
 //        int attendanceWeek = Integer.parseInt(attendanceWeekStr);
 //        List<Attendance> attendances = attendanceService.listAll(syllabusId);
@@ -218,6 +220,13 @@ public class attendanceProfessorController {
 //        Attendance.AttendanceBuilder builder =Attendance.builder()
 //                .syllabus(syllabusService.findById(attendanceDto.getSyllabus()).get())
 //
-        return "redirect:/p/attendance/" + attendanceWeekStr;
+
+        Optional<Attendance> attendances = attendanceService.findAllBySyllabus_IdAndStudent_Id(syllabusId,studentId);
+
+        attendances.ifPresent(selectWeek -> {
+            selectWeek.setWeek(attendanceWeekStr,weekValue);
+            attendanceService.save(selectWeek);
+        });
+        return "redirect:/p/attendance/"+attendanceWeekStr;
     }
 }

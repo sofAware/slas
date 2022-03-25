@@ -69,24 +69,27 @@
     </tr>
     </thead>
     <tbody>
-    <form>
-        <tr  th:each="attendance : ${attendances}" >
-            <th th:text="${attendance.getStudent().getName()}"></th>
 
-            <td>
-                <input type='radio' th:name="${attendance.getWeeksByList().get(attendanceWeekStr)}" th:value='1' /></td>
-            <td>
-                <input type='radio' th:name="${attendance.getWeeksByList().get(attendanceWeekStr)}" th:value='2' /></td>
-            <td>
-                <input type='radio' th:name="${attendance.getWeeksByList().get(attendanceWeekStr)}" th:value='3' /></td>
-            <td>
-                <input type='radio' th:name="${attendance.getWeeksByList().get(attendanceWeekStr)}" th:value='4' /></td>
-        </tr>
-        <button class="btn btn-primary" type="submit" aria-expanded="false"
-                sec:authorize="hasRole('PROFESSOR')">
-            수정 완료
-        </button>
-    </form>
+    <tr  th:each="attendance : ${attendances}" >
+        <form method="POST" id="write">
+            <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+            <th th:text="${attendance.getStudent().getName()}"></th>
+            <input type="hidden" name="student-id" th:value="${attendance.getStudent().getId()}">
+            <input type="hidden" name="syllabus-id" th:value="${attendance.getSyllabus().getId()}">
+        <td>
+            <input type='radio' name="weekValue" th:value='1' /></td>
+        <td>
+            <input type='radio' name="weekValue" th:value='2' /></td>
+        <td>
+            <input type='radio' name="weekValue" th:value='3' /></td>
+        <td>
+            <input type='radio' name="weekValue" th:value='4' /></td>
+        <td><input type="submit"  value="수정">
+        </td>
+        </form>
+    </tr>
+
+
 
 
     </tbody>

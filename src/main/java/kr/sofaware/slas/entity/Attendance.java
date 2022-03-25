@@ -60,6 +60,28 @@ public class   Attendance {
         return weeksList;
     }
 
+    public void setWeek(String index,int value){
+        switch(index){
+            case "1": week1=value;
+            case "2": week2=value;
+            case "3": week3=value;
+            case "4": week4=value;
+            case "5": week5=value;
+            case "6": week6=value;
+            case "7": week7=value;
+            case "8": week8=value;
+            case "9": week9=value;
+            case "10": week10=value;
+            case "11": week11=value;
+            case "12": week12=value;
+            case "13": week13=value;
+            case "14": week14=value;
+            case "15": week15=value;
+            case "16": week16=value;
+        }
+
+    }
+
     public static String formatWeek(int week){
         switch (week){
             case  1 : return "O"; // 출석

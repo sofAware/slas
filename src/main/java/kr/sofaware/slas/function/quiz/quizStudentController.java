@@ -1,6 +1,9 @@
 package kr.sofaware.slas.function.quiz;
 
 import kr.sofaware.slas.entity.*;
+import kr.sofaware.slas.repository.MemberRepository;
+import kr.sofaware.slas.repository.QuizRepository;
+import kr.sofaware.slas.repository.QuizSubmitRepository;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -21,7 +24,9 @@ public class quizStudentController {
     private final AttendanceService attendanceService; //출석 체크 결과 받아올 곳
     private  final  MemberService memberService;
     private final QuizService quizService;
-
+    private final QuizRepository quizRepository;
+    private final MemberRepository memberRepository;
+    private final QuizSubmitRepository quizSubmitRepository;
 
     @GetMapping("/list")
     public String getQuiz(Model model, Authentication authentication, Principal principal,
@@ -227,6 +232,7 @@ public class quizStudentController {
     public String postQuizTest(Model model, Authentication authentication, Principal principal,
                                @PathVariable String testNum,
                                @PathVariable String syNo,
+                               @Nullable @RequestParam("weekValue") String weekValue,
                                @Nullable @RequestParam("year-semester") String yearSemester,
                                @PathVariable  @Nullable @RequestParam("syllabus-id") String syllabusId){
         Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
@@ -316,34 +322,36 @@ public class quizStudentController {
         List<QuizSubmit> quizSubmitList = quizService.alistAll(syllabusId);
 
         Optional<QuizSubmit> quizSubmit = quizService.read(syllabusId);
+        model.addAttribute("quizSubmit",quizSubmit);
 
-
-        QuizSubmit.QuizSubmitBuilder quizSumitBuilder=QuizSubmit.builder()
-                .answer(quizSubmit.get().getAnswer())
-                                .score(quizSubmit.get().getScore())
-                .student(memberService.loadUserByUsername(principal.getName()));
-//                BoardBuilder builder = Board.builder()
-//                .syllabus(syllabusService.findById(noticeDto.getSyllabusId()).get())
-//                .category(Board.CATEGORY_NOTICE)
-//                .title(noticeDto.getTitle())
-//                .content(noticeDto.getContent())
-//                .member(memberService.loadUserByUsername(principal.getName()))
-//                .date(new Date())
-//                .view(0);
-
-        QuizSubmit quizSubmit1 =quizSumitBuilder.build();
-        quizService.save(quizSubmit1);
-
-
-        //여기가 진짜
         List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId(syNo,testNum);
         model.addAttribute("quizTest",quizTest);
+
+//        for(int i=0;i<quizTest.size();i++){
+//            Quiz quizz = quizRepository.findById(new QuizPK(syllabusId, testNum, i)).get();
+//
+//            //Member student = memberRepository.findById(Id).get();
+//            QuizSubmit.QuizSubmitBuilder builder=QuizSubmit.builder()
+//                    .answer(quizSubmit.get().getAnswer())
+//                    .score(quizSubmit.get().getScore())
+//                    .student(memberService.loadUserByUsername(principal.getName()))
+//                    .quiz(quizz);
+//            QuizSubmit quizSubmit1 =builder.build();
+//            quizService.save(quizSubmit1);
+//        }
+        Optional<QuizSubmit> quizSubmit1=quizSubmitRepository.findByQuiz_SyllabusId(syllabusId);
+        quizSubmit1.ifPresent(select -> {
+            select.setAnswer(weekValue);
+            quizService.save(select);
+        });
+
+
         model.addAttribute("syllabusId",syNo);
 
 //        QuizSubmit.QuizSubmitBuilder builder=QuizSubmit.builder()
 //                .quiz(quizTest)
 
-        return "quiz/sQuizTest";
+        return "redirect:/s/list";
     }
 
 }
