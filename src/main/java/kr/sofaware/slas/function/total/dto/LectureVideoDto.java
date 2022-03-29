@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class LectureVideoDto {
-    private String id;                  // 강의영상 아이디 (<주차>-<회차>, 1-1, 1-2, ...)
+    private int id;                     // 강의영상 아이디 (<주차>-<회차>, 1-1, 1-2, ...)
 
     private String name;                // 강의영상 제목
 

@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta th:replace="/frame/head.html">
-    <title>Title</title>
-</head>
-<body>
-<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
-<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
+<meta th:replace="/frame/start.html">
+<!-- add your css here -->
+<title>제목을 입력하세요</title>
+<meta th:replace="/frame/mid.html">
 
 
-<!-- Copy & Edit here! -->
+<!-- add your content here! -->
 
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
-</body>
-</html>
+<meta th:replace="/frame/mid2.html">
+<!-- add your js here -->
+<meta th:replace="/frame/end.html">
