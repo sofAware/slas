@@ -1,6 +1,8 @@
 package kr.sofaware.slas.service;
 
+import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Quiz;
+import kr.sofaware.slas.entity.QuizPK;
 import kr.sofaware.slas.entity.QuizSubmit;
 import kr.sofaware.slas.repository.QuizRepository;
 import kr.sofaware.slas.repository.QuizSubmitRepository;
@@ -8,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 @RequiredArgsConstructor
 @Service
@@ -128,4 +132,17 @@ public class QuizService {
     public Optional<QuizSubmit> read(String SyllabusId){
         return quizSubmitRepository.findByQuiz_SyllabusId(SyllabusId);
     }
+
+    public  List<Quiz> findAllBySyllabus_IdAndId(String SyllabusId,String Id){
+        return quizRepository.findAllBySyllabus_IdAndId(SyllabusId,Id);
+    }
+
+    public Quiz findById(String syNo, String testNum, String testId){
+        return   quizRepository.findById(new QuizPK(syNo, testNum, parseInt(testId))).get();
+    }
+
+
+//    public Optional<Quiz> read(String SyllabusId,String Id) {
+//        return quizRepository.findById(Quiz);
+//    }
 }

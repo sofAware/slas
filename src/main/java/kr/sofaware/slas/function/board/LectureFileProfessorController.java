@@ -131,6 +131,7 @@ public class LectureFileProfessorController {
                 .content(boardDto.getContent())
                 .member(memberService.loadUserByUsername(principal.getName()))
                 .date(new Date())
+
                 .view(0);
 
         // 첨부 파일 저장
