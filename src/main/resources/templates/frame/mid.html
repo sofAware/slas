@@ -6,29 +6,8 @@
       <div class="d-flex">
         <!-- LOGO -->
         <div class="navbar-brand-box">
-          <a href="index.html" class="logo logo-dark">
-                                  <span class="logo-sm">
-                                      <img src="assets/images/logo.svg" alt="" height="22">
-                                  </span>
-            <span class="logo-lg">
-                                      <img src="assets/images/logo-dark.png" alt="" height="17">
-                                  </span>
-          </a>
-
-          <a href="index.html" class="logo logo-light">
-                                  <span class="logo-sm">
-                                      <img src="assets/images/logo-light.svg" alt="" height="22">
-                                  </span>
-            <span class="logo-lg">
-                                      <img src="assets/images/logo-light.png" alt="" height="19">
-                                  </span>
-          </a>
+          <a href="/" class="logo text-white" style="font-size: 22px">SLAS</a>
         </div>
-
-        <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
-                data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
-          <i class="fa fa-fw fa-bars"></i>
-        </button>
 
         <!-- App Search-->
         <form class="app-search d-none d-lg-block">
@@ -38,11 +17,11 @@
           </div>
         </form>
 
-        <div class="dropdown dropdown-mega d-none d-lg-block ms-2">
-          <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown" aria-haspopup="false"
+        <div class="dropdown dropdown-mega d-lg-block ms-2">
+          <button type="button" class="btn header-item waves-effect px-4" data-bs-toggle="dropdown"
+                  aria-haspopup="false"
                   aria-expanded="false">
-            <span key="t-megamenu">메뉴</span>
-            <i class="mdi mdi-chevron-down"></i>
+            <i class="fa fa-fw fa-bars"></i>
           </button>
           <div class="dropdown-menu dropdown-megamenu">
             <div class="row">
@@ -53,19 +32,19 @@
                     <h5 class="font-size-14 fw-bold" key="t-ui-components">양경호</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
-                      <li><a href="/p/notice">공지사항</a></li>
-                      <li><a href="/p/lf">강의자료</a></li>
-                      <li><a href="/p/assignment">과제</a></li>
-                      <li><a href="/p/qna">질문</a></li>
-                      <li><a href="/p/lv">강의영상</a></li>
+                      <li><a class="d-block" href="/p/notice">공지사항</a></li>
+                      <li><a class="d-block" href="/p/lf">강의자료</a></li>
+                      <li><a class="d-block" href="/p/assignment">과제</a></li>
+                      <li><a class="d-block" href="/p/qna">질문</a></li>
+                      <li><a class="d-block" href="/p/lv">강의영상</a></li>
                     </ul>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                      <li><a href="/s/notice">공지사항</a></li>
-                      <li><a href="/s/lf">강의자료</a></li>
-                      <li><a href="/s/assignment">과제</a></li>
-                      <li><a href="/s/qna">질문</a></li>
-                      <li><a href="/s/lv">강의영상</a></li>
+                      <li><a class="d-block" href="/s/notice">공지사항</a></li>
+                      <li><a class="d-block" href="/s/lf">강의자료</a></li>
+                      <li><a class="d-block" href="/s/assignment">과제</a></li>
+                      <li><a class="d-block" href="/s/qna">질문</a></li>
+                      <li><a class="d-block" href="/s/lv">강의영상</a></li>
                     </ul>
                   </div>
 
@@ -73,15 +52,15 @@
                     <h5 class="font-size-14 fw-bold" key="t-applications">김수헌</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
-                      <li><a href="/p/timetable">시간표</a></li>
-                      <li><a href="/p/grade">성적관리</a></li>
-                      <li><a href="/p/syllabus">강의 계획서</a></li>
+                      <li><a class="d-block" href="/p/timetable">시간표</a></li>
+                      <li><a class="d-block" href="/p/grade">성적관리</a></li>
+                      <li><a class="d-block" href="/p/syllabus">강의 계획서</a></li>
                     </ul>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                      <li><a href="/s/timetable">시간표</a></li>
-                      <li><a href="/s/grade">성적조회</a></li>
-                      <li><a href="/s/syllabus">강의 계획서</a></li>
+                      <li><a class="d-block" href="/s/timetable">시간표</a></li>
+                      <li><a class="d-block" href="/s/grade">성적조회</a></li>
+                      <li><a class="d-block" href="/s/syllabus">강의 계획서</a></li>
                     </ul>
                   </div>
 
@@ -89,13 +68,13 @@
                     <h5 class="font-size-14 fw-bold" key="t-extra-pages">정지민</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
-                      <li><a href="/p/main">메인페이지</a></li>
-                      <li><a href="/p/total">강의 종합</a></li>
+                      <li><a class="d-block" href="/p/main">메인페이지</a></li>
+                      <li><a class="d-block" href="/p/total">강의 종합</a></li>
                     </ul>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                      <li><a href="/s/main">메인페이지</a></li>
-                      <li><a href="/s/total">강의 종합</a></li>
+                      <li><a class="d-block" href="/s/main">메인페이지</a></li>
+                      <li><a class="d-block" href="/s/total">강의 종합</a></li>
                     </ul>
                   </div>
                 </div>
@@ -106,15 +85,15 @@
                     <h5 class="font-size-14 fw-bold" key="t-ui-components">박소현</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
-                      <li><a href="/p/attendance">출석체크</a></li>
-                      <li><a href="/p/info">개인정보</a></li>
-                      <li><a href="/p/quiz/list">퀴즈</a></li>
+                      <li><a class="d-block" href="/p/attendance">출석체크</a></li>
+                      <li><a class="d-block" href="/p/info">개인정보</a></li>
+                      <li><a class="d-block" href="/p/quiz/list">퀴즈</a></li>
                     </ul>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                      <li><a href="/s/attendance">출석체크</a></li>
-                      <li><a href="/s/info">개인정보</a></li>
-                      <li><a href="/s/quiz/list">퀴즈</a></li>
+                      <li><a class="d-block" href="/s/attendance">출석체크</a></li>
+                      <li><a class="d-block" href="/s/info">개인정보</a></li>
+                      <li><a class="d-block" href="/s/quiz/list">퀴즈</a></li>
                     </ul>
                   </div>
 
