@@ -15,7 +15,7 @@ public class LectureVideoService {
 
     private final LectureVideoRepository lectureVideoRepository;
 
-    public Optional<LectureVideo> get(String syllabusId, String id) {
+    public Optional<LectureVideo> get(String syllabusId, int id) {
         return lectureVideoRepository.findBySyllabus_IdAndId(syllabusId, id);
     }
 

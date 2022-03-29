@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LectureVideoRepository extends JpaRepository<LectureVideo, LectureVideoPK> {
-    Optional<LectureVideo> findBySyllabus_IdAndId(String syllabusId, String id);
+    Optional<LectureVideo> findBySyllabus_IdAndId(String syllabusId, int id);
     List<LectureVideo> findAllBySyllabus_Id(String syllabusId);
 
     @Query("SELECT lv FROM LectureVideo lv WHERE lv.syllabus.id = :syllabus_id AND lv.attendanceEnd >= :currentDate ORDER BY lv.attendanceEnd ASC")        //지민

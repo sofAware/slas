@@ -1,70 +1,175 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta th:replace="/frame/head.html">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.css" rel="stylesheet">
-    <link th:href="@{/css/login.css}" rel="stylesheet">
-    <title>소파대학교 로그인</title>
+
+  <meta charset="utf-8"/>
+  <title>소파대학교 로그인</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- App favicon -->
+  <link rel="shortcut icon" href="/assets/images/favicon.png">
+
+  <!-- owl.carousel css -->
+  <link rel="stylesheet" href="/assets/libs/owl.carousel/assets/owl.carousel.min.css">
+
+  <link rel="stylesheet" href="/assets/libs/owl.carousel/assets/owl.theme.default.min.css">
+
+  <!-- Bootstrap Css -->
+  <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+  <!-- Icons Css -->
+  <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+  <!-- App Css-->
+  <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css"/>
+
+  <link href="/assets/css/custom/login.css" rel="stylesheet" type="text/css"/>
+
 </head>
-<body class="text-center">
 
-<!-- section -->
-<main>
-    <form th:action="@{/login}" id="login" method="POST">
-        <img class="mb-5" src="/favicon.png" alt="" width="128" height="128">
+<body class="auth-body-bg">
 
-        <div class="form-floating">
-            <input type="text" name="username" class="form-control" id="floatingId" placeholder=" ">
-            <label for="floatingId">학번</label>
-        </div>
-        <div class="input-group form-floating mb-2">
-            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder=" " style="border-bottom-right-radius: 0;">
-            <label for="floatingPassword">비밀번호</label>
-            <span class="input-group-text" id="togglePassword" style="cursor: pointer; border-bottom-right-radius: 0.25rem;">
-                <i class="far fa-eye"></i>
-            </span>
-            <div id="floatingPasswordFeedback" class="invalid-feedback">
-                학번 혹은 비밀번호가 틀렸습니다.
+<div>
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+
+      <div class="col-xl-9">
+        <div class="auth-full-bg pt-lg-5 p-4">
+          <div class="w-100">
+            <div class="bg-overlay"></div>
+            <div class="d-flex h-100 flex-column">
+
+              <div class="p-4 mt-auto">
+                <div class="row justify-content-center">
+                  <div class="col-lg-7">
+                    <div class="text-center">
+
+                      <h4 class="mb-3"><i class="bx bxs-quote-alt-left text-primary h1 align-middle me-3"></i><span
+                          class="text-primary">5k+</span><span class="ms-1 text-light">Satisfied clients</span></h4>
+
+                      <div dir="ltr">
+                        <div class="owl-carousel owl-theme auth-review-carousel" id="auth-review-carousel">
+                          <div class="item">
+                            <div class="py-3">
+                              <p class="font-size-16 mb-4 text-light">" Fantastic theme with a ton of options. If you just want the
+                                HTML to integrate with your project, then this is the package. You can find the files in
+                                the 'dist' folder...no need to install git and all the other stuff the documentation
+                                talks about. "</p>
+
+                              <div>
+                                <h4 class="font-size-16 text-primary">Abs1981</h4>
+                                <p class="font-size-14 mb-0 text-light">- Skote User</p>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="item">
+                            <div class="py-3">
+                              <p class="font-size-16 mb-4 text-light">" If Every Vendor on Envato are as supportive as Themesbrand,
+                                Development with be a nice experience. You guys are Wonderful. Keep us the good work.
+                                "</p>
+
+                              <div>
+                                <h4 class="font-size-16 text-primary">nezerious</h4>
+                                <p class="font-size-14 mb-0 text-light">- Skote User</p>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+      <!-- end col -->
 
-        <div class="container g-0 mb-2">
-            <div class="row">
-                <div class="col-6">
-                    <span class="float-start">
-                        <input type="checkbox" id="floatingRemember">
-                        <label for="floatingRemember">학번 저장</label>
-                    </span>
+      <div class="col-xl-3">
+        <div class="auth-full-page-content p-md-5 p-4">
+          <div class="w-100">
+
+            <div class="d-flex flex-column h-100">
+              <div class="mb-4 mb-md-5">
+                <a href="" class="d-block auth-logo d-flex align-items-center gap-2">
+                  <img src="/assets/images/favicon.png" alt="" height="28">
+                  <h2 class="m-0">SLAS</h2>
+                </a>
+              </div>
+              <div class="my-auto">
+
+                <div>
+                  <h5 class="text-primary">안녕하세요!</h5>
+                  <p class="text-muted">소파대학교 학사시스템입니다.</p>
                 </div>
-                <div class="col-6">
-                    <button type="button" id="findPw" class="w-100 btn btn-sm btn-secondary">비밀번호 찾기</button>
+
+                <div class="mt-4">
+                  <form th:action="@{/login}" method="POST">
+
+                    <div class="mb-3">
+                      <label for="username" class="form-label">학번 또는 교번</label>
+                      <input type="text" name="username" class="form-control" id="username" placeholder="ID">
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">비밀번호</label>
+                      <div class="input-group auth-pass-inputgroup">
+                        <input type="password" name="password" class="form-control" placeholder="Enter password" aria-label="Password"
+                               aria-describedby="password-addon">
+                        <button class="btn btn-light " type="button" id="password-addon"><i
+                            class="mdi mdi-eye-outline"></i></button>
+                      </div>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="remember-check">
+                      <label class="form-check-label" for="remember-check">
+                        학번 기억하기
+                      </label>
+                    </div>
+
+                    <div class="mt-3 d-grid">
+                      <button class="btn btn-primary waves-effect waves-light" type="submit">로그인</button>
+                    </div>
+
+                  </form>
                 </div>
+              </div>
+
+              <div class="mt-4 mt-md-5 text-center">
+                <p class="mb-0">© 2022 sofAware</p>
+              </div>
             </div>
+
+
+          </div>
         </div>
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+  </div>
+  <!-- end container-fluid -->
+</div>
 
+<!-- JAVASCRIPT -->
+<script src="/assets/libs/jquery/jquery.min.js"></script>
+<script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="/assets/libs/simplebar/simplebar.min.js"></script>
+<script src="/assets/libs/node-waves/waves.min.js"></script>
 
-        <button type="submit" class="w-100 fw-bold btn btn-lg btn-block btn-primary mb-5">로그인</button>
+<!-- owl.carousel js -->
+<script src="/assets/libs/owl.carousel/owl.carousel.min.js"></script>
 
-        <div class="container g-0">
-            <div class="row">
-                <div class="col-sm-6 mb-1">
-                    <button type="button" id="findId" class="w-100 btn btn-sm btn-secondary">학번 조회</button>
-                </div>
-                <div class="col-sm-6 mb-1">
-                    <button type="button" id="signup" class="w-100 btn btn-sm btn-secondary">비밀번호 최초 등록</button>
-                </div>
-            </div>
-        </div>
+<!-- auth-2-carousel init -->
+<script src="/assets/js/pages/auth-2-carousel.init.js"></script>
 
+<!-- App js -->
+<script src="/assets/js/app.js"></script>
 
-        <button type="button" class="w-100 btn btn-sm btn-secondary" onclick="location.href='/privacy-policy'">개인정보 처리방침</button>
-    </form>
-</main>
-
-<div th:replace="/frame/tail.html"></div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
-<script type="text/javascript" th:src="@{/js/login.js}"></script>
 </body>
 </html>

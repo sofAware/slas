@@ -116,7 +116,7 @@ public class StudentTotalPageController {
         // 과목 현황 -> 완료한 강의 개수 (출석 제대로한 강의 & 지각이지만 그래도 들은 강의만 인정)
         int finishedLectureVideo=0;
         for(LectureVideoDto lv : lectureVideoDtoList){
-            if(attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()).getWeek(Integer.parseInt(lv.getId()))== Attendance.ATTEND||attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()).getWeek(Integer.parseInt(lv.getId()))== Attendance.LATE)
+            if(attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()).getWeek(lv.getId())== Attendance.ATTEND||attendanceService.findBySyllabus_IdAndStudent_Id(syllabusId, principal.getName()).getWeek(lv.getId())== Attendance.LATE)
                 finishedLectureVideo++;
         }
 

@@ -49,7 +49,7 @@ public class FileService {
 
         // 폴더가 없을 경우 쭉 만들고 파일 저장
         if (!Files.exists(dirPath))
-            Files.createDirectory(dirPath);
+            Files.createDirectories(dirPath);
         file.transferTo(filePath);
 
         // 경로 반환
@@ -63,6 +63,8 @@ public class FileService {
      * @author 양경호
      */
     public void deleteOnSyllabus(String path) {
+        if (path == null || path.isEmpty())
+            return;
 
         // 경로가 강의 관련 파일이 아닐 경우 나가리
         if (!path.startsWith(String.format("/%s/%s/", PATH_ROOT ,PATH_SYLLABUS)))
@@ -89,7 +91,10 @@ public class FileService {
             try {
                 while (Files.exists(filePath)) {
                     System.out.println("FileService.deleteOnSyllabus | trying to delete file " + filePath);
-                    try { Files.delete(filePath); }
+                    try {
+                        Files.delete(filePath);
+                        System.out.println("FileService.deleteOnSyllabus | deleting file successful " + filePath);
+                    }
                     catch (FileSystemException e) { }
                     Thread.sleep(10000);
                 }

@@ -98,7 +98,7 @@ public class StudentMainPageController {
 
                 for(Iterator<LectureVideo> iter = lectureVideoList.iterator(); iter.hasNext();){                  // 수강한 강의라면 목록에서 삭제
                     LectureVideo lv=iter.next();
-                    if(attendanceService.findBySyllabus_IdAndStudent_Id(s.getId(),username).getWeek(Integer.parseInt(lv.getId())) != Attendance.NOINPUT)
+                    if(attendanceService.findBySyllabus_IdAndStudent_Id(s.getId(),username).getWeek(lv.getId()) != Attendance.NOINPUT)
                         iter.remove();
                 }
 
