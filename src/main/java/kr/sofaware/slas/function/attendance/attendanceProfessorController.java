@@ -219,9 +219,10 @@ public class attendanceProfessorController {
 
 //        Attendance.AttendanceBuilder builder =Attendance.builder()
 //                .syllabus(syllabusService.findById(attendanceDto.getSyllabus()).get())
-//
+
 
         Optional<Attendance> attendances = attendanceService.findAllBySyllabus_IdAndStudent_Id(syllabusId,studentId);
+
 
         attendances.ifPresent(selectWeek -> {
             selectWeek.setWeek(attendanceWeekStr,weekValue);

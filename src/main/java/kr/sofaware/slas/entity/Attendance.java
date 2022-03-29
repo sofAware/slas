@@ -62,22 +62,54 @@ public class   Attendance {
 
     public void setWeek(String index,int value){
         switch(index){
-            case "1": week1=value;
-            case "2": week2=value;
-            case "3": week3=value;
-            case "4": week4=value;
-            case "5": week5=value;
-            case "6": week6=value;
-            case "7": week7=value;
-            case "8": week8=value;
-            case "9": week9=value;
-            case "10": week10=value;
-            case "11": week11=value;
-            case "12": week12=value;
-            case "13": week13=value;
-            case "14": week14=value;
-            case "15": week15=value;
-            case "16": week16=value;
+            case "1":
+                week1=value;
+                break;
+            case "2":
+                week2=value;
+                break;
+            case "3":
+                week3=value;
+                break;
+            case "4":
+                week4=value;
+                break;
+            case "5":
+                week5=value;
+                break;
+            case "6":
+                week6=value;
+                break;
+            case "7":
+                week7=value;
+                break;
+            case "8":
+                week8=value;
+                break;
+            case "9":
+                week9=value;
+                break;
+            case "10":
+                week10=value;
+                break;
+            case "11":
+                week11=value;
+                break;
+            case "12":
+                week12=value;
+                break;
+            case "13":
+                week13=value;
+                break;
+            case "14":
+                week14=value;
+                break;
+            case "15":
+                week15=value;
+                break;
+            case "16":
+                week16=value;
+                break;
         }
 
     }

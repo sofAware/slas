@@ -69,7 +69,7 @@
     </tr>
     </thead>
     <tbody>
-
+    <input type="button" value="뒤로가기" th:onclick="| location.href='@{/p/attendance}'|">
     <tr  th:each="attendance : ${attendances}" >
         <form method="POST" id="write">
             <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>

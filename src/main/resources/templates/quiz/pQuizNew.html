@@ -10,8 +10,17 @@
 <header th:replace="/frame/pHeader.html"></header>
 
 <form method="POST" id="write">
+  <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
   <table class="table table-striped table-hover">
-
+<!--    <div class="mb-3 row">-->
+<!--      <label for="syllabus" class="col-sm-2 col-form-label">강의</label>-->
+<!--      <div class="col-sm-10">-->
+<!--        <select class="form-control" id="syllabus" name="syllabusId" disabled>-->
+<!--          <option th:text="${syllabus.formatDetailName()}"-->
+<!--                  th:value="${syllabus.getId()}" selected></option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--    </div>-->
     <thead>
     <tr>
       <th>퀴즈 번호</th>
@@ -21,17 +30,18 @@
     </tr>
     </thead><!-- 퀴즈 목록이 없는 경우 -->
     <tr>
+      <input type="hidden" name="syllabusId" th:value="${syllabus.getId()}">
       <td>
-        <input type="text" text="id" name="id" >
+        <input type="text" name="id" >
       </td>
       <td>
-        <input type="text" text="id" name="name">
+        <input type="text"  name="name">
       </td>
       <td>
-        <input type="text" text="id" name="submitStart">
+        <input type="date"  name="submitStart">
       </td>
       <td>
-        <input type="text" text="id" name="submitEnd">
+        <input type="date"  name="submitEnd">
       </td>
     </tr>
     </tbody>
@@ -47,6 +57,7 @@
       <th>카테고리</th>
       <th>문제 내용</th>
       <th>모범 답안</th>
+      <th>배점</th>
     </tr>
 
   </table>
@@ -62,12 +73,15 @@
     const cell3 = newRow.insertCell();
     const cell4 = newRow.insertCell();
     const cell5 = newRow.insertCell();
+    const cell6 = newRow.insertCell();
 
-    cell1.innerHTML = '<input type="text" text="id" name="questionNum">';
-    cell2.innerHTML = '<input type="text" text="id" name="category">';
-    cell3.innerHTML = '<input type="text" text="id" name="question">';
-    cell4.innerHTML = '<input type="text" text="id" name="correctAnswer">';
-    cell5.innerHTML = '<input type="submit" value="완료">';
+    cell1.innerHTML = '<input type="number" name="questionNum">';
+    cell2.innerHTML = '<input type="number" name="category">';
+    cell2.innerHTML = '<input type="number" name="category">';
+    cell3.innerHTML = '<input type="text" name="question">';
+    cell4.innerHTML = '<input type="text" name="correctAnswer">';``
+    cell5.innerHTML = '<input type="number" name="score">';
+    cell6.innerHTML = '<input type="submit" value="완료">';
 
     count++;
   }
@@ -115,14 +129,14 @@
 <!--    }-->
 <!--</script>-->
 
-<script>
-  const btnPut = document.querySelector('#addDoc');
-  if(btnPut)
-    document.getElementById("addDoc").addEventListener("click", function(e){
-      var target = document.querySelector(".add_doctor").cloneNode(true);
-      document.querySelector(".docList").innerHTML += target.innerHTML;
-    });
-</script>
+<!--<script>-->
+<!--  const btnPut = document.querySelector('#addDoc');-->
+<!--  if(btnPut)-->
+<!--    document.getElementById("addDoc").addEventListener("click", function(e){-->
+<!--      var target = document.querySelector(".add_doctor").cloneNode(true);-->
+<!--      document.querySelector(".docList").innerHTML += target.innerHTML;-->
+<!--    });-->
+<!--</script>-->
 
 </body>
 </html>

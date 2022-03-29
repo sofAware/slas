@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.util.Date;
 
+@Data
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,16 +27,16 @@ public class QuizDto {
     private int totalScore=0;                            // 해당 퀴즈의 총점
     private int acquiredScore=0;                         // 취득 점수
 
-    @Builder
-    public QuizDto(String id, String name, Date submitStart, Date submitEnd, Boolean submitted, int totalScore, int acquiredScore){
-        this.id=id;
-        this.name=name;
-        this.submitStart=submitStart;
-        this.submitEnd=submitEnd;
-        this.submitted=submitted;
-        this.totalScore=totalScore;
-        this.acquiredScore=acquiredScore;
-    }
+//    @Builder
+//    public QuizDto(String id, String name, Date submitStart, Date submitEnd, Boolean submitted, int totalScore, int acquiredScore){
+//        this.id=id;
+//        this.name=name;
+//        this.submitStart=submitStart;
+//        this.submitEnd=submitEnd;
+//        this.submitted=submitted;
+//        this.totalScore=totalScore;
+//        this.acquiredScore=acquiredScore;
+//    }
 
     public QuizDto(Quiz entity){                           // entity 로부터 dto 생성
         this.id=entity.getId();

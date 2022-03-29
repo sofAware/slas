@@ -129,8 +129,7 @@ public class quizProfessorController {
     @GetMapping("/make")
     public String makeQuiz(Model model, Authentication authentication, Principal principal,
                                 @Nullable @RequestParam("year-semester") String yearSemester,
-                                @Nullable @RequestParam("syllabus-id") String syllabusId,
-                                @Nullable @RequestParam("week-list") String week) {
+                                @Nullable @RequestParam("syllabus-id") String syllabusId) {
         Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
         String Id = principal.getName();
 
@@ -228,16 +227,20 @@ public class quizProfessorController {
         if (syllabus.isEmpty())
             return "error/400";
 
+
+
         // 작성
         model.addAttribute("syllabus", syllabus.get());
         return "quiz/pQuizNew";
     }
 
     @PostMapping("/make")
-    public String makingQuiz(QuizDto quizDto, Model model, Principal principal) throws IOException {
+    public String makingQuiz(QuizSaveDto quizDto, Model model, Principal principal) throws IOException {
+
 
         //퀴즈
         Quiz.QuizBuilder builder = Quiz.builder()
+                .syllabus(syllabusService.findById(quizDto.getSyllabusId()).get())
                 .id(quizDto.getId())
                 .name(quizDto.getName())
                 .questionNum(quizDto.getQuestionNum())
@@ -245,15 +248,17 @@ public class quizProfessorController {
                 .question(quizDto.getQuestion())
                 .correctAnswer(quizDto.getCorrectAnswer())
                 .submitEnd(quizDto.getSubmitEnd())
-                .submitStart(quizDto.getSubmitStart());
+                .submitStart(quizDto.getSubmitStart())
+                .score(quizDto.getScore());
+
 
         Quiz quiz = builder.build();
         quizService.save(quiz);
 
-        List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId("a","a");
-        model.addAttribute("quizTest",quizTest);
+//        List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId("a","a");
+//        model.addAttribute("quizTest",quizTest);
 
-        return "redirect:/make";
+        return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(quizDto.getSyllabusId()).get().getId();
     }
 
     @GetMapping("/make/{testNum}&{syNo}")
@@ -273,14 +278,41 @@ public class quizProfessorController {
         model.addAttribute("quizTest",quizTest);
         model.addAttribute("syllabusId",syNo);
 
+        Optional<Syllabus> syllabus = syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()) :
+                syllabusService.findById(syllabusId);
+
+        // 해당 강의가 없다면 잘못된 요청
+        if (syllabus.isEmpty())
+            return "error/400";
+
+
+
+        // 작성
+        model.addAttribute("syllabus", syllabus.get());
+
         return "quiz/pQuizmake";
     }
 
     @PostMapping("/make/{testNum}&{syNo}")
-    public String editingQuiz(QuizDto quizDto,@PathVariable String testNum ,Model model, Principal principal) throws IOException {
+    public String editingQuiz(QuizSaveDto quizDto,@PathVariable String syNo,@PathVariable String testNum ,Model model, Principal principal) throws IOException {
+
+        Quiz.QuizBuilder builder = Quiz.builder()
+                .syllabus(syllabusService.findById(syNo).get())
+                .id(quizDto.getId())
+                .name(quizDto.getName())
+                .questionNum(quizDto.getQuestionNum())
+                .category(quizDto.getCategory())
+                .question(quizDto.getQuestion())
+                .correctAnswer(quizDto.getCorrectAnswer())
+                .submitEnd(quizDto.getSubmitEnd())
+                .submitStart(quizDto.getSubmitStart())
+                .score(quizDto.getScore());
 
 
-        return "redirect:/make/"+ testNum;
+        Quiz quiz = builder.build();
+        quizService.save(quiz);
+        return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(syNo).get().getId();
     }
 
 }
