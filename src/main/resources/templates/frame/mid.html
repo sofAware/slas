@@ -25,10 +25,9 @@
           </button>
           <div class="dropdown-menu dropdown-megamenu">
             <div class="row">
-              <div class="col-sm-8">
-
+              <div class="col-sm-6">
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <h5 class="font-size-14 fw-bold" key="t-ui-components">양경호</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
@@ -47,24 +46,7 @@
                       <li><a class="d-block" href="/s/lv">강의영상</a></li>
                     </ul>
                   </div>
-
-                  <div class="col-md-4">
-                    <h5 class="font-size-14 fw-bold" key="t-applications">김수헌</h5>
-                    <ul class="list-unstyled megamenu-list"
-                        th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
-                      <li><a class="d-block" href="/p/timetable">시간표</a></li>
-                      <li><a class="d-block" href="/p/grade">성적관리</a></li>
-                      <li><a class="d-block" href="/p/syllabus">강의 계획서</a></li>
-                    </ul>
-                    <ul class="list-unstyled megamenu-list"
-                        th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                      <li><a class="d-block" href="/s/timetable">시간표</a></li>
-                      <li><a class="d-block" href="/s/grade">성적조회</a></li>
-                      <li><a class="d-block" href="/s/syllabus">강의 계획서</a></li>
-                    </ul>
-                  </div>
-
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <h5 class="font-size-14 fw-bold" key="t-extra-pages">정지민</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
@@ -79,8 +61,23 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                 <div class="row">
+                  <div class="col-md-6">
+                    <h5 class="font-size-14 fw-bold" key="t-applications">김수헌</h5>
+                    <ul class="list-unstyled megamenu-list"
+                        th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
+                      <li><a class="d-block" href="/p/timetable">시간표</a></li>
+                      <li><a class="d-block" href="/p/grade">성적관리</a></li>
+                      <li><a class="d-block" href="/p/syllabus">강의 계획서</a></li>
+                    </ul>
+                    <ul class="list-unstyled megamenu-list"
+                        th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
+                      <li><a class="d-block" href="/s/timetable">시간표</a></li>
+                      <li><a class="d-block" href="/s/grade">성적조회</a></li>
+                      <li><a class="d-block" href="/s/syllabus">강의 계획서</a></li>
+                    </ul>
+                  </div>
                   <div class="col-sm-6">
                     <h5 class="font-size-14 fw-bold" key="t-ui-components">박소현</h5>
                     <ul class="list-unstyled megamenu-list"
@@ -96,12 +93,6 @@
                       <li><a class="d-block" href="/s/quiz/list">퀴즈</a></li>
                     </ul>
                   </div>
-
-                  <div class="col-sm-5">
-                    <div>
-                      <img src="/assets/images/megamenu-img.png" alt="" class="img-fluid mx-auto d-block">
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -111,123 +102,6 @@
       </div>
 
       <div class="d-flex">
-
-        <div class="dropdown d-inline-block d-lg-none ms-2">
-          <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="mdi mdi-magnify"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-               aria-labelledby="page-header-search-dropdown">
-
-            <form class="p-3">
-              <div class="form-group m-0">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search ..." aria-label="Search input">
-
-                  <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                  s
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="dropdown d-inline-block">
-          <button type="button" class="btn header-item waves-effect"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img id="header-lang-img" src="/assets/images/flags/us.jpg" alt="Header Language" height="16">
-          </button>
-          <div class="dropdown-menu dropdown-menu-end">
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="eng">
-              <img src="/assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12"> <span
-                class="align-middle">English</span>
-            </a>
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
-              <img src="/assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span
-                class="align-middle">Spanish</span>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
-              <img src="/assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span
-                class="align-middle">German</span>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
-              <img src="/assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span
-                class="align-middle">Italian</span>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
-              <img src="/assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span
-                class="align-middle">Russian</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="dropdown d-none d-lg-inline-block ms-1">
-          <button type="button" class="btn header-item noti-icon waves-effect"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bx bx-customize"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-            <div class="px-lg-2">
-              <div class="row g-0">
-                <div class="col">
-                  <a class="dropdown-icon-item" href="#">
-                    <img src="/assets/images/brands/github.png" alt="Github">
-                    <span>GitHub</span>
-                  </a>
-                </div>
-                <div class="col">
-                  <a class="dropdown-icon-item" href="#">
-                    <img src="/assets/images/brands/bitbucket.png" alt="bitbucket">
-                    <span>Bitbucket</span>
-                  </a>
-                </div>
-                <div class="col">
-                  <a class="dropdown-icon-item" href="#">
-                    <img src="/assets/images/brands/dribbble.png" alt="dribbble">
-                    <span>Dribbble</span>
-                  </a>
-                </div>
-              </div>
-
-              <div class="row no-gutters">
-                <div class="col">
-                  <a class="dropdown-icon-item" href="#">
-                    <img src="/assets/images/brands/dropbox.png" alt="dropbox">
-                    <span>Dropbox</span>
-                  </a>
-                </div>
-                <div class="col">
-                  <a class="dropdown-icon-item" href="#">
-                    <img src="/assets/images/brands/mail_chimp.png" alt="mail_chimp">
-                    <span>Mail Chimp</span>
-                  </a>
-                </div>
-                <div class="col">
-                  <a class="dropdown-icon-item" href="#">
-                    <img src="/assets/images/brands/slack.png" alt="slack">
-                    <span>Slack</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="dropdown d-none d-lg-inline-block ms-1">
-          <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
-            <i class="bx bx-fullscreen"></i>
-          </button>
-        </div>
 
         <div class="dropdown d-inline-block">
           <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
