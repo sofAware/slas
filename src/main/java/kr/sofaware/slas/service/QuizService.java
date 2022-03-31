@@ -133,6 +133,10 @@ public class QuizService {
         return quizSubmitRepository.findByQuiz_SyllabusId(SyllabusId);
     }
 
+//    public Optional<Quiz> readQuiz(String syNo, String testNum, String testId){
+//        return quizRepository.findById(SyllabusIdId);
+//    }
+
     public  List<Quiz> findAllBySyllabus_IdAndId(String SyllabusId,String Id){
         return quizRepository.findAllBySyllabus_IdAndId(SyllabusId,Id);
     }
@@ -141,7 +145,9 @@ public class QuizService {
         return   quizRepository.findById(new QuizPK(syNo, testNum, parseInt(testId))).get();
     }
 
-
+    public void delete(QuizPK quizPK) {
+        quizRepository.deleteById(quizPK);
+    }
 //    public Optional<Quiz> read(String SyllabusId,String Id) {
 //        return quizRepository.findById(Quiz);
 //    }

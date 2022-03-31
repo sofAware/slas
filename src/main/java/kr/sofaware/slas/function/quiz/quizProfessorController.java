@@ -2,6 +2,7 @@ package kr.sofaware.slas.function.quiz;
 
 
 import kr.sofaware.slas.entity.*;
+import kr.sofaware.slas.function.board.AssignmentSubmitInfo;
 import kr.sofaware.slas.service.AttendanceService;
 import kr.sofaware.slas.service.MemberService;
 import kr.sofaware.slas.service.QuizService;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 @RequiredArgsConstructor
 @Controller
@@ -315,5 +318,16 @@ public class quizProfessorController {
         return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(syNo).get().getId();
     }
 
+    @GetMapping("/make/delete/{testNum}&{syNo}&{testInNum}")
+    public String delete(Principal principal,
+                         @PathVariable String syNo,
+                         @PathVariable String testNum,@PathVariable String testInNum) {
+
+        QuizPK optionalQuiz = new QuizPK(syNo, testNum, parseInt(testInNum));
+        quizService.delete(optionalQuiz);
+
+        // 목록으로 리디렉션
+        return "redirect:/p/assignment";
+    }
 }
 
