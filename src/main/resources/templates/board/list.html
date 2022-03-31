@@ -47,12 +47,19 @@
     .card-body {
         padding: 0.8rem 1rem;
     }
+
+    @media (max-width: 768px) {
+        .board-card-detail {
+            color: rgba(0, 0, 0, 0.2);
+        }
+    }
 </style>
 <title th:text="'소파대학교 ' + ${title.substring(2)}"></title>
 <meta th:replace="/frame/mid.html">
 
 
 <!-- add your content here! -->
+<!-- 제목 및 메뉴 -->
 <div class="board-menu">
   <h2 class="m-0 mb-3" th:text="${title}"></h2>
   <div class="mb-5 d-flex justify-content-center gap-4">
@@ -102,18 +109,16 @@
 </div>
 
 <!-- 게시글 헤더 -->
-<div class="board-header row d-none d-sm-flex">
-  <div class="col-8">
-
+<div class="board-header row d-none d-md-flex">
+  <div class="col-7"><h5>제목</h5></div>
+  <div class="col-5">
+    <div class="row">
+      <h5 class="col-3" th:if="${selectedSyllabusId.isEmpty()}">강의명</h5>
+      <h5 class="col-3 ms-md-auto">작성자</h5>
+      <h5 class="col-4">작성일</h5>
+      <h5 class="col-2">조회수</h5>
+    </div>
   </div>
-  <div class="col-4">
-
-  </div>
-  <h5 class="col-7">제목</h5>
-  <h5 class="col-1" th:if="${selectedSyllabusId.isEmpty()}">강의명</h5>
-  <h5 class="col-1">작성자</h5>
-  <h5 class="col-2">작성일</h5>
-  <h5 class="col-1">조회수</h5>
 </div>
 
 <!-- 게시글 목록 -->
@@ -121,21 +126,28 @@
   <a class="card" th:href="'./' + ${rootURL} + '/' + ${board.getId()}">
     <div class="card-body">
       <div class="row">
-        <div class="col-sm-7 fw-bold" th:text="${board.getTitle()}"></div>
-        <div class="col-sm-1" th:text="${board.getSyllabus().getName()}" th:if="${selectedSyllabusId.isEmpty()}"></div>
-        <div class="col-sm-1">
-          <i class="fas fa-user d-sm-none"></i>
-          <span th:text="${board.getMember().getName()}"></span>
-        </div>
-        <div class="col-sm-2">
-          <i class="fas fa-calendar-alt d-sm-none"></i>
-          <span th:text="${#dates.createToday().compareTo(board.getDate()) < 0 ?
+        <div class="col-md-7 fw-bold" th:text="${board.getTitle()}"></div>
+        <div class="col-md-5 board-card-detail">
+          <div class="row row-cols-auto">
+            <div class="col-md-3" th:if="${selectedSyllabusId.isEmpty()}">
+              <i class="fas fa-graduation-cap d-md-none"></i>
+              <span th:text="${board.getSyllabus().getName()}"></span>
+            </div>
+            <div class="col-md-3 ms-md-auto">
+              <i class="fas fa-user d-md-none"></i>
+              <span th:text="${board.getMember().getName()}"></span>
+            </div>
+            <div class="col-md-4">
+              <i class="fas fa-calendar-alt d-md-none"></i>
+              <span th:text="${#dates.createToday().compareTo(board.getDate()) < 0 ?
                 #dates.format(board.getDate(), 'HH:mm') :
                 #dates.format(board.getDate(), 'yyyy-MM-dd')}"></span>
-        </div>
-        <div class="col-sm-1">
-          <i class="fas fa-eye d-sm-none"></i>
-          <span th:text="${board.getView()}"></span>
+            </div>
+            <div class="col-md-2">
+              <i class="fas fa-eye d-md-none"></i>
+              <span th:text="${board.getView()}"></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
