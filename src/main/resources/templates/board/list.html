@@ -148,10 +148,6 @@
 <script>
     const btnWrite = document.querySelector('#write');
 
-    // 게시글 리스트 각각 이동 이벤트
-    document.querySelectorAll('tbody > tr').forEach(e => e.addEventListener('click', evt =>
-        location.href = './[[${rootURL}]]/' + e.querySelector('td').innerText));
-
     // 글쓰기 버튼 이벤트
     if (btnWrite)
         btnWrite.addEventListener('click', evt => {
