@@ -139,7 +139,7 @@ public class LectureVideoProfessorController {
 
         // 작성
         model.addAttribute("syllabus", syllabus.get());
-        return "/lectureVideo/write";
+        return "lectureVideo/write";
     }
 
     @PostMapping("write")
@@ -206,7 +206,7 @@ public class LectureVideoProfessorController {
         // 페이지 전송
         model.addAttribute("syllabus", lv.get().getSyllabus());
         model.addAttribute("lv", lv.get());
-        return "/lectureVideo/write";
+        return "lectureVideo/write";
     }
     @PostMapping("edit")
     public String postEditing(LectureVideoDto lectureVideoDto, Principal principal,
