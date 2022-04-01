@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
     <title th:text="${title.substring(3)} + ' - ' + ${board.getSyllabus().getName()}"></title>
     <style>
@@ -19,8 +19,8 @@
     </style>
 </head>
 <body>
-<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
-<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
 
 <div class="container-fluid m-0 px-sm-4">
     <!--    제목-->
@@ -94,8 +94,8 @@
     </div>
 </div>
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
     // 삭제 버튼 툴팁

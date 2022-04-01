@@ -4,12 +4,12 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <link rel="stylesheet" type="text/css" href="/css/timetable.css">
     <title>공지사항</title>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header th:replace="frame/pHeader.html"></header>
 
 <h2>교수 시간표 페이지</h2>
 
@@ -415,8 +415,8 @@ ID : <span sec:authentication="name"></span> <br>
 
 
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 <script>
     document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
         location.href = e.getAttribute("href")));
