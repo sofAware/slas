@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
     <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet" />
     <title th:text="'강의영상 - ' + ${lv.getSyllabus().getName()} + ' ' + ${lv.getId()}"></title>
@@ -21,8 +21,8 @@
     </style>
 </head>
 <body>
-<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
-<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
 
 <div class="container-fluid m-0 px-sm-4">
     <!--    제목-->
@@ -76,8 +76,8 @@
     </video>
 </div>
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
 <script>
     // 삭제 버튼 툴팁

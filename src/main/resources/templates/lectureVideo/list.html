@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <title>강의영상</title>
     <style>
         tbody > tr {
@@ -12,8 +12,8 @@
         }
     </style>
 </head>
-<header sec:authorize="hasRole('STUDENT')" th:replace="/frame/sHeader.html"></header>
-<header sec:authorize="hasRole('PROFESSOR')" th:replace="/frame/pHeader.html"></header>
+<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
 
 <div class="container">
     <h2 class="my-4">🎬 강의영상</h2>
@@ -87,8 +87,8 @@
     </table>
 </div>
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 <script>
     const btnWrite = document.querySelector('#write');
 

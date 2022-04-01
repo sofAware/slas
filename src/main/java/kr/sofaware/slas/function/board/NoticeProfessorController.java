@@ -115,7 +115,7 @@ public class NoticeProfessorController {
                 syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()).get() :
                 syllabusService.findById(syllabusId).get());
 
-        return "/board/write";
+        return "board/write";
     }
     @PostMapping("write")
     public String postWriting(BoardDto boardDto, Principal principal) throws IOException {
