@@ -3,11 +3,11 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <title>퀴즈</title>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header th:replace="frame/pHeader.html"></header>
 
 <div class="d-flex justify-content-center gap-4">
     <!-- 학기 선택 -->
@@ -82,8 +82,8 @@
     </tbody>
 </table>
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 <script>
     const btnPut = document.querySelector('#test');
     if (btnPut)
