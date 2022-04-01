@@ -72,15 +72,33 @@ public class QuizService {
      * @param syllabusId, quizId
      * @return 취득 총점
      */
-    public int getAcquiredScore(String syllabusId, String quizId){
+    public int getAcquiredScore(String syllabusId, String quizId, String studentId){
         int acquiredScore=0;
-        List<QuizSubmit> quizSubmitList=quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_Id(syllabusId,quizId);
+        List<QuizSubmit> quizSubmitList=quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_IdAndStudent_Id(syllabusId,quizId,studentId);
 
         for(QuizSubmit q : quizSubmitList)
             acquiredScore+=q.getScore();
 
         return acquiredScore;
     }
+
+//    /**
+//     * @author 박소현
+//     */
+//    public List<Integer> getAcquiredScoreList(String syllabusId, String quizId){
+//        List<Integer> acquiredScore=new ArrayList<>();
+//        int score=0;
+//        List<QuizSubmit> quizSubmitList=quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_Id(syllabusId,quizId);
+//
+//        for(QuizSubmit q : quizSubmitList)
+//            for(int i=0;i<quizSubmitList.size();i++){
+//                if()
+//                acquiredScore+=q.getStudent().getScore();
+//            }
+//
+//
+//        return acquiredScore;
+//    }
 
     /**
      * @author 박소현
@@ -133,6 +151,10 @@ public class QuizService {
         return quizSubmitRepository.findByQuiz_SyllabusId(SyllabusId);
     }
 
+//    public Optional<Quiz> readQuiz(String syNo, String testNum, String testId){
+//        return quizRepository.findById(SyllabusIdId);
+//    }
+
     public  List<Quiz> findAllBySyllabus_IdAndId(String SyllabusId,String Id){
         return quizRepository.findAllBySyllabus_IdAndId(SyllabusId,Id);
     }
@@ -141,8 +163,14 @@ public class QuizService {
         return   quizRepository.findById(new QuizPK(syNo, testNum, parseInt(testId))).get();
     }
 
-
+    public void delete(QuizPK quizPK) {
+        quizRepository.deleteById(quizPK);
+    }
 //    public Optional<Quiz> read(String SyllabusId,String Id) {
 //        return quizRepository.findById(Quiz);
 //    }
+
+    public List<QuizSubmit> findByQuiz_Syllabus_IdAndQuiz_Id(String Quiz_syllabusId, String Quiz_id){
+        return quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_Id(Quiz_syllabusId,Quiz_id);
+    }
 }
