@@ -2,6 +2,7 @@ package kr.sofaware.slas.function.quiz;
 
 
 import kr.sofaware.slas.entity.*;
+import kr.sofaware.slas.function.board.AssignmentSubmitInfo;
 import kr.sofaware.slas.service.AttendanceService;
 import kr.sofaware.slas.service.MemberService;
 import kr.sofaware.slas.service.QuizService;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 @RequiredArgsConstructor
 @Controller
@@ -114,7 +117,7 @@ public class quizProfessorController {
             quizDto.setSubmitted(quizService.isQuizSubmitted(principal.getName(), syllabusId, quizDto.getId(), quizMap.get(quizId).size()));
             // 취득 점수 update
             quizDto.setTotalScore(quizService.getTotalScore(syllabusId,quizDto.getId()));
-            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId()));
+            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId(), principal.getName()));
 
             quizDtoList.add(quizDto);
         }
@@ -129,8 +132,7 @@ public class quizProfessorController {
     @GetMapping("/make")
     public String makeQuiz(Model model, Authentication authentication, Principal principal,
                                 @Nullable @RequestParam("year-semester") String yearSemester,
-                                @Nullable @RequestParam("syllabus-id") String syllabusId,
-                                @Nullable @RequestParam("week-list") String week) {
+                                @Nullable @RequestParam("syllabus-id") String syllabusId) {
         Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
         String Id = principal.getName();
 
@@ -152,10 +154,6 @@ public class quizProfessorController {
         } else if (yearSemester == null) {
             yearSemester = syllabusId.substring(0, 4);
         }
-
-
-
-
 
         Map<String, String> formatYS = new TreeMap<>(Collections.reverseOrder());
         lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
@@ -212,7 +210,7 @@ public class quizProfessorController {
             quizDto.setSubmitted(quizService.isQuizSubmitted(principal.getName(), syllabusId, quizDto.getId(), quizMap.get(quizId).size()));
             // 취득 점수 update
             quizDto.setTotalScore(quizService.getTotalScore(syllabusId,quizDto.getId()));
-            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId()));
+            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId(),principal.getName()));
 
             quizDtoList.add(quizDto);
         }
@@ -221,26 +219,141 @@ public class quizProfessorController {
         model.addAttribute("quizList",quizDtoList);
 
 
-        return "quiz/pQuizmake";
+
+        //진짜
+        // 학정번호가 넘어왔으면 그걸로 강의 아니면 교수한 강의 최근 1개
+        Optional<Syllabus> syllabus = syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()) :
+                syllabusService.findById(syllabusId);
+
+        // 해당 강의가 없다면 잘못된 요청
+        if (syllabus.isEmpty())
+            return "error/400";
+
+
+
+        // 작성
+        model.addAttribute("syllabus", syllabus.get());
+        return "quiz/pQuizNew";
     }
 
     @PostMapping("/make")
-    public String makingQuiz(QuizDto quizDto, Model model, Principal principal) throws IOException {
+    public String makingQuiz(QuizSaveDto quizDto, Model model, Principal principal) throws IOException {
 
-        // 게시글 만들기
+
+        //퀴즈
         Quiz.QuizBuilder builder = Quiz.builder()
+                .syllabus(syllabusService.findById(quizDto.getSyllabusId()).get())
                 .id(quizDto.getId())
                 .name(quizDto.getName())
                 .questionNum(quizDto.getQuestionNum())
                 .category(quizDto.getCategory())
                 .question(quizDto.getQuestion())
-                .correctAnswer(quizDto.getCorrectAnswer());
+                .correctAnswer(quizDto.getCorrectAnswer())
+                .submitEnd(quizDto.getSubmitEnd())
+                .submitStart(quizDto.getSubmitStart())
+                .score(quizDto.getScore());
 
 
         Quiz quiz = builder.build();
         quizService.save(quiz);
 
-        // 작성된 포스트 번호로 뷰 이동
-        return "redirect:/p/notice/" + quiz.getId();
+//        List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId("a","a");
+//        model.addAttribute("quizTest",quizTest);
+
+        return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(quizDto.getSyllabusId()).get().getId();
     }
+
+    @GetMapping("/make/{testNum}&{syNo}")
+    public String editQuiz(Model model, Authentication authentication, Principal principal,
+                           @PathVariable String testNum,
+                           @PathVariable String syNo,
+                           @Nullable @RequestParam("year-semester") String yearSemester,
+                           @Nullable @RequestParam("syllabus-id") String syllabusId) {
+        Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
+        String Id = principal.getName();
+
+        model.addAttribute("id", Id);
+        model.addAttribute("auth", auth);
+
+        //진짜
+        List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId(syNo,testNum);
+        model.addAttribute("quizTest",quizTest);
+        model.addAttribute("syllabusId",syNo);
+
+        Optional<Syllabus> syllabus = syllabusId == null ?
+                syllabusService.findFirstByProfessor_IdOrderByIdDesc(principal.getName()) :
+                syllabusService.findById(syllabusId);
+
+        // 해당 강의가 없다면 잘못된 요청
+        if (syllabus.isEmpty())
+            return "error/400";
+
+
+
+        // 작성
+        model.addAttribute("syllabus", syllabus.get());
+
+        return "quiz/pQuizmake";
+    }
+
+    @PostMapping("/make/{testNum}&{syNo}")
+    public String editingQuiz(QuizSaveDto quizDto,@PathVariable String syNo,@PathVariable String testNum ,Model model, Principal principal) throws IOException {
+
+        Quiz.QuizBuilder builder = Quiz.builder()
+                .syllabus(syllabusService.findById(syNo).get())
+                .id(quizDto.getId())
+                .name(quizDto.getName())
+                .questionNum(quizDto.getQuestionNum())
+                .category(quizDto.getCategory())
+                .question(quizDto.getQuestion())
+                .correctAnswer(quizDto.getCorrectAnswer())
+                .submitEnd(quizDto.getSubmitEnd())
+                .submitStart(quizDto.getSubmitStart())
+                .score(quizDto.getScore());
+
+
+        Quiz quiz = builder.build();
+        quizService.save(quiz);
+        return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(syNo).get().getId();
+    }
+
+    @GetMapping("/make/delete/{testNum}&{syNo}&{testInNum}")
+    public String delete(Principal principal,
+                         @PathVariable String syNo,
+                         @PathVariable String testNum,@PathVariable String testInNum) {
+
+        QuizPK optionalQuiz = new QuizPK(syNo, testNum, parseInt(testInNum));
+        quizService.delete(optionalQuiz);
+        String A = "redirect:/p/quiz/list";
+
+        // 목록으로 리디렉션
+        return A;
+    }
+
+    @GetMapping("/make/browse/{testNum}&{syNo}")
+    public String browse(Principal principal,
+                         @PathVariable String syNo,
+                         @PathVariable String testNum,Model model) {
+
+        List<Integer> studentScoreList=new ArrayList<>();
+
+        List<QuizSubmit> quizSubmitList=quizService.findByQuiz_Syllabus_IdAndQuiz_Id(syNo,testNum);
+
+        for(int i=0;i<quizSubmitList.size();i++){
+            String studentId=quizSubmitList.get(i).getStudent().getId();
+            studentScoreList.add(quizService.getAcquiredScore(syNo,testNum,studentId));
+        }
+
+        model.addAttribute("quizSubmitList",quizSubmitList); //학생 학번과 이름을 가져오기 위하
+        model.addAttribute("studentScoreList",studentScoreList); //점수를 담아놓은 리스트 (학생의 리스트 순서대로)
+
+
+        //퀴즈 열람 페이지
+        return "quiz/pQuizResult";
+    }
+
+
 }
+
+

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="/frame/head.html">
+    <title>퀴즈</title>
+</head>
+<body>
+
+<tbody>
+<div class="container">
+    <div class="timetable-img text-center">
+        <img src="img/content/timetable.png" alt="">
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+
+            <thead>
+            <tr class="bg-light-gray">
+                <th class="text-uppercase">
+                </th>
+                <th class="text-uppercase">1:출석</th>
+                <th class="text-uppercase">2:결석</th>
+                <th class="text-uppercase">3:지각</th>
+            </tr>
+            </thead>
+
+        </table>
+    </div>
+</div>
+</tbody>
+
+
+<button class="btn btn-primary" type="button" aria-expanded="false" id="put" onclick="test()"
+>
+    제출하기
+</button>
+
+<form form method="POST" id="write">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>문제</th>
+            <th>정답</th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+
+        <tbody style="cursor: pointer;" >
+        <tr th:each="i : ${#numbers.sequence(0,quizTest.size()-1)}">
+            <td th:text="${quizTest.get(i).getQuestionNum()}"></td>
+            <td th:text="${quizTest.get(i).getQuestion()}"></td>
+            <td th:if="${quizTest.get(i).getCategory() eq 1}">
+                <input  type="radio" text="1">  1
+                <input type="radio" text="2">   2
+                <input type="radio" text="3">   3
+                <input type="radio" text="4">   4
+                <input type="radio" text="5">   5
+            </td>
+
+            <td th:if="${quizTest.get(i).getCategory() eq 2}">
+                <input type="text" name="psw"  ></td>
+            <td th:if="${quizTest.get(i).getCategory() eq 3}">
+                <input  type="text" name="psw"  style="width:300px;height:200px;font-size:30px;"></td>
+
+        </tr>
+        <input type="submit" value="저장하기">
+        </tbody>
+
+
+
+    </table>
+</form>
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+<script>
+    const btnPut = document.querySelector('#test');
+    if (btnPut)
+        btnPut.addEventListener('click', evt => {
+            //const sid = document.querySelector('#syllabus').getAttribute('data-sid');
+            location.href = '/s/quiztest' ;
+        });
+</script>
+<script>
+    const btnPut = document.querySelector('#put');
+    if (btnPut)
+        btnPut.addEventListener('click', evt => {
+            //const sid = document.querySelector('#syllabus').getAttribute('data-sid');
+            location.href = '/p/attendance/put';
+        });
+</script>
+
+<script>
+    function test(){
+        if (!confirm("제출하시겠습니까? 제출하시면 수정이 불가능합니다")) {
+
+        } else {
+            document.location = '/s/quiz/list';
+        }
+    }
+</script>
+</body>
+</html>

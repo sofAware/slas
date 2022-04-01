@@ -1,12 +1,14 @@
 package kr.sofaware.slas.service;
 
+import kr.sofaware.slas.entity.Assignment;
 import kr.sofaware.slas.entity.Attendance;
-import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.Syllabus;
 import kr.sofaware.slas.repository.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -52,4 +54,17 @@ public class AttendanceService {
     public List<Attendance> listAll(String SyllabusId) {
         return attendanceRepository.findAllBySyllabus_Id(SyllabusId);
     }
+
+    public List<Attendance> read(String StudentId, String SyllabusId) {
+        return attendanceRepository.findAllByStudent_IdAndSyllabus_Id(StudentId,SyllabusId);
+    }
+
+    public Attendance save(Attendance attendance) {
+        return attendanceRepository.save(attendance);
+    }
+
+    public Optional<Attendance> findAllBySyllabus_IdAndStudent_Id(String syllabusId,String id){return attendanceRepository.findAllBySyllabus_IdAndStudent_Id(syllabusId,id);}
+
+    //public Optional update(String SyllabusId,int week) {return attendanceRepository.findAllBySyllabusAndWeeksByList(SyllabusId,week);}
+
 }

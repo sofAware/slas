@@ -43,25 +43,7 @@
 
 </div>
 <br>
-<!-- 주차 선택 -->
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="weeks" data-bs-toggle="dropdown" aria-expanded="false"
-            th:text=주차 선택>
-        주차 선택
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="weeks">
-        <li th:each="key : ${week.keySet()}">
-            <a class="dropdown-item"
-               th:attr="href=${'?week =' + key}"
-               th:text="${week.get(key)}"></a>
-        </li>
-    </ul>
 
-    <button class="btn btn-primary" type="button" aria-expanded="false" id="put"
-            sec:authorize="hasRole('PROFESSOR')">
-        수정
-    </button>
-</div>
 
 
 *수정하고 싶은 주차를 클릭하세요
@@ -70,9 +52,8 @@
     <tr>
         <th>이름</th>
         <th:block th:each="i : ${#numbers.sequence(1,16)}">
-            <td>
-                <a href="/p/attendance/put" class="link-dark"
-                   th:text="${i+'주차'}">
+            <td><a
+                th:attr="href='./attendance/' + ${i}" th:text="${i+'주차'}">
                 </a>
             </td>
         </th:block>
@@ -80,7 +61,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr  th:each="attendance : ${attendances}" >
+    <tr th:each="attendance : ${attendances}" >
         <th th:text="${attendance.getStudent().getName()}"></th>
        <th:block th:each="i : ${#numbers.sequence(0,15)}">
            <td th:text="${attendance.formatWeek(attendance.getWeeksByList().get(i))}"></td>
@@ -117,12 +98,18 @@
 <footer th:replace="/frame/footer.html"></footer>
 <script th:replace="/frame/tail.html"></script>
 <script>
-    const btnPut = document.querySelector('#put');
+    const btnPut = document.querySelector('#naa');
     if (btnPut)
         btnPut.addEventListener('click', evt => {
             //const sid = document.querySelector('#syllabus').getAttribute('data-sid');
-            location.href = '/p/attendance/put';
+            location.href = '/p/attendance/put'+ '/a';
         });
+</script>
+
+<script>
+    // 게시글 리스트 각각 이동 이벤트
+    document.querySelectorAll('thead > tr>td').forEach(e => e.addEventListener('click', evt =>
+        location.href = './assignment/' + e.querySelector('td').innerText));
 </script>
 
 </body>

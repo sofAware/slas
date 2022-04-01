@@ -65,7 +65,9 @@ public class studentInfoProfessorController {
 
         List<Attendance> attendances = attendanceService.listAll(syllabusId);
         model.addAttribute("attendances", attendances);
-
+//        for(int i=0;i< attendances.size();i++){
+//            List<String> semester= attendances.get(i).getStudent().getSemester();
+//        }
 
 
         return "info/pStudentInfo";
