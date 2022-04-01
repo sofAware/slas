@@ -69,7 +69,7 @@ public class QuizService {
     /**
      * 해당 퀴즈에 대해 취득한 점수를 구함
      * @author 정지민
-     * @param syllabusId, quizId
+     * @param syllabusId, quizId, studentId
      * @return 취득 총점
      */
     public int getAcquiredScore(String syllabusId, String quizId, String studentId){
