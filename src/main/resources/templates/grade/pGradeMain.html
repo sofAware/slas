@@ -3,11 +3,11 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <title>공지사항</title>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header th:replace="frame/pHeader.html"></header>
 
 <div class="d-flex justify-content-center gap-4">
     <!-- 학기 선택 -->
@@ -72,8 +72,8 @@
         </tbody>
     </table>
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 <script>
     document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
         location.href = e.getAttribute("href")));
