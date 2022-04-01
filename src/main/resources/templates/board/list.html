@@ -1,4 +1,4 @@
-<meta th:replace="/frame/start.html">
+<meta th:replace="frame/start.html">
 <!-- add your css here -->
 <style>
     .board-menu {
@@ -55,7 +55,7 @@
     }
 </style>
 <title th:text="${title.substring(3)}"></title>
-<meta th:replace="/frame/mid.html">
+<meta th:replace="frame/mid.html">
 
 
 <!-- add your content here! -->
@@ -155,7 +155,7 @@
 </th:block>
 
 
-<meta th:replace="/frame/mid2.html">
+<meta th:replace="frame/mid2.html">
 <!-- add your js here -->
 <script>
     const btnWrite = document.querySelector('#write');
@@ -167,4 +167,4 @@
             location.href = './[[${rootURL}]]/write' + (sid ? '?syllabus-id=' + sid : '');
         });
 </script>
-<meta th:replace="/frame/end.html">
+<meta th:replace="frame/end.html">

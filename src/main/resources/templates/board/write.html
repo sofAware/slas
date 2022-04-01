@@ -1,8 +1,8 @@
-<meta th:replace="/frame/start.html">
+<meta th:replace="frame/start.html">
 <!-- add your css here -->
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
 <title th:text="${title.substring(3)} + ' 작성'"></title>
-<meta th:replace="/frame/mid.html">
+<meta th:replace="frame/mid.html">
 
 
 <!-- add your content here! -->
@@ -45,10 +45,10 @@
 </form>
 
 
-<meta th:replace="/frame/mid2.html">
+<meta th:replace="frame/mid2.html">
 <script>
     const initialValue= `[(${board} ? ${board.getContent()} : '')]`;
 </script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script type="text/javascript" src="/assets/js/pBoardWrite.js"></script>
-<meta th:replace="/frame/end.html">
+<meta th:replace="frame/end.html">
