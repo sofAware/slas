@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta th:replace="/frame/head.html">
+    <meta th:replace="frame/head.html">
     <title>Professor Main Page</title>
 
     <!--시간표 출력 style-->
@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-<header th:replace="/frame/pHeader.html"></header>
+<header th:replace="frame/pHeader.html"></header>
     <!-- Copy & Edit here! -->
     <div>
         <span th:text="${MainPageDto.id}"></span>
@@ -150,7 +150,7 @@
         <hr>
     </div>
 
-<footer th:replace="/frame/footer.html"></footer>
-<script th:replace="/frame/tail.html"></script>
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
 </body>
 </html>
