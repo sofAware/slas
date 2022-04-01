@@ -43,25 +43,7 @@
 
 </div>
 <br>
-<!-- 주차 선택 -->
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="weeks" data-bs-toggle="dropdown" aria-expanded="false"
-            th:text=주차 선택>
-        주차 선택
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="weeks">
-        <li th:each="key : ${week.keySet()}">
-            <a class="dropdown-item"
-               th:attr="href=${'?week =' + key}"
-               th:text="${week.get(key)}"></a>
-        </li>
-    </ul>
 
-    <button class="btn btn-primary" type="button" aria-expanded="false" id="put"
-            sec:authorize="hasRole('PROFESSOR')">
-        수정
-    </button>
-</div>
 
 
 *수정하고 싶은 주차를 클릭하세요

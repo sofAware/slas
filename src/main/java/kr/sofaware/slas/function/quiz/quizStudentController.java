@@ -287,4 +287,6 @@ public class quizStudentController {
         return "redirect:/s/quiz/detail/" + testNum + "&" + syNo;
     }
 
+
+
 }
