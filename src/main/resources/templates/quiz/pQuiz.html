@@ -53,7 +53,7 @@
         <th>번호</th>
         <th>시험 제목</th>
         <th>응시 기간</th>
-        <th> </th>
+        <th>학생 결과</th>
 
     </tr>
     </thead>
@@ -67,6 +67,12 @@
             </a>
         </td>
         <td th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td>
+            <a th:attr="href=${'/p/quiz/make/browse/' + quizList.get(i).getId() +'&'+ selectedSyllabusId}"
+               class="link-dark"
+               th:text="확인">
+            </a>
+        </td>
     </tr>
     </tbody>
     <tbody th:unless="${quizList.isEmpty() eq false}">                                                        <!-- 퀴즈 목록이 없는 경우 -->

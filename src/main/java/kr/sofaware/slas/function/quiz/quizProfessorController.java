@@ -117,7 +117,7 @@ public class quizProfessorController {
             quizDto.setSubmitted(quizService.isQuizSubmitted(principal.getName(), syllabusId, quizDto.getId(), quizMap.get(quizId).size()));
             // 취득 점수 update
             quizDto.setTotalScore(quizService.getTotalScore(syllabusId,quizDto.getId()));
-            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId()));
+            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId(), principal.getName()));
 
             quizDtoList.add(quizDto);
         }
@@ -210,7 +210,7 @@ public class quizProfessorController {
             quizDto.setSubmitted(quizService.isQuizSubmitted(principal.getName(), syllabusId, quizDto.getId(), quizMap.get(quizId).size()));
             // 취득 점수 update
             quizDto.setTotalScore(quizService.getTotalScore(syllabusId,quizDto.getId()));
-            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId()));
+            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId(),principal.getName()));
 
             quizDtoList.add(quizDto);
         }
@@ -325,9 +325,35 @@ public class quizProfessorController {
 
         QuizPK optionalQuiz = new QuizPK(syNo, testNum, parseInt(testInNum));
         quizService.delete(optionalQuiz);
+        String A = "redirect:/p/quiz/list";
 
         // 목록으로 리디렉션
-        return "redirect:/p/assignment";
+        return A;
     }
+
+    @GetMapping("/make/browse/{testNum}&{syNo}")
+    public String browse(Principal principal,
+                         @PathVariable String syNo,
+                         @PathVariable String testNum,Model model) {
+
+        List<Integer> studentScoreList=new ArrayList<>();
+
+        List<QuizSubmit> quizSubmitList=quizService.findByQuiz_Syllabus_IdAndQuiz_Id(syNo,testNum);
+
+        for(int i=0;i<quizSubmitList.size();i++){
+            String studentId=quizSubmitList.get(i).getStudent().getId();
+            studentScoreList.add(quizService.getAcquiredScore(syNo,testNum,studentId));
+        }
+
+        model.addAttribute("quizSubmitList",quizSubmitList); //학생 학번과 이름을 가져오기 위하
+        model.addAttribute("studentScoreList",studentScoreList); //점수를 담아놓은 리스트 (학생의 리스트 순서대로)
+
+
+        //퀴즈 열람 페이지
+        return "quiz/pQuizResult";
+    }
+
+
 }
+
 

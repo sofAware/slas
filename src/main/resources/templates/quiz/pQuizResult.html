@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="/frame/head.html">
+    <title>학생 퀴즈 점수 열람</title>
+</head>
+<body>
+<header th:replace="/frame/pHeader.html"></header>
+<br>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>
+            <h3>퀴즈 점수</h3>
+        </th>
+    </tr>
+    </thead>
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>학번</th>
+        <th>점수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr  th:each="i : ${#numbers.sequence(0,quizSubmitList.size()-1)}" >
+        <th th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getId()}"></th>
+        <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getName()}"></td>
+        <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${studentScoreList.get(i)}" ></td>
+    </tr>
+    </td>
+    </tbody>
+</table>
+
+
+
+
+<footer th:replace="/frame/footer.html"></footer>
+<script th:replace="/frame/tail.html"></script>
+</body>
+</html>

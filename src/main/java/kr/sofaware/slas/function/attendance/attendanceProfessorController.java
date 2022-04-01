@@ -30,8 +30,7 @@ public class attendanceProfessorController {
     @GetMapping("/attendance")
     public String getAttendance(Model model, Authentication authentication, Principal principal,
                                 @Nullable @RequestParam("year-semester") String yearSemester,
-                                @Nullable @RequestParam("syllabus-id") String syllabusId,
-                                @Nullable @RequestParam("week-list") String week) {
+                                @Nullable @RequestParam("syllabus-id") String syllabusId) {
         Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
         String Id = principal.getName();
 
@@ -71,13 +70,6 @@ public class attendanceProfessorController {
         model.addAttribute("selectedSyllabusName",
                 lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
                         .findAny().get().getName());
-
-        //주차 선택
-        Map<String,Integer>weekList=new HashMap<String,Integer>();
-        weekList.put("week1",1);
-        weekList.put("week2",2);
-        weekList.put("week3",3);
-        model.addAttribute("week",weekList);
 
 
         List<Attendance> attendances = attendanceService.listAll(syllabusId);
