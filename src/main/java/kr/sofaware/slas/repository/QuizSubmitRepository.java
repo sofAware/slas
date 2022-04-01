@@ -15,7 +15,7 @@ public interface QuizSubmitRepository extends JpaRepository<QuizSubmit, QuizSubm
 
     List<QuizSubmit> findAllByQuiz_Syllabus_Id(String syllabusId);
 
-    List<QuizSubmit> findByQuiz_Syllabus_IdAndQuiz_Id(String syllabus_id, String id);
+    List<QuizSubmit> findByQuiz_Syllabus_IdAndQuiz_IdAndStudent_Id(String syllabus_id, String id, String student_id);
 
     Optional<QuizSubmit> findByQuiz_SyllabusId(String syllabusId);
 

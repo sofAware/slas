@@ -114,7 +114,7 @@ public class quizProfessorController {
             quizDto.setSubmitted(quizService.isQuizSubmitted(principal.getName(), syllabusId, quizDto.getId(), quizMap.get(quizId).size()));
             // 취득 점수 update
             quizDto.setTotalScore(quizService.getTotalScore(syllabusId,quizDto.getId()));
-            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId()));
+            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId(),principal.getName()));
 
             quizDtoList.add(quizDto);
         }
@@ -207,7 +207,8 @@ public class quizProfessorController {
             quizDto.setSubmitted(quizService.isQuizSubmitted(principal.getName(), syllabusId, quizDto.getId(), quizMap.get(quizId).size()));
             // 취득 점수 update
             quizDto.setTotalScore(quizService.getTotalScore(syllabusId,quizDto.getId()));
-            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId()));
+            quizDto.setAcquiredScore(quizService.getAcquiredScore(syllabusId,quizDto.getId(), principal.getName())
+            );
 
             quizDtoList.add(quizDto);
         }

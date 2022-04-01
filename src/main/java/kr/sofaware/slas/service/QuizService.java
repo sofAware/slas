@@ -72,9 +72,9 @@ public class QuizService {
      * @param syllabusId, quizId
      * @return 취득 총점
      */
-    public int getAcquiredScore(String syllabusId, String quizId){
+    public int getAcquiredScore(String syllabusId, String quizId, String studentId){
         int acquiredScore=0;
-        List<QuizSubmit> quizSubmitList=quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_Id(syllabusId,quizId);
+        List<QuizSubmit> quizSubmitList=quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_IdAndStudent_Id(syllabusId,quizId,studentId);
 
         for(QuizSubmit q : quizSubmitList)
             acquiredScore+=q.getScore();
