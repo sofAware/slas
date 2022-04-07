@@ -28,6 +28,7 @@ public class ProfessorTotalPageController {
     private final AssignmentService assignmentService;
     private final QnaService qnaService;
     private final LectureVideoService lectureVideoService;
+    private final LectureFileService lectureFileService;
 
     //교수 강의 종합 페이지
     @GetMapping("total")
@@ -106,11 +107,18 @@ public class ProfessorTotalPageController {
         lectureVideoList.forEach(lv -> lectureVideoDtoList.add(new LectureVideoDto(lv)));
 
 
+        // 강의 자료 목록
+        List<Board> lectureFileList=new ArrayList<>();
+        lectureFileList.addAll(lectureFileService.listAll(syllabusId));
+
+
         model.addAttribute("noticeList",noticeDtoList);                             // 공지 사항
         model.addAttribute("assignmentList",assignmentDtoList);                     // 과제 목록
         model.addAttribute("quizList",quizDtoList);                                 // 퀴즈 목록
         model.addAttribute("qnAList",qnADtoList);                                   // 질문 게시판 목록
         model.addAttribute("lectureVideoList",lectureVideoDtoList);                 // 강의 영상 목록
+        model.addAttribute("lectureFileList",lectureFileList);                      // 강의 자료 목록
+
 
         return "total/professor-totalpage";
     }
