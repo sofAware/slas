@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +34,18 @@ public class Member implements UserDetails {
 
     private String role;        // 역할
 
+    @Lob
+    private Blob profile;       // 프로필 사진
+
+    public InputStream getProfile() {
+        try {
+            return profile.getBinaryStream();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Member from(MemberDto memberDTO) {
         return new Member(
                 memberDTO.getId(),
@@ -37,7 +53,8 @@ public class Member implements UserDetails {
                 memberDTO.getName(),
                 memberDTO.getMajor(),
                 memberDTO.getSemester(),
-                memberDTO.getRole());
+                memberDTO.getRole(),
+                null);
     }
 
     @Override
