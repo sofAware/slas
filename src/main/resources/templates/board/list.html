@@ -126,7 +126,11 @@
   <a class="card" th:href="'./' + ${rootURL} + '/' + ${board.getId()}">
     <div class="card-body">
       <div class="row">
-        <div class="col-md-7 fw-bold" th:text="${board.getTitle()}"></div>
+        <div class="col-md-7 d-flex align-items-center gap-1">
+          <span th:text="${board.getTitle()}" class="flex-grow-1 fw-bold text-start"></span>
+          <i class="far fa-image" th:if="${board.getContent().contains('![image](')}"></i>
+          <i class="fa fa-paperclip" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}"></i>
+        </div>
         <div class="col-md-5 board-card-detail">
           <div class="row row-cols-auto">
             <div class="col-md-3" th:if="${selectedSyllabusId.isEmpty()}">

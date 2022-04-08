@@ -35,11 +35,15 @@ public class Member implements UserDetails {
     @Lob
     private Blob profile;       // 프로필 사진
 
-    public InputStream getProfile() {
+    public InputStream getProfileContent() {
+        if (getProfile() == null) return null;
+
         try {
-            return profile.getBinaryStream();
+            return getProfile().getBinaryStream();
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IllegalStateException e) {
+            return null;
         }
         return null;
     }
