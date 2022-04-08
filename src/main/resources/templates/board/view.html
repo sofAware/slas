@@ -35,7 +35,7 @@
     <div class="col-sm-auto text-center" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
       <a class="text-decoration-none text-primary" target="_blank"
          th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
-        <i class="fa-solid fa-paperclip"></i>
+        <i class="fa fa-paperclip"></i>
         <span th:text="${board.getAttachmentName()}"></span>
       </a>
     </div>
