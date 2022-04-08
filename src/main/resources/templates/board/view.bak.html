@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta th:replace="frame/head.html">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+    <title th:text="${title.substring(3)} + ' - ' + ${board.getSyllabus().getName()}"></title>
+    <style>
+        .container-fluid {
+            padding-top: 4rem;
+            padding-bottom: 3rem;
+            background-color: #fafafa;
+        }
+        .comment {
+            border-top: 1px solid rgb(241, 243, 245);
+        }
+    </style>
+</head>
+<body>
+<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
+
+<div class="container-fluid m-0 px-sm-4">
+    <!--    제목-->
+    <div class="d-flex justify-content-center mb-2">
+        <h1 th:text="${board.getTitle()}"></h1>
+    </div>
+
+    <!--    세부 정보-->
+    <div class="row justify-content-center mb-2">
+        <div class="col-sm-auto text-center">
+            <i class="far fa-user"></i>
+            <span class="text-secondary" th:text="${board.getMember().getName()}"></span>
+        </div>
+        <div class="col-sm-auto text-center">
+            <i class="far fa-calendar"></i>
+            <span class="text-secondary" th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd HH:mm')}"></span>
+        </div>
+        <div class="col-sm-auto text-center">
+            <i class="far fa-eye"></i>
+            <span class="text-secondary" th:text="${board.getView()}"></span>
+        </div>
+        <div class="col-sm-auto text-center" th:if="${board.getAttachmentName() != null && !board.getAttachmentName().isEmpty()}">
+            <a class="text-decoration-none text-primary" target="_blank"
+                    th:attr="href=${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}">
+                <i class="fa-solid fa-paperclip"></i>
+                <span th:text="${board.getAttachmentName()}"></span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+<!--    작성자 버튼-->
+    <div class="d-flex justify-content-end gap-2 mt-3 mb-5">
+        <a class="btn btn-secondary" th:attr="href='../' + ${rootURL}">목록</a>
+        <a class="btn btn-primary" th:attr="href='./edit/' + ${board.getId()}"
+           th:if="${#authentication.getName()}==${board.getMember().getId()}">수정</a>
+        <a class="btn btn-danger" th:attr="href='./delete/' + ${board.getId()}"
+           data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
+           th:if="${#authentication.getName()}==${board.getMember().getId()}">삭제</a>
+    </div>
+
+    <div id="viewer"></div>
+</div>
+
+<div class="container" th:if="${board.getCategory() == board.CATEGORY_QNA}" style="margin-top: 4rem;">
+    <h4 class="my-4" th:text="${board.getComments().size()} + '개의 댓글'"></h4>
+<!--    댓글 작성-->
+    <form method="POST" th:action="'./add-comment/' + ${board.getId()}">
+        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+
+        <textarea class="form-control" name="content"></textarea>
+        <div class="d-flex mt-3 mb-5">
+            <button type="submit" class="btn btn-primary ms-auto">댓글 작성</button>
+        </div>
+    </form>
+
+<!--    작성된 댓글들-->
+    <div th:each="comment : ${board.getComments()}" class="py-4 comment">
+        <div class="d-flex justify-content-between gap-1 my-1">
+            <b th:text="${comment.getMember().getName()}"></b>
+            <span class="me-auto" th:text="'(' + ${#dates.createToday().compareTo(comment.getDate()) < 0 ?
+                  #dates.format(comment.getDate(), 'HH:mm') :
+                  #dates.format(comment.getDate(), 'yyyy-MM-dd')} + ')'"></span>
+            <a class="text-decoration-none text-danger"
+               data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
+                th:if="${#authentication.getName()}==${comment.getMember().getId()}"
+                th:href="'./delete-comment/' + ${board.getId()} + '?comment-id=' + ${comment.getId()}"><b>삭제</b></a>
+        </div>
+        <div th:text="${comment.getContent()}"></div>
+    </div>
+</div>
+
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    // 삭제 버튼 툴팁
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    // Toast UI 뷰어
+    const viewer = new toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true,
+        initialValue: `[(${board.getContent()})]`
+    });
+</script>
+</body>
+</html>
