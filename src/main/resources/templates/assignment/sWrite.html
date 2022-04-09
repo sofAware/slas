@@ -1,55 +1,75 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta th:replace="frame/head.html">
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <title th:text="'과제 - ' + ${assignment.getSyllabus().getName()}"></title>
-</head>
-<body>
-<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
-<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+<style>
+    .toastui-editor-md-mode {
+        background-color: white;
+    }
+    h6 {
+        font-weight: bold;
+    }
+</style>
+<title>과제</title>
+<meta th:replace="frame/mid.html">
 
-<div class="container">
 
-    <div class="d-flex justify-content-end align-items-end gap-2 my-4">
-        <h2 class="me-auto">✒️ 과제</h2>
-        <a class="btn btn-secondary" th:attr="href='../../assignment'">목록</a>
+<!-- add your content here! -->
+<!-- 과제 정보 타이틀 및 메뉴 -->
+<div class="d-flex justify-content-end align-items-end gap-2 mb-4">
+    <h2 class="me-auto">✒️ 과제</h2>
+
+    <a class="btn btn-secondary" th:attr="href='../assignment'">목록</a>
+</div>
+
+<!-- 과제 정보 -->
+<div class="row">
+    <!--        제목 -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3 border-end"><h6>강의</h6></div>
+                    <div class="col-9"><p th:text="${assignment.getSyllabus().formatDetailName()}"></p></div>
+                </div>
+                <div class="row">
+                    <div class="col-3 border-end"><h6>제목</h6></div>
+                    <div class="col-9"><p th:text="${assignment.getName()}"></p></div>
+                </div>
+                <div class="row">
+                    <div class="col-3 border-end"><h6>제출기한</h6></div>
+                    <div class="col-9"><p th:text="${
+                        #dates.format(assignment.getSubmitStart(), 'yyyy-MM-dd HH시 mm분') + ' ~ ' +
+                        #dates.format(assignment.getSubmitEnd(),   'yyyy-MM-dd HH시 mm분')}"></p></div>
+                </div>
+                <div class="row" th:if="${assignment.getAttachmentName() != null && !assignment.getAttachmentName().isEmpty()}">
+                    <div class="col-3 border-end"><h6>첨부파일</h6></div>
+                    <div class="col-9">
+                        <a class="text-decoration-none text-primary" target="_blank"
+                           th:attr="href=${assignment.getAttachmentPath()} + '?filename=' + ${assignment.getAttachmentName()}"
+                           th:text="${assignment.getAttachmentName()}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <table class="table table-bordered" style="margin-bottom: 4rem;">
-        <colgroup>
-            <col span="1" style="width: 20%;">
-            <col span="1" style="width: 80%;">
-        </colgroup>
-
-        <tr><th class="table-active text-center">강의</th>
-            <td th:text="${assignment.getSyllabus().formatDetailName()}"></td></tr>
-
-        <tr><th class="table-active text-center">제목</th>
-            <td th:text="${assignment.getName()}"></td></tr>
-
-        <tr><th class="table-active text-center">제출기한</th>
-            <td th:text="${
-                #dates.format(assignment.getSubmitStart(), 'yyyy-MM-dd HH시 mm분') + ' ~ ' +
-                #dates.format(assignment.getSubmitEnd(),   'yyyy-MM-dd HH시 mm분')}"></td></tr>
-
-        <tr><th class="table-active text-center">내용</th>
-            <td><div id="viewer"></div></td></tr>
-
-        <tr><th class="table-active text-center">첨부파일</th>
-            <td><a class="text-decoration-none text-primary" target="_blank"
-                   th:attr="href=${assignment.getAttachmentPath()} + '?filename=' + ${assignment.getAttachmentName()}"
-                   th:text="${assignment.getAttachmentName()}"></a></td></tr>
-    </table>
-
-
-    <div class="d-flex justify-content-between align-items-end gap-2 my-4">
-        <h4 class="me-auto">내 제출</h4>
+    <!--        내용 -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="pb-2 border-bottom">내용</h6>
+                <div id="viewer"></div>
+            </div>
+        </div>
     </div>
+</div>
 
+<!-- 과제 제출 타이틀 및 메뉴 -->
+<div class="d-flex justify-content-between align-items-end gap-2 mt-5 my-4">
+    <h2 class="me-auto">📑 내 제출</h2>
+</div>
+
+<!-- 과제 제출 -->
+<div class="row">
     <form method="POST" id="write">
         <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
         <select class="form-control d-none" id="syllabus" name="syllabusId" disabled>
@@ -82,8 +102,9 @@
     </form>
 </div>
 
-<footer th:replace="frame/footer.html"></footer>
-<script th:replace="frame/tail.html"></script>
+
+<meta th:replace="frame/mid2.html">
+<!-- add your js here -->
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
     // Toast UI 뷰어 - 과제
@@ -95,6 +116,5 @@
 
     const initialValue= `[(${board} ? ${board.getContent()} : '')]`;
 </script>
-<script type="text/javascript" th:src="@{/js/pBoardWrite.js}"></script>
-</body>
-</html>
+<script type="text/javascript" src="/assets/js/pBoardWrite.js"></script>
+<meta th:replace="frame/end.html">

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta th:replace="frame/head.html">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+    <title th:text="'과제 - ' + ${assignment.getSyllabus().getName()}"></title>
+</head>
+<body>
+<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
+<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
+
+<div class="container">
+
+    <div class="d-flex justify-content-end align-items-end gap-2 my-4">
+        <h2 class="me-auto">✒️ 과제</h2>
+        <a class="btn btn-secondary" th:attr="href='../assignment'">목록</a>
+    </div>
+
+    <table class="table table-bordered" style="margin-bottom: 4rem;">
+        <colgroup>
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 80%;">
+        </colgroup>
+
+        <tr><th class="table-active text-center">강의</th>
+            <td th:text="${assignment.getSyllabus().formatDetailName()}"></td></tr>
+
+        <tr><th class="table-active text-center">제목</th>
+            <td th:text="${assignment.getName()}"></td></tr>
+
+        <tr><th class="table-active text-center">제출기한</th>
+            <td th:text="${
+                #dates.format(assignment.getSubmitStart(), 'yyyy-MM-dd HH시 mm분') + ' ~ ' +
+                #dates.format(assignment.getSubmitEnd(),   'yyyy-MM-dd HH시 mm분')}"></td></tr>
+
+        <tr><th class="table-active text-center">내용</th>
+            <td><div id="viewer"></div></td></tr>
+
+        <tr><th class="table-active text-center">첨부파일</th>
+            <td><a class="text-decoration-none text-primary" target="_blank"
+                   th:attr="href=${assignment.getAttachmentPath()} + '?filename=' + ${assignment.getAttachmentName()}"
+                   th:text="${assignment.getAttachmentName()}"></a></td></tr>
+    </table>
+
+
+    <div class="d-flex justify-content-between align-items-end gap-2 my-4">
+        <h4 class="me-auto">내 제출</h4>
+
+        <a class="btn btn-primary" th:attr="href='./edit/' + ${assignment.getId()}">수정</a>
+        <a class="btn btn-danger" th:attr="href='./delete/' + ${assignment.getId()}"
+           data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨">삭제</a>
+    </div>
+
+    <table class="table table-bordered">
+        <colgroup>
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 80%;">
+        </colgroup>
+
+        <tr><th class="table-active text-center">제목</th>
+            <td th:text="${board.getTitle()}"></td></tr>
+
+        <tr><th class="table-active text-center">제출일</th>
+            <td th:text="${#dates.format(board.getDate(), 'yyyy-MM-dd HH시 mm분')}"></td></tr>
+
+        <tr><th class="table-active text-center">내용</th>
+            <td><div id="viewerSubmit"></div></td></tr>
+
+        <tr><th class="table-active text-center">첨부파일</th>
+            <td><a class="text-decoration-none text-primary" target="_blank"
+                   th:href="${board.getAttachmentPath()} + '?filename=' + ${board.getAttachmentName()}"
+                   th:text="${board.getAttachmentName()}"></a></td></tr>
+    </table>
+</div>
+
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    // 삭제 버튼 툴팁
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    // Toast UI 뷰어 - 과제
+    const viewer = new toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true,
+        initialValue: `[(${assignment.getContent()})]`
+    });
+
+    // Toast UI 뷰어 - 내 제출
+    const viewerSubmit = new toastui.Editor.factory({
+        el: document.querySelector('#viewerSubmit'),
+        viewer: true,
+        initialValue: `[(${board.getContent()})]`
+    });
+</script>
+</body>
+</html>

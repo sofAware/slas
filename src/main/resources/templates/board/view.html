@@ -4,6 +4,9 @@
     .comment {
         border-top: 1px solid rgb(241, 243, 245);
     }
+    #viewer img {
+        width: 100%;
+    }
 </style>
 <title th:text="${title.substring(3)} + ' - ' + ${board.getSyllabus().getName()}"></title>
 <meta th:replace="frame/mid.html">

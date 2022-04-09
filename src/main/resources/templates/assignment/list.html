@@ -25,13 +25,13 @@
 
     .card {
         margin-bottom: 0.5rem;
-        transition: color 0.1s, background-color 0.1s;
-    }
-    .card:hover {
-        background-color: #fafafa;
+        transition: opacity 0.1s, background-color 0.1s;
     }
     a.card {
         color: #495057;
+    }
+    .card:hover {
+        background-color: #fafafa;
     }
     .card div,
     .card span,
@@ -41,11 +41,14 @@
     .card .fw-bold {
         text-align: left;
     }
-    .card:hover span {
-        color: black;
-    }
     .card-body {
+        opacity: 0.8;
         padding: 0.8rem 1rem;
+        transition: opacity 0.1s;
+    }
+    .card-body:hover {
+        opacity: 1;
+        background-color: #fafafa;
     }
 
     @media (max-width: 768px) {
@@ -124,7 +127,10 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-7 d-flex align-items-center gap-1">
-                    <span th:text="${a.getName()}" class="flex-grow-1 fw-bold text-start"></span>
+                    <div th:attr="class=${isSubmits.get(a.getId()) ? 'text-success' : ''}+' flex-grow-1 text-start'">
+                        <i class="fas fa-check" th:if="${isSubmits.get(a.getId())}"></i>
+                        <span th:text="${a.getName()}" class="fw-bold"></span>
+                    </div>
                     <i class="far fa-image" th:if="${a.getContent().contains('![image](')}"></i>
                     <i class="fa fa-paperclip" th:if="${a.getAttachmentName() != null && !a.getAttachmentName().isEmpty()}"></i>
                 </div>
