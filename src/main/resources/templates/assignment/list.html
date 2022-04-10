@@ -127,8 +127,8 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-7 d-flex align-items-center gap-1">
-                    <div th:attr="class=${isSubmits.get(a.getId()) ? 'text-success' : ''}+' flex-grow-1 text-start'">
-                        <i class="fas fa-check" th:if="${isSubmits.get(a.getId())}"></i>
+                    <div th:attr="class=${#authorization.expression('hasRole(''STUDENT'')') && isSubmits.get(a.getId()) ? 'text-success' : ''}+' flex-grow-1 text-start'">
+                        <i class="fas fa-check" th:if="${#authorization.expression('hasRole(''STUDENT'')') && isSubmits.get(a.getId())}"></i>
                         <span th:text="${a.getName()}" class="fw-bold"></span>
                     </div>
                     <i class="far fa-image" th:if="${a.getContent().contains('![image](')}"></i>
