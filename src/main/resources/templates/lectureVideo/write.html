@@ -1,104 +1,93 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta th:replace="frame/head.html">
-    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
-    <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet" />
-    <title>강의영상 - 글쓰기</title>
-    <style>
-        /* 배속 메뉴 */
-        .vjs-playback-rate .vjs-menu {
-            width: 6em;
-        }
-    </style>
-</head>
-<body>
-<header sec:authorize="hasRole('STUDENT')" th:replace="frame/sHeader.html"></header>
-<header sec:authorize="hasRole('PROFESSOR')" th:replace="frame/pHeader.html"></header>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+<link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet" />
+<title>강의영상 - 글쓰기</title>
+<style>
+    /* 배속 메뉴 */
+    .vjs-playback-rate .vjs-menu {
+        width: 6em;
+    }
+</style>
+<meta th:replace="frame/mid.html">
 
-<div class="container">
-    <h2 class="my-4">🎬 강의영상</h2>
-    <form method="POST" id="write">
-        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
 
-        <div class="mb-3 row">
-            <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
-            <div class="col-sm-10">
-                <select class="form-control" id="syllabus" name="syllabusId" disabled>
-                    <option th:text="${syllabus.formatDetailName()}"
-                            th:value="${syllabus.getId()}" selected></option>
-                </select>
+<!-- add your content here! -->
+<h2 class="m-0 mb-5">🎬 강의영상</h2>
+<form method="POST" id="write">
+    <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+
+    <div class="mb-3 row">
+        <label for="syllabus" class="col-sm-2 col-form-label">강의</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="syllabus" name="syllabusId" disabled>
+                <option th:text="${syllabus.formatDetailName()}"
+                        th:value="${syllabus.getId()}" selected></option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputTitle" name="title"
+                   th:attr="value=${lv}?${lv.getName()}:''">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="inputWeek" class="col-sm-2 col-form-label">주차</label>
+        <div class="col-sm-10">
+            <div class="input-group col-sm-10">
+                <input type="number" class="form-control" id="inputWeek" name="week"
+                       th:value="${lv}?${lv.getId()}:1">
             </div>
         </div>
-        <div class="mb-3 row">
-            <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputTitle" name="title"
-                    th:attr="value=${lv}?${lv.getName()}:''">
+    </div>
+    <div class="mb-3 row">
+        <label for="inputAttendanceStart" class="col-sm-2 col-form-label">출석기간</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="date" class="form-control" id="inputAttendanceStart" name="attendanceStart"
+                       th:value="${lv}?${#dates.format(lv.getAttendanceStart(), 'yyyy-MM-dd')}:''">
+                <input type="date" class="form-control" id="inputAttendanceEnd" name="attendanceEnd"
+                       th:value="${lv}?${#dates.format(lv.getAttendanceEnd(), 'yyyy-MM-dd')}:''">
             </div>
         </div>
-        <div class="mb-3 row">
-            <label for="inputWeek" class="col-sm-2 col-form-label">주차</label>
-            <div class="col-sm-10">
-                <div class="input-group col-sm-10">
-                    <input type="number" class="form-control" id="inputWeek" name="week"
-                           th:value="${lv}?${lv.getId()}:1">
-                </div>
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="inputAttendanceStart" class="col-sm-2 col-form-label">출석기간</label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="date" class="form-control" id="inputAttendanceStart" name="attendanceStart"
-                           th:value="${lv}?${#dates.format(lv.getAttendanceStart(), 'yyyy-MM-dd')}:''">
-                    <input type="date" class="form-control" id="inputAttendanceEnd" name="attendanceEnd"
-                           th:value="${lv}?${#dates.format(lv.getAttendanceEnd(), 'yyyy-MM-dd')}:''">
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <video
-                id="my-video"
-                class="video-js vjs-big-play-centered vjs-theme-forest mb-3 mx-auto w-100"
-                controls
-                preload="auto"
-                data-setup='{"fluid": true, "playbackRates": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]}'
-        >
-            <source th:if="${lv}" th:src="${lv.getAttachmentPath()}" type="video/mp4" />
-            <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a
-                web browser that
-                <a href="https://videojs.com/html5-video-support/" target="_blank"
-                >supports HTML5 video</a
-                >
-            </p>
-        </video>
+    <video
+        id="my-video"
+        class="video-js vjs-big-play-centered vjs-theme-forest mb-3 mx-auto w-100"
+        controls
+        preload="auto"
+        data-setup='{"fluid": true, "playbackRates": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]}'
+    >
+        <source th:if="${lv}" th:src="${lv.getAttachmentPath()}" type="video/mp4" />
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank"
+            >supports HTML5 video</a
+            >
+        </p>
+    </video>
 
-        <div class="mb-3 row">
-            <div class="col">
-                <div class="form-check mb-1" th:if="${lv}?${lv.getAttachmentPath() != null && !lv.getAttachmentPath().isEmpty()}:false">
-                    <input class="form-check-input" type="checkbox" value="true" id="deleteFile" name="deleteFile">
-                    <label class="form-check-label" for="deleteFile" th:text="${lv.getName()}+' (체크시 삭제)'"></label>
-                </div>
-                <input class="form-control" type="file" id="file" name="file" accept=".mp4">
+    <div class="mb-3 row">
+        <div class="col">
+            <div class="form-check mb-1" th:if="${lv}?${lv.getAttachmentPath() != null && !lv.getAttachmentPath().isEmpty()}:false">
+                <input class="form-check-input" type="checkbox" value="true" id="deleteFile" name="deleteFile">
+                <label class="form-check-label" for="deleteFile" th:text="${lv.getName()}+' (체크시 삭제)'"></label>
             </div>
+            <input class="form-control" type="file" id="file" name="file" accept=".mp4">
         </div>
-        <div class="mb-3 d-flex gap-3">
-            <a href="/p/lv" type="button" class="btn btn-secondary me-auto">목록</a>
-            <div class="spinner-border text-primary d-none" role="status"></div>
-            <button type="submit" class="btn btn-primary" th:text="${lv}?'수정완료':'작성완료'"></button>
-        </div>
-    </form>
-</div>
-<!-- Copy & Edit here! -->
+    </div>
+    <div class="mb-3 d-flex gap-3">
+        <a href="/p/lv" type="button" class="btn btn-secondary me-auto">목록</a>
+        <div class="spinner-border text-primary d-none" role="status"></div>
+        <button type="submit" class="btn btn-primary" th:text="${lv}?'수정완료':'작성완료'"></button>
+    </div>
+</form>
 
-<footer th:replace="frame/footer.html"></footer>
-<script th:replace="frame/tail.html"></script>
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script type="text/javascript" th:src="@{/js/pLectureVideoWrite.js}"></script>
-</body>
-</html>
+
+<meta th:replace="frame/mid2.html">
+<script type="text/javascript" src="/assets/js/pLectureVideoWrite.js"></script>
+<meta th:replace="frame/end.html">
