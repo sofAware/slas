@@ -1,166 +1,167 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-  <meta th:replace="frame/head.html">
-  <title>퀴즈</title>
-</head>
-<body>
-<header th:replace="frame/pHeader.html"></header>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<style>
+  .board-menu {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .board-menu > * {
+    flex-shrink: 0;
+  }
+  .board-menu > div {
+    margin-left: auto;
+  }
 
-<form method="POST" id="write">
-  <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
-  <table class="table table-striped table-hover">
+  .board-header {
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .board-header h5 {
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+  }
 
-    <!--    <div class="mb-3 row">-->
-<!--      <label for="syllabus" class="col-sm-2 col-form-label">강의</label>-->
-<!--      <div class="col-sm-10">-->
-<!--        <select class="form-control" id="syllabus" name="syllabusId" disabled>-->
-<!--          <option th:text="${syllabus.formatDetailName()}"-->
-<!--                  th:value="${syllabus.getId()}" selected></option>-->
-<!--        </select>-->
-<!--      </div>-->
-<!--    </div>-->
-    <input type="button" value="출제 완료" th:onclick="| location.href='@{/p/quiz/list}'|">
+  .card {
+    margin-bottom: 0.5rem;
+    transition: color 0.1s, background-color 0.1s;
+  }
+  .card:hover {
+    background-color: #fafafa;
+  }
+  a.card {
+    color: #495057;
+  }
+  .card div,
+  .card span,
+  .card i {
+    text-align: center;
+  }
+  .card .fw-bold {
+    text-align: left;
+  }
+  .card:hover span {
+    color: black;
+  }
+  .card-body {
+    padding: 0.8rem 1rem;
+  }
 
-    <thead>
-    <tr>
-      <th>퀴즈 번호</th>
-      <th>퀴즈 제목</th>
-      <th>제출 가능 시작 일자</th>
-      <th>제출 가능 마감 일자</th>
-    </tr>
-    </thead><!-- 퀴즈 목록이 없는 경우 -->
-    <tr>
-      <input type="hidden" name="syllabusId" th:value="${syllabus.getId()}">
-      <td>
-        <input type="text" name="id" >
-      </td>
-      <td>
-        <input type="text"  name="name">
-      </td>
-      <td>
-        <input type="date"  name="submitStart">
-      </td>
-      <td>
-        <input type="date"  name="submitEnd">
-      </td>
-    </tr>
-    </tbody>
-
-  </table>
-
-<!--  <tr><input type=button value='항목 추가' onclick='createDiv()'></tr>-->
-
-  <table id="dynamic_table" class="table table-striped table-hover">
-    <thead>
-    <td>항목 추가</td>
-    </thead>
-    <tr>
-      <th>문제 번호</th>
-      <th>카테고리</th>
-      <th>문제 내용</th>
-      <th>모범 답안</th>
-      <th>배점</th>
-      <th></th>
-    </tr>
-    <!--    <tr><input type="button" value='항목 추가' onclick='createDiv()'></tr>-->
-
-    <td>
-      <input type="number" name="questionNum">
-    </td>
-    <td>
-      <input type="number" name="category">
-    </td>
-    <td>
-      <input type="text" name="question">
-    </td>
-    <td>
-      <input type="text" name="correctAnswer">
-    </td>
-    <td>
-      <input type="number" name="score">
-    </td>
-    <td>
-      <input type="submit" name="complete" value="완료">
-    </td>
-  </table>
-</form>
-
-<!--<script>-->
-<!--  function createDiv() {-->
-<!--    const dynamicTable = document.getElementById('dynamic_table');-->
-<!--    const newRow = dynamicTable.insertRow();-->
-<!--    const cell1 = newRow.insertCell();-->
-<!--    const cell2 = newRow.insertCell();-->
-<!--    const cell3 = newRow.insertCell();-->
-<!--    const cell4 = newRow.insertCell();-->
-<!--    const cell5 = newRow.insertCell();-->
-<!--    const cell6 = newRow.insertCell();-->
-
-<!--    cell1.innerHTML = '<input type="number" name="questionNum">';-->
-<!--    cell2.innerHTML = '<input type="number" name="category">';-->
-<!--    cell2.innerHTML = '<input type="number" name="category">';-->
-<!--    cell3.innerHTML = '<input type="text" name="question">';-->
-<!--    cell4.innerHTML = '<input type="text" name="correctAnswer">';``-->
-<!--    cell5.innerHTML = '<input type="number" name="score">';-->
-<!--    cell6.innerHTML = '<input type="submit" value="완료">';-->
-
-<!--    count++;-->
-<!--  }-->
-
-<!--  function checkSize(input) {-->
-<!--    if (input.files && input.files[0].size > (20*1024*1024)) {-->
-<!--      alert("파일 사이즈가 20MB 초과되었습니다.");-->
-<!--    }-->
-<!--  }-->
-
-<!--  function deleteRow() {-->
-<!--    var table = document.getElementById('dynamic_table');-->
-<!--    var checkboxArray = document.getElementsByName('checkboxObj');-->
-
-<!--    for (var i = checkboxArray.length-1; i>=0; i&#45;&#45;) {-->
-<!--      var check = checkboxArray[i].checked;-->
-
-<!--      if (check) {-->
-<!--        table.deleteRow(i);-->
-<!--      }-->
-<!--    }-->
-<!--  }-->
-<!--</script>-->
+  @media (max-width: 768px) {
+    .board-card-detail {
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
+</style>
+<title>퀴즈 출제</title>
+<meta th:replace="frame/mid.html">
 
 
-<!--<script>-->
-<!--    function createDiv() {-->
-<!--        alert('더이상 추가하실수 없습니다.');-->
-<!--    }-->
-<!--        noTh = noTh + 1;-->
+<!-- add your content here! -->
+<a class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+        <th:block>
+          <tr>
+            <th>학정 번호</th>
+            <th>강의 제목</th>
+          </tr>
+        </th:block>
 
-<!--        <tr>하이</tr>-->
-<!--        layer1.innerHTML=layer1.innerHTML-->
-<!--            +'<table>'-->
-<!--            +'        <tr>'-->
-<!--            +'                  <td><input name=rg_ext20[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext21[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext22[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext23[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext24[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext25[] type=text class=basic size=20></td>'-->
-<!--            +'        </tr>';-->
-<!--        +'</table>';-->
-<!--        layer1.style.display = "";-->
-<!--    }-->
-<!--</script>-->
+        </thead>
+        <tbody>
+        <th:block>
+          <tr>
 
-<!--<script>-->
-<!--  const btnPut = document.querySelector('#addDoc');-->
-<!--  if(btnPut)-->
-<!--    document.getElementById("addDoc").addEventListener("click", function(e){-->
-<!--      var target = document.querySelector(".add_doctor").cloneNode(true);-->
-<!--      document.querySelector(".docList").innerHTML += target.innerHTML;-->
-<!--    });-->
-<!--</script>-->
+          </tr>
+        </th:block>
 
-</body>
-</html>
+        </tbody>
+      </table>
+    </div>
+
+    <br>
+  </div>
+</a>
+
+<a class="card">
+  <br>
+  <h4 class="card-title text-center">강의 정보</h4>
+  <br>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-nowrap mb-0">
+        <thead>
+        <th:block>
+          <tr>
+            <th>퀴즈 번호</th>
+            <th>퀴즈 제목</th>
+            <th>제출 가능 시작 일자</th>
+            <th>제출 가능 마감 일자</th>
+          </tr>
+        </th:block>
+
+        </thead>
+        <tbody>
+        <th:block>
+          <tr>
+            <input type="hidden" name="syllabusId" th:value="${syllabus.getId()}">
+            <td><input type="text" class="form-control" name="id"></td>
+            <td><input type="text" class="form-control" name="name"></td>
+            <td><input type="date" class="form-control" name="submitStart"></td>
+            <td><input type="date" class="form-control" name="submitEnd"></td>
+          </tr>
+        </th:block>
+
+        </tbody>
+      </table>
+
+      <table class="table table-bordered table-striped table-nowrap mb-0">
+        <thead>
+        <th:block>
+          <tr>
+            <th>문제 번호</th>
+            <th>카테고리</th>
+            <th>문제 내용</th>
+            <th>모범 답안</th>
+            <th>배점</th>
+          </tr>
+        </th:block>
+
+        </thead>
+        <tbody>
+
+
+
+        <th:block>
+          <tr>
+            <td><input type="number" class="form-control" name="questionNum"></td>
+            <td>
+              <select class="form-select" id="autoSizingSelect">
+                <option selected="">Choose</option>
+                <option name="category" value="1">객관식</option>
+                <option name="category" value="2">단답식</option>
+                <option name="category" value="3">주관식</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control" name="question"></td>
+            <td><input type="text" class="form-control" name="correctAnswer"></td>
+            <td><input type="number" class="form-control" name="score"></td>
+          </tr>
+        </th:block>
+
+        </tbody>
+      </table>
+
+    </div>
+
+    <br>
+  </div>
+</a>
+
+<meta th:replace="frame/mid2.html">
+<!-- add your js here -->
+<meta th:replace="frame/end.html">
