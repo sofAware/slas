@@ -92,6 +92,15 @@ public class AssignmentStudentController {
         // 제출기한 시작일 내림차순 정렬 후 모델에 넣기
         assignments.sort(Comparator.comparing(Assignment::getSubmitStart).reversed());
         model.addAttribute("assignments", assignments);
+
+        // 내가 과제를 제출했는지 내역
+        Map<Integer, Boolean> isSubmits = new HashMap<>();
+        assignments.forEach(a -> {
+            Optional<Board> submit = assignmentSubmitService.findByAssignment_IdAndMember_Id(a.getId(), principal.getName());
+            isSubmits.put(a.getId(), submit.isPresent());
+        });
+        model.addAttribute("isSubmits", isSubmits);
+
         return "assignment/list";
     }
 

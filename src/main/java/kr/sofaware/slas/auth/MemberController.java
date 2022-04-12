@@ -1,16 +1,24 @@
 package kr.sofaware.slas.auth;
 
+import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Principal;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,5 +57,14 @@ public class MemberController {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder
                 .getContext().getAuthentication());
         return "redirect:/login";
+    }
+
+    // 프로필 사진 요청
+    @GetMapping("/assets/images/profile")
+    @ResponseBody
+    public byte[] viewProfile(Principal principal) throws IOException {
+        Member member = memberService.loadUserByUsername(principal.getName());
+        InputStream profile = member.getProfileContent();
+        return profile == null ? null : profile.readAllBytes();
     }
 }

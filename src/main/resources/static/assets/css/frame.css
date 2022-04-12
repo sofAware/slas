@@ -1,0 +1,12 @@
+.bx-tada,
+.bx-spin {
+    animation: none;
+}
+
+.waves-effect:hover > .bx-tada {
+    animation: tada 1.5s ease infinite;
+}
+
+.waves-effect:hover > .bx-spin {
+    animation: spin 2s linear infinite;
+}
