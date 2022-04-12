@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="frame/head.html">
+    <title>퀴즈</title>
+</head>
+<body>
+<header th:replace="frame/sHeader.html"></header>
+
+<div class="d-flex justify-content-center gap-4">
+    <!-- 학기 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${yearSemester}">
+            학기 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="semester">
+            <li th:each="key : ${mapYS.keySet()}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?year-semester=' + key}"
+                   th:text="${mapYS.get(key)}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 강의 선택 -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${selectedSyllabusName}" th:attr="data-sid=${selectedSyllabusId}">
+            강의 선택
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="syllabus">
+            <li th:each="s : ${syllabuses}">
+                <a class="dropdown-item"
+                   th:attr="href=${'?syllabus-id=' + s.getId()}"
+                   th:text="${s.getName()}"></a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>시험 제목</th>
+        <th>응시 기간</th>
+        <th>응시 여부</th>
+        <th> </th>
+
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer;" th:if="${quizList.isEmpty() eq false}">                                                            <!-- 퀴즈 목록이 존재하는 경우 -->
+    <tr th:each="i : ${#numbers.sequence(0,quizList.size()-1)}">
+        <td th:text="${quizList.get(i).getId()}"></td>
+        <td th:text="${quizList.get(i).getName()}"></td>
+        <td th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:if="${quizList.get(i).getSubmitted() eq true}" th:text="O"></td>
+        <td th:unless="${quizList.get(i).getSubmitted() eq true}" th:text="X"></td>
+        <td>
+            <button th:unless="${quizList.get(i).getSubmitted() eq true}" type="button" name="button"
+                    id="test" th:attr="data-sid=${quizList.get(i).getId()}">응시</button>
+        </td>
+
+
+    </tr>
+    </tbody>
+    <tbody th:unless="${quizList.isEmpty() eq false}">                                                        <!-- 퀴즈 목록이 없는 경우 -->
+    <tr>
+        <td th:colspan="4">등록된 내용이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
+<script>
+    const btnPut = document.querySelector('#test');
+    if (btnPut)
+        btnPut.addEventListener('click', evt => {
+            const sid = document.querySelector('#test').getAttribute('data-sid');
+            const sidd = document.querySelector('#syllabus').getAttribute('data-sid');
+
+            location.href = '/s/quiz/detail/' + sid +'&'+sidd ;
+        });
+</script>
+
+</body>
+</html>
+
