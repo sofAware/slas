@@ -1,187 +1,319 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-    <meta charset="UTF-8">
-    <meta th:replace="frame/head.html">
-    <title>Student Main Page</title>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<link rel="stylesheet" type="text/css" href="/assets/css/custom/timetable.css">
+<title>메인 페이지</title>
+<meta th:replace="frame/mid.html">
+<!-- add your content here! -->
 
-    <!--시간표 출력 style-->
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            text-align: center;
-            width : 100px;
-            height: 40px;
-        }
-        th, td {
-            padding: 5px;
-        }
-        th {
-            text-align: center;
-        }
-    </style>
-</head>
+<div class="row">                                                           <!-- 년도, 학기 선택 버튼 -->
+    <div class="mb-4 d-flex justify-content-end gap-4">
+        <!-- 학기 선택 -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="true">
+                [[${formatYS}?${formatYS}:'학기 선택']]
+                <i class="mdi mdi-chevron-down"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="semester">
+                <li th:each="key : ${mapYS.keySet()}">
+                    <a class="dropdown-item"
+                       th:attr="href=${'?year-semester=' + key}"
+                       th:text="${mapYS.get(key)}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-<body>
-    <header th:replace="frame/sHeader.html"></header>
+<div class="row">                                                               <!-- 시간표 -->
+    <div class="col-xl-7">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center">시간표</h4>
 
-    <div>
-        <span th:text="${MainPageDto.id}"></span>
-        <span th:text="${MainPageDto.name}"></span>
+                <div class="timetable-img text-center">
+                    <img src="img/content/timetable.png" alt="">
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                        <tr class="bg-light-gray">
+                            <th class="text-uppercase">Time</th>
+                            <th class="text-uppercase">Monday</th>
+                            <th class="text-uppercase">Tuesday</th>
+                            <th class="text-uppercase">Wednesday</th>
+                            <th class="text-uppercase">Thursday</th>
+                            <th class="text-uppercase">Friday</th>
+                            <th class="text-uppercase">Saturday</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="align-middle">1교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td class="align-middle" th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(0).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(0).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(0).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(0).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(0).get(num).lectureName != '' ? 'bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(0).get(num).professorName != "" ? "9:00-10:15" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(0).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">2교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(1).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(1).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(1).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(1).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(1).get(num).lectureName != '' ? 'bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(1).get(num).professorName != "" ? "10:30-11:45" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(1).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">3교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(2).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(2).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(2).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(2).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(2).get(num).lectureName != '' ? 'bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(2).get(num).professorName != "" ? "12:00-13:15" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(2).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">4교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(3).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(3).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(3).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(3).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(3).get(num).lectureName != '' ? 'bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(3).get(num).professorName != "" ? "13:30-14:45" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(3).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">5교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(4).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(4).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(4).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(4).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(4).get(num).lectureName != '' ? 'bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(4).get(num).professorName != "" ? "15:00-16:15" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(4).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">6교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(5).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(5).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(5).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(5).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(5).get(num).lectureName != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(5).get(num).professorName != "" ? "16:30-17:45" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(5).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">7교시</td>
+                            <!-- 들은 강의들이 없는 경우 -->
+                            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
+                            <!-- 들은 강의들이 있는 경우 -->
+                            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(6).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(6).get(num).cellSpan}">
+                                <th:block th:if="${MainPageDto.cellDtoList.get(6).get(num).lectureName != null}">
+                                    <span th:text="${MainPageDto.cellDtoList.get(6).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(6).get(num).lectureName != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <div th:text='${MainPageDto.cellDtoList.get(6).get(num).professorName != "" ? "18:00-19:00" : ""}' class="margin-10px-top font-size14"></div>
+                                    <div th:text="${MainPageDto.cellDtoList.get(6).get(num).professorName}" class="font-size13 text-light-gray"></div>
+                                </th:block>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
     </div>
 
-    <a>공지 사항</a><br>
-    <a>Q&A 게시판</a><br>
-    <a>강의 자료 게시판</a><br>
-    <a>강의 영상 게시판</a><br>
-    <a>강의계획서</a><br>
-    <a>출석 체크</a><br>
-    <a>과제 게시판</a><br>
-    <a>퀴즈</a><br>
-    <a>개인정보 조회&수정</a><br>
-    <a href="/home">홈으로 이동 -></a><br>
 
-    <!-- 학기 선택 -->
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
-                th:text="${yearSemester}">
-            학기 선택
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="semester">
-            <li th:each="key : ${mapYS.keySet()}">
-                <a class="dropdown-item"
-                   th:attr="href=${'?year-semester=' + key}"
-                   th:text="${mapYS.get(key)}"></a>
-            </li>
-        </ul>
+
+
+<!--    <div class="timetable-img text-center">-->
+<!--        <img src="img/content/timetable.png" alt="">-->
+<!--    </div>-->
+<!--    <div class="table-responsive">-->
+<!--        <table class="table table-bordered text-center">-->
+<!--            <thead>-->
+<!--                <tr class="bg-light-gray">-->
+<!--                    <th class="text-uppercase">Time</th>-->
+<!--                    <th class="text-uppercase">Monday</th>-->
+<!--                    <th class="text-uppercase">Tuesday</th>-->
+<!--                    <th class="text-uppercase">Wednesday</th>-->
+<!--                    <th class="text-uppercase">Thursday</th>-->
+<!--                    <th class="text-uppercase">Friday</th>-->
+<!--                    <th class="text-uppercase">Saturday</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">0교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td class="align-middle" th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(0).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(0).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(0).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(0).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(0).get(num).lectureName != '' ? 'bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(0).get(num).professorName != "" ? "9:00-10:15" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(0).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">2교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(1).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(1).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(1).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(1).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(1).get(num).lectureName != '' ? 'bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(1).get(num).professorName != "" ? "10:30-11:45" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(1).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">3교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(2).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(2).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(2).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(2).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(2).get(num).lectureName != '' ? 'bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(2).get(num).professorName != "" ? "12:00-13:15" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(2).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">4교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(3).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(3).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(3).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(3).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(3).get(num).lectureName != '' ? 'bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(3).get(num).professorName != "" ? "13:30-14:45" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(3).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">5교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(4).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(4).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(4).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(4).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(4).get(num).lectureName != '' ? 'bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(4).get(num).professorName != "" ? "15:00-16:15" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(4).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">6교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(5).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(5).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(5).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(5).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(5).get(num).lectureName != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(5).get(num).professorName != "" ? "16:30-17:45" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(5).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td class="align-middle">7교시</td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 없는 경우 &ndash;&gt;-->
+<!--                    <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>-->
+<!--                    &lt;!&ndash; 들은 강의들이 있는 경우 &ndash;&gt;-->
+<!--                    <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(6).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(6).get(num).cellSpan}">-->
+<!--                        <th:block th:if="${MainPageDto.cellDtoList.get(6).get(num).lectureName != null}">-->
+<!--                            <span th:text="${MainPageDto.cellDtoList.get(6).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(6).get(num).lectureName != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>-->
+<!--                            <div th:text='${MainPageDto.cellDtoList.get(6).get(num).professorName != "" ? "18:00-19:00" : ""}' class="margin-10px-top font-size14"></div>-->
+<!--                            <div th:text="${MainPageDto.cellDtoList.get(6).get(num).professorName}" class="font-size13 text-light-gray"></div>-->
+<!--                        </th:block>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
+
+
+</div>
+
+<div class="row">
+    <div class="col-xl-4 col-sm-6">
+        <div class="card">
+            <div class="row">
+                <div class="col-xl-5">
+                    <div class="text-center p-4 border-end">
+                        <div class=" avatar-sm mx-auto mb-3 mt-1">
+                                                        <span class="avatar-title rounded-circle bg-dark bg-soft text-dark text-light font-size-16">
+                                                            H
+                                                        </span>
+                        </div>
+                        <h5 class="text-truncate pb-1">기업과 경영</h5>
+                    </div>
+                </div>
+
+                <div class="col-xl-7 align-self-center">
+                    <div class="p-4 text-center text-xl-start">
+                        <div class="row">
+                            <div class="col-6"><button type="button" class="btn btn-secondary text-dark text-gradient btn-sm waves-effect waves-light" style="width: 90px; border:none;">공지사항</button>
+
+                            </div>
+                            <div class="col-6"><button type="button" class="btn btn-secondary text-dark text-gradient btn-sm waves-effect waves-light" style="width: 90px; border:none;">강의영상</button>
+
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6"><button type="button" class="btn  btn-secondary text-dark text-gradient btn-sm waves-effect waves-light" style="width: 90px; border:none">강의자료</button>
+
+                            </div>
+                            <div class="col-6"><button type="button" class="btn btn-secondary text-dark text-gradient btn-sm waves-effect waves-light" style="width: 90px; border:none;">질문게시판</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
-
-    <!-- 해당 학기에 들은 과목들 시간표로 출력 -->
-    <!-- 해당 학기에 들은 시간표가 있는 경우 => studentMainPageDto 의 cellDtoList 를 바탕으로 출력하면 됨  -->
-    <!-- 해당 학기에 들은 시간표가 없는 경우 => 그냥 빈 테이블 출력  -->
-    <table style="width:50%; height:50%;">
-        <tr>
-            <th> </th>
-            <th>월</th>
-            <th>화</th>
-            <th>수</th>
-            <th>목</th>
-            <th>금</th>
-        </tr>
-        <tr>
-            <th>1교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(0).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(0).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(0).get(num).cellSpan}"></td>
-        </tr>
-        <tr>
-            <th>2교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(1).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(1).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(1).get(num).cellSpan}"></td>
-        </tr>
-        <tr>
-            <th>3교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(2).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(2).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(2).get(num).cellSpan}"></td>
-        </tr>
-        <tr>
-            <th>4교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(3).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(3).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(3).get(num).cellSpan}"></td>
-        </tr>
-        <tr>
-            <th>5교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(4).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(4).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(4).get(num).cellSpan}"></td>
-        </tr>
-        <tr>
-            <th>6교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(5).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(5).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(5).get(num).cellSpan}"></td>
-        </tr>
-        <tr>
-            <th>7교시</th>
-            <!-- 들은 강의들이 없는 경우 -->
-            <td th:if="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,4)}"></td>
-            <!-- 들은 강의들이 있는 경우 -->
-            <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(6).size()-1)}" th:utext="${MainPageDto.cellDtoList.get(6).get(num).lectureName}" th:rowspan="${MainPageDto.cellDtoList.get(6).get(num).cellSpan}"></td>
-        </tr>
-    </table>
+</div>
 
 
-    <!--    수강과목들 보여주기-->
-    <div th:if="${MainPageDto.noLectures eq false}" th:each="num : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().size()-1)}">
-        <h3 th:text="${MainPageDto.getSyllabusDtoList().get(num).getName()}"></h3>                <!-- num 번째 syllabusDto 를 get 해서 .name 으로 과목이름 가져옴 -->
-        <a>공지 사항 바로가기</a><br>
-        <a>Q&A 게시판 바로가기 </a><br>
-        <a>강의 자료 게시판 바로가기</a><br>
-        <a>강의 영상 게시판 바로가기</a><br>
 
 
-        <h4>최신 공지사항</h4>
-        <div th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().size()-1)}">
-            <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).getUploadDate(), 'yyyy-MM-dd')+' '+MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}"></a> <br>
-        </div>
 
-
-        <h4>남은 강의</h4>
-        <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().isEmpty() eq false}">
-            <p th:text="${'이 과목의 남은 강의 개수는 '+MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()+' 개 입니다.'}"></p>
-            <p th:text="${'가장 빠른 마감일은 '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')+' 입니다.'}"></p>
-            <p>남은 강의들의 목록</p>
-            <!-- 남은 강의들의 목록이 3개 이하인 경우 -->
-            <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()-1)}">
-                <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}"></a>
-            </div>
-            <!-- 남은 강의들의 목록이 3개 넘는 경우 => 3개까지만 보여주기 -->
-            <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,2)}">
-                <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}"></a>
-            </div>
-        </div>
-        <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().isEmpty() eq false}">
-            <p>남은 강의가 없습니다!</p>
-        </div>
-
-
-        <h4>남은 과제</h4>
-        <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
-            <p th:text="${'이 과목의 남은 과제 개수는 '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()+' 개 입니다.'}"></p>
-            <p th:text="${'가장 빠른 마감일은 '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' 이고, 과제명은 '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getName()+' 입니다.'}"></p>
-<!--            <p th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).size())}" th:text="${MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).get(i).getName()}"></p>-->
-            <p>남은 과제들의 목록</p>
-            <!-- 남은 과제들의 목록이 3개 이하인 경우 -->
-            <div th:if="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()-1)}">
-                <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}"></a>
-            </div>
-            <!-- 남은 과제들의 목록이 3개 넘는 경우 => 3개까지만 보여주기 -->
-            <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().size()<=3}" th:each="i : ${#numbers.sequence(0,2)}">
-                <a th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')+' '+MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}"></a>
-            </div>
-        </div>
-        <div th:unless="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().isEmpty() eq false}">
-            <p>남은 과제가 없습니다!</p>
-        </div>
-
-        <hr>
-    </div>
-
-    <footer th:replace="frame/footer.html"></footer>
-    <script th:replace="frame/tail.html"></script>
-</body>
-</html>
+<meta th:replace="frame/mid2.html">
+<!-- add your js here -->
+<meta th:replace="frame/end.html">

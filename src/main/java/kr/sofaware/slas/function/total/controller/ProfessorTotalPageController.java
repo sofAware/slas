@@ -62,13 +62,15 @@ public class ProfessorTotalPageController {
         //학기 선택 리스트
         model.addAttribute("mapYS", formatYS);
         model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+        model.addAttribute("formatYS", Syllabus.formatYearSemester(yearSemester));
 
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));
         String finalSyllabusId = syllabusId;
         model.addAttribute("selectedSyllabusName",
                 lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
-                        .findAny().get().getName());
+                        .findAny().get().getName()+" ("+lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
+                        .findAny().get().formatClassTime()+")");
 
 
         // 공지사항

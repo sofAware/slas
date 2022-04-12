@@ -9,9 +9,9 @@
     <div class="mb-4 d-flex justify-content-start gap-4">
         <!-- 학기 선택 -->
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
-                    th:text="${yearSemester}">
-                학기 선택
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="true">
+                [[${formatYS}?${formatYS}:'학기 선택']]
+                <i class="mdi mdi-chevron-down"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="semester">
                 <li th:each="key : ${mapYS.keySet()}">
@@ -24,15 +24,20 @@
 
         <!-- 강의 선택 -->
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
-                    th:text="${selectedSyllabusName}">
-                강의 선택
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false">
+                [[${selectedSyllabusName}?${selectedSyllabusName}:'강의 선택']]
+                <i class="mdi mdi-chevron-down"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="syllabus">
-                <li th:each="s : ${syllabuses}">
+                <li th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}" th:each="s : ${syllabuses}">
                     <a class="dropdown-item"
                        th:attr="href=${'?syllabus-id=' + s.getId()}"
-                       th:text="${s.getName()}"></a>
+                       th:text="${s.getName() + ' (' + s.formatClassTime() + ')'}"></a>
+                </li>
+                <li th:if="${#authorization.expression('hasRole(''STUDENT'')')}" th:each="s : ${syllabuses}">
+                    <a class="dropdown-item"
+                       th:attr="href=${'?syllabus-id=' + s.getId()}"
+                       th:text="${s.getName() + ' - ' + s.getProfessor().getName() + ' (' + s.formatClassTime() + ')'}"></a>
                 </li>
             </ul>
         </div>

@@ -51,9 +51,11 @@ public class StudentMainPageController {
 
             Map<String, String> formatYS = new TreeMap<>(Collections.reverseOrder());
             lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
+
             // 학기 선택 리스트
             model.addAttribute("mapYS", formatYS);
             model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+            model.addAttribute("formatYS", Syllabus.formatYearSemester(yearSemester));
 
             List<SyllabusDtoForStu> syllabusDtoList = new ArrayList<>();                            //년도, 학기를 바탕으로 이 학생이 해당 학기에 들은 강의들의 syllabus 들을 받아와서 view 에 전달하기 위한 syllabusDto 들로 변환
             for(Syllabus s : lectures.get(yearSemester)){
