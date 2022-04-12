@@ -28,6 +28,7 @@ public class ProfessorTotalPageController {
     private final AssignmentService assignmentService;
     private final QnaService qnaService;
     private final LectureVideoService lectureVideoService;
+    private final LectureFileService lectureFileService;
 
     //교수 강의 종합 페이지
     @GetMapping("total")
@@ -61,13 +62,15 @@ public class ProfessorTotalPageController {
         //학기 선택 리스트
         model.addAttribute("mapYS", formatYS);
         model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+        model.addAttribute("formatYS", Syllabus.formatYearSemester(yearSemester));
 
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));
         String finalSyllabusId = syllabusId;
         model.addAttribute("selectedSyllabusName",
                 lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
-                        .findAny().get().getName());
+                        .findAny().get().getName()+" ("+lectures.get(yearSemester).stream().filter(s -> s.getId().equals(finalSyllabusId))
+                        .findAny().get().formatClassTime()+")");
 
 
         // 공지사항
@@ -106,11 +109,18 @@ public class ProfessorTotalPageController {
         lectureVideoList.forEach(lv -> lectureVideoDtoList.add(new LectureVideoDto(lv)));
 
 
+        // 강의 자료 목록
+        List<Board> lectureFileList=new ArrayList<>();
+        lectureFileList.addAll(lectureFileService.listAll(syllabusId));
+
+
         model.addAttribute("noticeList",noticeDtoList);                             // 공지 사항
         model.addAttribute("assignmentList",assignmentDtoList);                     // 과제 목록
         model.addAttribute("quizList",quizDtoList);                                 // 퀴즈 목록
         model.addAttribute("qnAList",qnADtoList);                                   // 질문 게시판 목록
         model.addAttribute("lectureVideoList",lectureVideoDtoList);                 // 강의 영상 목록
+        model.addAttribute("lectureFileList",lectureFileList);                      // 강의 자료 목록
+
 
         return "total/professor-totalpage";
     }

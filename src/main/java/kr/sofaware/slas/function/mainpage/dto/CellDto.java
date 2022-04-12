@@ -18,11 +18,13 @@ public class CellDto {
     public static int TOTAL_DAYOFWEEK=5;                    // 요일은 월화수목금 이렇게 5개만
 
     private String lectureName = null;
+    private String professorName = null;
     private int cellSpan = 1;
 
     @Builder
-    public CellDto(String lectureName, int cellSpan) {
+    public CellDto(String lectureName, String professorName, int cellSpan) {
         this.lectureName = lectureName;
+        this.professorName = professorName;
         this.cellSpan = cellSpan;
     }
 
@@ -42,35 +44,45 @@ public class CellDto {
                 switch (s.getDayOfWeek1()) {
                     case "MON":
                         cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(0).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(0).setProfessorName(s.getProfessor().getName());
                         break;
                     case "TUE":
                         cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(1).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(1).setProfessorName(s.getProfessor().getName());
                         break;
                     case "WED":
                         cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(2).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(2).setProfessorName(s.getProfessor().getName());
                         break;
                     case "THU":
                         cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(3).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(3).setProfessorName(s.getProfessor().getName());
                         break;
                     case "FRI":
                         cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(4).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime1()) - 1).get(4).setProfessorName(s.getProfessor().getName());
                         break;
                 }
                 switch (s.getDayOfWeek2()) {
                     case "MON":
                         cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(0).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(0).setProfessorName(s.getProfessor().getName());
                         break;
                     case "TUE":
                         cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(1).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(1).setProfessorName(s.getProfessor().getName());
                         break;
                     case "WED":
                         cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(2).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(2).setProfessorName(s.getProfessor().getName());
                         break;
                     case "THU":
                         cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(3).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(3).setProfessorName(s.getProfessor().getName());
                         break;
                     case "FRI":
                         cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(4).setLectureName(s.getName());
+                        cellDtoList.get(Integer.parseInt(s.getTime2()) - 1).get(4).setProfessorName(s.getProfessor().getName());
                         break;
                 }
             }

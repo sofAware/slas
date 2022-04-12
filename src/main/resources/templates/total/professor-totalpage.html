@@ -1,38 +1,17 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta th:replace="frame/head.html">
-    <title>Title</title>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<title>강의 종합</title>
+<meta th:replace="frame/mid.html">
 
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            text-align: center;
-            width : 500px;
-            height: 60px;
-        }
-        th, td {
-            padding: 5px;
-        }
-        th {
-            text-align: center;
-        }
-    </style>
+<!-- add your content here! -->
 
-</head>
-<body>
-<header th:replace="frame/pHeader.html"></header>
-    <!-- Copy & Edit here! -->
-
-    <div class="d-flex justify-content-center gap-4">
+<div class="row">                                                           <!-- 년도, 학기 선택 버튼 -->
+    <div class="mb-4 d-flex justify-content-start gap-4">
         <!-- 학기 선택 -->
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="false"
-                    th:text="${yearSemester}">
-                학기 선택
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="true">
+                [[${formatYS}?${formatYS}:'학기 선택']]
+                <i class="mdi mdi-chevron-down"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="semester">
                 <li th:each="key : ${mapYS.keySet()}">
@@ -45,131 +24,354 @@
 
         <!-- 강의 선택 -->
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false"
-                    th:text="${selectedSyllabusName}">
-                강의 선택
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="syllabus" data-bs-toggle="dropdown" aria-expanded="false">
+                [[${selectedSyllabusName}?${selectedSyllabusName}:'강의 선택']]
+                <i class="mdi mdi-chevron-down"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="syllabus">
-                <li th:each="s : ${syllabuses}">
+                <li th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}" th:each="s : ${syllabuses}">
                     <a class="dropdown-item"
                        th:attr="href=${'?syllabus-id=' + s.getId()}"
-                       th:text="${s.getName()}"></a>
+                       th:text="${s.getName() + ' (' + s.formatClassTime() + ')'}"></a>
+                </li>
+                <li th:if="${#authorization.expression('hasRole(''STUDENT'')')}" th:each="s : ${syllabuses}">
+                    <a class="dropdown-item"
+                       th:attr="href=${'?syllabus-id=' + s.getId()}"
+                       th:text="${s.getName() + ' - ' + s.getProfessor().getName() + ' (' + s.formatClassTime() + ')'}"></a>
                 </li>
             </ul>
         </div>
     </div>
+</div>
 
-    <div>
-        <h4>공지 사항</h4>
-        <div th:each="i : ${#numbers.sequence(0,noticeList.size()-1)}">
-            <a th:text="${#dates.format(noticeList.get(i).getUploadDate(), 'yyyy-MM-dd')+' '+noticeList.get(i).title}"></a> <br>
+
+<div class="row">
+    <div class="col-md-4">                                                    <!-- 공지 사항 -->
+        <div class="card" style="height: 325px">
+            <div class="card-body">
+                <h4 class="card-title mb-5">공지 사항</h4>
+                <div class="">
+                    <ul class="verti-timeline list-unstyled">
+                        <li th:each="i : ${#numbers.sequence(0,noticeList.size()-1)}" class="event-list">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-right-arrow-circle"></i>
+                            </div>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div>
+                                        <h5 th:text="${noticeList.get(i).title}" class="font-size-15"><a href="javascript: void(0);" class="text-dark"></a></h5>
+                                        <span th:text="${#dates.format(noticeList.get(i).getUploadDate(), 'yyyy-MM-dd')}" class="text-primary"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div>
-        <h4>과제 목록</h4>
-        <table>                                <!-- 이 과목의 과제들을 제출 마감기한 빠른 순으로 보여줌 !! 몇개까지 출력할진 프론트에서 정해주자 ~~ 아직 안 정했음 !!!!!!! 나중에 유아이 꾸미면서 생각해 보자 ~~  -->
-            <thead>
-                <tr>
-                    <th>과제명</th>
-                    <th>제출 기한</th>
-                </tr>
-            </thead>
-            <tbody th:if="${assignmentList.isEmpty() eq false}">                                                            <!-- 과제 목록이 존재하는 경우 -->
-                <tr th:each="i : ${#numbers.sequence(0,assignmentList.size()-1)}">
-                    <td th:text="${assignmentList.get(i).getName()}"></td>
-                    <td th:text="${#dates.format(assignmentList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(assignmentList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
-                </tr>
-            </tbody>
-            <tbody th:unless="${assignmentList.isEmpty() eq false}">                                                        <!-- 과제 목록이 없는 경우 -->
-                <tr>
-                    <td th:colspan="2">등록된 내용이 없습니다.</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-md-4">                                                      <!-- 강의 자료 게시판, 출석 체크 바로가기 -->
+        <div class="row mb-5 mt-3">
+            <div>
+                <div class="social-source text-center mt-3">
+                    <div class="avatar-xs mx-auto mb-3">
+                                                        <span class="avatar-title rounded-circle bg-secondary font-size-16">
+                                                                <i class="bx bx-right-arrow-alt"></i>
+                                                            </span>
+                    </div>
+                    <h5 class="font-size-15">강의자료 게시판</h5>
+                    <p class="text-muted mb-0">바로가기</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <div class="social-source text-center mt-3">
+                    <div class="avatar-xs mx-auto mb-3">
+                                                        <span class="avatar-title rounded-circle bg-secondary font-size-16">
+                                                                <i class="bx bx-right-arrow-alt"></i>
+                                                            </span>
+                    </div>
+                    <h5 class="font-size-15">출석 체크</h5>
+                    <p class="text-muted mb-0">바로가기</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <h4>퀴즈 목록</h4>                      <!-- 이 과목의 퀴즈들을 제출 마감기한 빠른 순으로 보여줌 !! 몇개까지 출력할진 프론트에서 정해주자 ~~ 아직 안 정했음 !!!!!!! 나중에 유아이 꾸미면서 생각해 보자 ~~  -->
-        <table>
-            <thead>
-                <tr>
-                    <th>퀴즈명</th>
-                    <th>응시 기간</th>
-                </tr>
-            </thead>
-            <tbody th:if="${quizList.isEmpty() eq false}">                                                            <!-- 퀴즈 목록이 존재하는 경우 -->
-                <tr th:each="i : ${#numbers.sequence(0,quizList.size()-1)}">
-                    <td th:text="${quizList.get(i).getName()}"></td>
-                    <td th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
-                </tr>
-            </tbody>
-            <tbody th:unless="${quizList.isEmpty() eq false}">                                                        <!-- 퀴즈 목록이 없는 경우 -->
-                <tr>
-                    <td th:colspan="2">등록된 내용이 없습니다.</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-md-4">                                                      <!-- 성적 페이지, 강의 계획서 바로가기 -->
+        <div class="row mb-5 mt-3">
+            <div>
+                <div class="social-source text-center mt-3">
+                    <div class="avatar-xs mx-auto mb-3">
+                                                        <span class="avatar-title rounded-circle bg-secondary font-size-16">
+                                                                <i class="bx bx-right-arrow-alt"></i>
+                                                            </span>
+                    </div>
+                    <h5 class="font-size-15">성적 페이지</h5>
+                    <p class="text-muted mb-0">바로가기</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <div class="social-source text-center mt-3">
+                    <div class="avatar-xs mx-auto mb-3">
+                                                        <span class="avatar-title rounded-circle bg-secondary font-size-16">
+                                                                <i class="bx bx-right-arrow-alt"></i>
+                                                            </span>
+                    </div>
+                    <h5 class="font-size-15">강의 계획서</h5>
+                    <p class="text-muted mb-0">바로가기</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">                                                                          <!-- 최근 질문 리스트 -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-wrap align-items-start">
+                    <div class="me-2">
+                        <h5 class="card-title mb-3">최근 Q&amp;A</h5>
+                    </div>
+                    <div class="dropdown ms-auto">
+                        <a class="text-muted font-size-16" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="mdi mdi-dots-horizontal"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end" style="">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${qnAList.isEmpty() eq false}" data-simplebar="init" style="max-height: 310px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                    <ul class="list-group list-group-flush">
+                        <li th:each="i : ${#numbers.sequence(0,qnAList.size()-1)}" class="list-group-item py-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-xs">
+                                        <div class="avatar-title rounded-circle bg-light text-primary">
+                                            <i class="bx bxs-user"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="font-size-14 mb-1" th:text="${qnAList.get(i).getStudentName()}"><small th:text="${#dates.format(qnAList.get(i).getDate(), 'yyyy-MM-dd')}" class="text-muted float-end"></small></h5>  <!--th:text="${qnAList.get(i).getStudentId()+' '+qnAList.get(i).getStudentName()}"--> <!--th:text="${#dates.format(qnAList.get(i).getDate(), 'yyyy-MM-dd HH:mm:ss')}"-->
+                                    <p th:text="${qnAList.get(i).getTitle()}" class="text-muted"></p>
+                                    <div>
+                                        <a href="javascript: void(0);" class="text-success"><i class="mdi mdi-reply me-1"></i>질문 바로가기</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 364px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 264px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
+
+                <div th:unless="${qnAList.isEmpty() eq false}" data-simplebar="init" style="max-height: 100px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                    <ul class="list-group list-group-flush">
+
+                        <li class="list-group-item py-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+
+                                </div>
+                                <div class="flex-grow-1 align-self-center">
+                                    <h5 class="font-size-13 mt-4 text-center">등록된 내용이 없습니다.</h5>  <!--th:text="${qnAList.get(i).getStudentId()+' '+qnAList.get(i).getStudentName()}"--> <!--th:text="${#dates.format(qnAList.get(i).getDate(), 'yyyy-MM-dd HH:mm:ss')}"-->
+
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 364px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 264px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
+
+
+
+
+            </div>
+        </div>
     </div>
 
-    <div>
-        <h4>질문 게시판</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>제목</th>
-                    <th>질문 학생</th>
-                </tr>
-            </thead>
-            <tbody th:if="${qnAList.isEmpty() eq false}">                                                            <!-- 질문 목록이 존재하는 경우 -->
-                <tr th:each="i : ${#numbers.sequence(0,qnAList.size()-1)}">
-                    <td th:text="${qnAList.get(i).getTitle()}"></td>
-                    <td th:text="${qnAList.get(i).getStudentId()}"></td>
-                </tr>
-            </tbody>
-            <tbody th:unless="${qnAList.isEmpty() eq false}">                                                        <!-- 질문 목록이 없는 경우 -->
-                <tr>
-                    <td th:colspan="2">등록된 내용이 없습니다.</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-xl-6">                                                              <!-- 강의 자료 -->
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <h4 class="card-title">강의 자료 리스트</h4>
+                    <p class="card-title-desc"></p>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light">
+                            <tr class="text-center">
+                                <th>제목</th>
+                                <th style="width : 100px">작성자</th>
+                                <th style="width : 200px">작성일</th>
+                            </tr>
+                            </thead>
+                            <tbody th:if="${lectureFileList.isEmpty() eq false}">
+                            <tr th:each="i : ${#numbers.sequence(0,lectureFileList.size()-1)}">
+                                <td th:text="${lectureFileList.get(i).getTitle()}"></td>
+                                <td th:text="${lectureFileList.get(i).getMember().getName()}" class="text-center"></td>
+                                <td th:text="${#dates.format(lectureFileList.get(i).getDate(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
+                            </tr>
+                            </tbody>
+                            <tbody th:unless="${lectureFileList.isEmpty() eq false}">                                                        <!-- 강의 영상 목록이 없는 경우 -->
+                            <tr>
+                                <td th:colspan="3" class="text-center">등록된 내용이 없습니다.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">                                          <!-- 퀴즈 목록 -->
+        <div class="card">
+            <div th:if="${quizList.isEmpty() eq false}" class="card-body">            <!-- 퀴즈 목록이 존재하는 경우 -->
+                <h4 class="card-title">퀴즈 목록</h4>
+                <p class="card-title-desc"></p>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                        <tr class="text-center">
+                            <th></th>
+                            <th style="width: 240px">시험명</th>
+                            <th>응시기간</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="i : ${#numbers.sequence(0,quizList.size()-1)}" class="text-center">
+                            <th scope="row" th:text="${i+1}"></th>
+                            <td th:text="${quizList.get(i).getName()}"></td>
+                            <td th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd  HH:mm:ss')+'   ~   '+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd  HH:mm:ss')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div th:unless="${quizList.isEmpty() eq false}" class="card-body">          <!-- 퀴즈 목록이 없는 경우 -->
+                <h4 class="card-title">퀴즈 목록</h4>
+                <p class="card-title-desc"></p>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                        <tr class="text-center">
+                            <th></th>
+                            <th style="width: 240px">시험명</th>
+                            <th>응시기간</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:colspan="3" class="text-center">등록된 내용이 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <h4>강의 영상</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>주회차</th>
-                    <th>제목</th>
-                    <th>출석기간</th>
-                    <th>길이</th>
-                </tr>
-            </thead>
-            <tbody th:if="${lectureVideoList.isEmpty() eq false}">                                                            <!-- 강의 영상 목록이 존재하는 경우 -->
-                <tr th:each="i : ${#numbers.sequence(0,lectureVideoList.size()-1)}">
-                    <td th:text="${lectureVideoList.get(i).getId()}"></td>
-                    <td th:text="${lectureVideoList.get(i).getName()}"></td>
-                    <td th:text="${#dates.format(lectureVideoList.get(i).getAttendanceStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(lectureVideoList.get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${lectureVideoList.get(i).getDuration()}"></td>
-                </tr>
-            </tbody>
-            <tbody th:unless="${lectureVideoList.isEmpty() eq false}">                                                        <!-- 강의 영상 목록이 없는 경우 -->
-                <tr>
-                    <td th:colspan="4">등록된 내용이 없습니다.</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-md-6">                                              <!-- 과제 목록 -->
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">과제 목록</h4>
+                <p class="card-title-desc"></p>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                        <tr class="text-center">
+                            <th></th>
+                            <th style="width: 240px">과제명</th>
+                            <th>제출기간</th>
+                        </tr>
+                        </thead>
+                        <tbody th:if="${assignmentList.isEmpty() eq false}">
+                        <tr th:each="i : ${#numbers.sequence(0,assignmentList.size()-1)}" class="text-center">
+                            <th scope="row" th:text="${i+1}"></th>
+                            <td th:text="${assignmentList.get(i).getName()}"></td>
+                            <td th:text="${#dates.format(assignmentList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'   ~   '+#dates.format(assignmentList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        </tr>
+                        </tbody>
+                        <tbody th:unless="${assignmentList.isEmpty() eq false}">                                                        <!-- 과제 목록이 없는 경우 -->
+                        <tr>
+                            <td th:colspan="3" class="text-center">등록된 내용이 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
 
-    <a>강의 자료 바로가기</a><br>
-    <a>출석 체크 바로가기</a><br>
-    <a>강의계획서 바로가기</a><br>
-    <a>성적 조회 바로가기</a><br>
+<div class="row">                                                           <!-- 강의 영상 -->
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <h4 class="card-title">강의 영상 리스트</h4>
+                    <p class="card-title-desc"></p>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light">
+                            <tr class="text-center">
+                                <th style="width : 150px">주회차</th>
+                                <th style="width : 480px">강의제목</th>
+                                <th style="width : 320px">학습기간</th>
+                                <th style="width : 150px">길이</th>
+                                <th style="width : 150px">강의보기</th>
+                            </tr>
+                            </thead>
+                            <tbody th:if="${lectureVideoList.isEmpty() eq false}">
+                            <tr th:each="i : ${#numbers.sequence(0,lectureVideoList.size()-1)}">
+                                <td th:text="${lectureVideoList.get(i).getId()}" class="text-center"></td>
+                                <td th:text="${lectureVideoList.get(i).getName()}"></td>
+                                <td th:text="${#dates.format(lectureVideoList.get(i).getAttendanceStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(lectureVideoList.get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
+                                <td th:text="${lectureVideoList.get(i).getDuration()}" class="text-center"></td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-light btn-sm">View</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody th:unless="${lectureVideoList.isEmpty() eq false}">                                                        <!-- 강의 영상 목록이 없는 경우 -->
+                            <tr>
+                                <td th:colspan="5" class="text-center">등록된 내용이 없습니다.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-<footer th:replace="frame/footer.html"></footer>
-<script th:replace="frame/tail.html"></script>
-</body>
-</html>
+<meta th:replace="frame/mid2.html">
+<!-- add your js here -->
+<meta th:replace="frame/end.html">
