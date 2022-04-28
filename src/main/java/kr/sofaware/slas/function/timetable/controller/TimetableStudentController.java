@@ -52,6 +52,7 @@ public class TimetableStudentController {
         lectures.keySet().forEach(s -> formatYS.put(s, Syllabus.formatYearSemester(s)));
         model.addAttribute("mapYS", formatYS);
         model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+        model.addAttribute("formatYS", Syllabus.formatYearSemester(yearSemester));
 
         //시간표 정보 보내기
 

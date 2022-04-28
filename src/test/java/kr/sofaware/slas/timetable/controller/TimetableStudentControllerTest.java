@@ -89,6 +89,6 @@ class TimetableStudentControllerTest {
             System.out.println();
         });
 
-        return "timetable/sTimetable";
+        return "OG_sTimetable";
     }
 }
