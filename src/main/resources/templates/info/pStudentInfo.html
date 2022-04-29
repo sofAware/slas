@@ -58,7 +58,7 @@
 
 <!-- add your content here! -->
 <div class="board-menu">
-    <h2 class="m-0 mb-3" >학생 명단</h2>
+    <h2 class="m-0 mb-3" >📋 학생 명단</h2>
     <div class="mb-5 d-flex justify-content-center gap-4">
         <!-- 학기 선택 -->
         <div class="dropdown">
@@ -101,9 +101,9 @@
 
 <!--현재 선택한 강의 정보-->
 <a class="card">
-    <br>
-    <h4 class="card-title text-center">강의 정보</h4>
-    <br>
+<!--    <br>-->
+<!--    <h4 class="card-title text-center">강의 정보</h4>-->
+<!--    <br>-->
     <div class="card-body">
         <div class="table-responsive">
             <table class="table mb-0">
@@ -133,42 +133,42 @@
 </a>
 
 <div class="card">
-<div class="card-body">
+    <div class="card-body">
 
-    <h4 class="card-title">학생 정보</h4>
-    <br>
+        <h4 class="card-title">학생 정보</h4>
+        <br>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-nowrap mb-0">
-            <thead>
-            <tr>
-                <th scope="col">이름</th>
-                <th scope="col" class="text-center">
-                    학번
-                </th>
-                <th scope="col" class="text-center">
-                    전공
-                </th>
-                <th scope="col" class="text-center">
-                    학년
-                </th>
-                <th scope="col" class="text-center">
-                    학기
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="attendance : ${attendances}">
-                <th class="text-nowrap" scope="row" th:text="${attendance.getStudent().getName()}"></th>
-                <td th:text="${attendance.getStudent().getId()}"></td>
-                <td th:text="${attendance.getStudent().getMajor()}"></td>
-                <td th:text="${attendance.getStudent().getSemester()/2}">학년</td>
-                <td th:text="${attendance.getStudent().getSemester()%2+1}">학기</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-nowrap mb-0">
+                <thead>
+                <tr>
+                    <th scope="col">이름</th>
+                    <th scope="col" class="text-center">
+                        학번
+                    </th>
+                    <th scope="col" class="text-center">
+                        전공
+                    </th>
+                    <th scope="col" class="text-center">
+                        학년
+                    </th>
+                    <th scope="col" class="text-center">
+                        학기
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="attendance : ${attendances}">
+                    <th class="text-nowrap" scope="row" th:text="${attendance.getStudent().getName()}"></th>
+                    <td th:text="${attendance.getStudent().getId()}"></td>
+                    <td th:text="${attendance.getStudent().getMajor()}"></td>
+                    <td th:text="${attendance.getStudent().getSemester()/2}">학년</td>
+                    <td th:text="${attendance.getStudent().getSemester()%2+1}">학기</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </div>
 
 <meta th:replace="frame/mid2.html">
