@@ -63,4 +63,14 @@ public class NoticeService implements BoardService {
 
         return noticeDtoList;
     }
+
+    public List<NoticeDto> findByCategoryAndSyllabus_IdOrderByDateDesc(String syllabus_id){
+        List<NoticeDto> noticeDtoList=new ArrayList<>();
+
+        List<Board> boardList=boardRepository.findByCategoryAndSyllabus_IdOrderByDateDesc(Board.CATEGORY_NOTICE,syllabus_id);
+
+        boardList.forEach(board -> noticeDtoList.add(new NoticeDto(board)));
+
+        return noticeDtoList;
+    }
 }
