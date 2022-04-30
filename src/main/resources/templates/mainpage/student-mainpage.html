@@ -66,7 +66,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td class="align-middle" th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(0).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(0).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(0).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(0).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(0).get(num).lectureName != '' ? 'bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(0).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(0).get(num).lectureName != '' ? 'bg-warning bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(0).get(num).professorName != "" ? "9:00-10:15" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(0).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -79,7 +79,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(1).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(1).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(1).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(1).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(1).get(num).lectureName != '' ? 'bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(1).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(1).get(num).lectureName != '' ? 'bg-danger bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(1).get(num).professorName != "" ? "10:30-11:45" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(1).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -92,7 +92,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(2).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(2).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(2).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(2).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(2).get(num).lectureName != '' ? 'bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(2).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(2).get(num).lectureName != '' ? 'bg-success bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(2).get(num).professorName != "" ? "12:00-13:15" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(2).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -105,7 +105,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(3).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(3).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(3).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(3).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(3).get(num).lectureName != '' ? 'bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(3).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(3).get(num).lectureName != '' ? 'bg-primary bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(3).get(num).professorName != "" ? "13:30-14:45" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(3).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -118,7 +118,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(4).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(4).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(4).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(4).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(4).get(num).lectureName != '' ? 'bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(4).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(4).get(num).lectureName != '' ? 'bg-dark bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(4).get(num).professorName != "" ? "15:00-16:15" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(4).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -131,7 +131,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(5).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(5).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(5).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(5).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(5).get(num).lectureName != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(5).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(5).get(num).lectureName != '' ? 'bg-info bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(5).get(num).professorName != "" ? "16:30-17:45" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(5).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -144,7 +144,7 @@
                             <!-- 들은 강의들이 있는 경우 -->
                             <td th:unless="${MainPageDto.noLectures eq true}" th:each="num : ${#numbers.sequence(0,MainPageDto.cellDtoList.get(6).size()-1)}" th:rowspan="${MainPageDto.cellDtoList.get(6).get(num).cellSpan}">
                                 <th:block th:if="${MainPageDto.cellDtoList.get(6).get(num).lectureName != null}">
-                                    <span th:text="${MainPageDto.cellDtoList.get(6).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(6).get(num).lectureName != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                    <span th:text="${MainPageDto.cellDtoList.get(6).get(num).lectureName}" th:attr="class=${MainPageDto.cellDtoList.get(6).get(num).lectureName != '' ? 'bg-secondary bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                     <div th:text='${MainPageDto.cellDtoList.get(6).get(num).professorName != "" ? "18:00-19:00" : ""}' class="margin-10px-top font-size14"></div>
                                     <div th:text="${MainPageDto.cellDtoList.get(6).get(num).professorName}" class="font-size13 text-light-gray"></div>
                                 </th:block>
@@ -370,7 +370,7 @@
                                         <div class="align-self-center overflow-hidden me-auto">
                                             <div>
                                                 <h5 th:text="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}" class="font-size-14 fw-bold text-truncate"><a href="javascript: void(0);" class="text-dark"></a></h5>
-                                                <p th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-muted mb-0"></p>
+                                                <p th:text="${'~ '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-muted mb-0"></p>
                                             </div>
                                         </div>
 
@@ -397,7 +397,7 @@
                                             <div class="align-self-center overflow-hidden me-auto">
                                                 <div>
                                                     <h5 th:text="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}" class="font-size-14 fw-bold text-truncate"><a href="javascript: void(0);" class="text-dark"></a></h5>
-                                                    <p th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-muted mb-0"></p>
+                                                    <p th:text="${'~ '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-muted mb-0"></p>
                                                 </div>
                                             </div>
 
@@ -434,4 +434,5 @@
 <meta th:replace="frame/mid2.html">
 <!-- add your js here -->
 <script src="assets/libs/simplebar/simplebar.min.js"></script>
+
 <meta th:replace="frame/end.html">
