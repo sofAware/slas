@@ -1,93 +1,96 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta th:replace="frame/head.html">
-    <title>공지사항</title>
-</head>
-<body>
-<header th:replace="frame/pHeader.html"></header>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<title>강의 계획서 수정</title>
+<meta th:replace="frame/mid.html">
 
 <form th:action="@{/p/syllabusDetail/{id}(id=${syllabusInfo.get().getId()})}" method="post">
-<table class="table table-striped table-hover">
-    <colgroup>
-        <col width="10%">
-        <col>
-        <col width="10%">
-        <col>
-    </colgroup>
-    <tbody>
-    <tr>
-        <th>교과목명</th>
-        <td onclick="event.cancelBubble = true;" colspan="3" th:text="${syllabusInfo.get().getName()}">컴퓨터구조-Computer Architecture</td>
-        <th>년도학기</th>
-        <td onclick="event.cancelBubble = true;" th:text="${syllabusYear}">2022/1</td>
-    </tr>
-    <tr>
-        <th>학정번호</th>
-        <td onclick="event.cancelBubble = true;" colspan="3" th:text="${syllabusInfo.get().getId()}">H030-3-1647-01</td>
-        <th>이수구분</th>
-        <td onclick="event.cancelBubble = true;">
-            <input type="text" name="category" th:value="${syllabusInfo.get().getCategory()}">
-        </td>
-    </tr>
-    <tr>
-        <th>강의소개<br>동영상</th>
-        <td onclick="event.cancelBubble = true;" colspan="3"></td>
-        <th>학점/시간</th>
-        <td onclick="event.cancelBubble = true;">
-            <input type="text" name="credit" th:value="${syllabusInfo.get().getCredit()}">
-        </td>
-    </tr>
-    <tr>
-        <th>강의시간 1</th>
-        <td onclick="event.cancelBubble = true;" colspan="3">
-            <input type="text" name="dayofweek1" th:value="${syllabusInfo.get().getDayOfWeek1()}">
-            <input type="text" name="time1" th:value="${syllabusInfo.get().getTime1()}">
-        </td>
-        <th>강의시간 2</th>
-        <td onclick="event.cancelBubble = true;">
-            <input type="text" name="dayofweek2" th:value="${syllabusInfo.get().getDayOfWeek2()}">
-            <input type="text" name="time2" th:value="${syllabusInfo.get().getTime2()}">
-        </td>
-    </tr>
-    <tr>
-        <th rowspan="3">담당교수</th>
-        <td onclick="event.cancelBubble = true;" rowspan="3" th:text="${syllabusInfo.get().getProfessor().getName()}">이윤구</td>
-        <th rowspan="3">구분</th>
-        <td onclick="event.cancelBubble = true;" rowspan="3">교수</td>
-        <th>연락처</th>
-        <td onclick="event.cancelBubble = true;"></td>
-    </tr>
-    <tr>
-        <th>이동전화</th>
-        <td onclick="event.cancelBubble = true;"></td>
-    </tr>
-    <tr>
-        <th>이메일</th>
-        <td onclick="event.cancelBubble = true;" ></td>
-    </tr>
-    <tr>
-        <th>교과목 소개</th>
-        <td onclick="event.cancelBubble = true;">
-            <input type="text" name="introduction" th:value="${syllabusInfo.get().getIntroduction()}">
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <!--강의 계획서 table-->
+                    <table class="table align-middle table-nowrap mb-0">
+                        <thead class="table-light">
+                        <colgroup>
+                            <col width="10%">
+                            <col>
+                            <col width="10%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th class="table-light">교과목명</th>
+                            <td onclick="event.cancelBubble = true;" colspan="3" th:text="${syllabusInfo.get().getName()}">컴퓨터구조-Computer Architecture</td>
+                            <th class="table-light">년도학기</th>
+                            <td onclick="event.cancelBubble = true;" th:text="${syllabusYear}">2022/1</td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">학정번호</th>
+                            <td onclick="event.cancelBubble = true;" colspan="3" th:text="${syllabusInfo.get().getId()}">H030-3-1647-01</td>
+                            <th class="table-light">이수구분</th>
+                            <td onclick="event.cancelBubble = true;">
+                                <input type="text" name="category" th:value="${syllabusInfo.get().getCategory()}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">강의소개<br>동영상</th>
+                            <td onclick="event.cancelBubble = true;" colspan="3"></td>
+                            <th class="table-light">학점/시간</th>
+                            <td onclick="event.cancelBubble = true;">
+                                <input type="text" name="credit" th:value="${syllabusInfo.get().getCredit()}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">강의시간 1</th>
+                            <td onclick="event.cancelBubble = true;" colspan="3">
+                                <input type="text" name="dayofweek1" th:value="${syllabusInfo.get().getDayOfWeek1()}">
+                                <input type="text" name="time1" th:value="${syllabusInfo.get().getTime1()}">
+                            </td>
+                            <th class="table-light">강의시간 2</th>
+                            <td onclick="event.cancelBubble = true;">
+                                <input type="text" name="dayofweek2" th:value="${syllabusInfo.get().getDayOfWeek2()}">
+                                <input type="text" name="time2" th:value="${syllabusInfo.get().getTime2()}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light" rowspan="3">담당교수</th>
+                            <td onclick="event.cancelBubble = true;" rowspan="3" th:text="${syllabusInfo.get().getProfessor().getName()}">이윤구</td>
+                            <th class="table-light" rowspan="3">구분</th>
+                            <td onclick="event.cancelBubble = true;" rowspan="3">교수</td>
+                            <th class="table-light">연락처</th>
+                            <td onclick="event.cancelBubble = true;"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">이동전화</th>
+                            <td onclick="event.cancelBubble = true;"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">이메일</th>
+                            <td onclick="event.cancelBubble = true;" ></td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">교과목 소개</th>
+                            <td onclick="event.cancelBubble = true;">
+                                <input type="text" name="introduction" th:value="${syllabusInfo.get().getIntroduction()}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-<!--뒤로가기 버튼 추가-->
-<input type="submit" value="수정하기">
-<input type="button" value="뒤로가기" th:onclick="| location.href='@{/p/syllabus}'|">
+                    <br>
+                    <!--뒤로가기 버튼 추가-->
+                    <input type="submit" value="수정하기" class="btn-primary">
+                    <input type="button" value="뒤로가기" class="btn-light" th:onclick="| location.href='@{/p/syllabus}'|">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </form>
 
 
-<footer th:replace="frame/footer.html"></footer>
-<script th:replace="frame/tail.html"></script>
-<script>
-    document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
-        location.href = e.getAttribute("href")));
-</script>
-</body>
-</html>
+<meta th:replace="frame/mid2.html">
+<!-- add your js here -->
+<meta th:replace="frame/end.html">
