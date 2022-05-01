@@ -60,6 +60,7 @@ public class GradeProfessorController {
         // 학기 선택 리스트
         model.addAttribute("mapYS", formatYS);
         model.addAttribute("yearSemester", Syllabus.formatYearSemester(yearSemester));
+        model.addAttribute("formatYS", Syllabus.formatYearSemester(yearSemester));
 
         // 강의 선택 리스트
         model.addAttribute("syllabuses", lectures.get(yearSemester));

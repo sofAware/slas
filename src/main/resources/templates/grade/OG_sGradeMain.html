@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="frame/head.html">
+    <title>공지사항</title>
+</head>
+<body>
+<header th:replace="frame/sHeader.html"></header>
+
+<!-- 인적 사항 -->
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th onclick="event.cancelBubble = true;">학과/학부</th>
+        <th onclick="event.cancelBubble = true;">학번</th>
+        <th onclick="event.cancelBubble = true;">이름</th>
+        <th onclick="event.cancelBubble = true;">학적사항</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr style="cursor: pointer;">
+        <td th:text="${studentInfo.getMajor()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${studentInfo.getId()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${studentInfo.getName()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${studentInfo.getSemester()}/2 + '학기'" onclick="event.cancelBubble = true;"></td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<!-- 취득 학점 조회 -->
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th onclick="event.cancelBubble = true;">교양 취득학점</th>
+        <th onclick="event.cancelBubble = true;">전공 취득학점</th>
+        <th onclick="event.cancelBubble = true;">전공 평점</th>
+        <th onclick="event.cancelBubble = true;">전체 평점</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr style="cursor: pointer;">
+        <td th:text="${geCredit}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${majorCredit}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${majorGradeAvg}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${allGradeAvg}" onclick="event.cancelBubble = true;"></td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<!-- 석차 조회 -->
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th onclick="event.cancelBubble = true;">년도</th>
+        <th onclick="event.cancelBubble = true;">학기</th>
+        <th onclick="event.cancelBubble = true;">신청 학점</th>
+        <th onclick="event.cancelBubble = true;">평점</th>
+        <th onclick="event.cancelBubble = true;">석차</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="grade : ${rankList}" style="cursor: pointer;">
+        <td th:text="${grade.getYear()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getSemester()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getTotalCredit()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getGradeAvg()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getRanking()}" onclick="event.cancelBubble = true;"></td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<!-- 년도별 석차 조회 -->
+<table th:each="element : ${gradeByYear}" class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th th:text="${element.key}" onclick="event.cancelBubble = true;"></th>
+    </tr>
+    <tr>
+        <th onclick="event.cancelBubble = true;">학정번호</th>
+        <th onclick="event.cancelBubble = true;">과목명</th>
+        <th onclick="event.cancelBubble = true;">개설학과</th>
+        <th onclick="event.cancelBubble = true;">이수구분</th>
+        <th onclick="event.cancelBubble = true;">학점</th>
+        <th onclick="event.cancelBubble = true;">성적</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="grade : ${element.value}" style="cursor: pointer;">
+        <td th:text="${grade.getSyllabusId()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getSyllabusName()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getMajor()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getCategory()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getCredit()}" onclick="event.cancelBubble = true;"></td>
+        <td th:text="${grade.getGrade()}" onclick="event.cancelBubble = true;"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<footer th:replace="frame/footer.html"></footer>
+<script th:replace="frame/tail.html"></script>
+<script>
+    document.querySelectorAll("table tr").forEach(e => e.addEventListener('click', evt =>
+        location.href = e.getAttribute("href")));
+</script>
+</body>
+</html>
