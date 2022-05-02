@@ -92,7 +92,7 @@
                     <table class="table table-bordered text-center">
 
                         <thead>
-                        <tr class="bg-light-gray">
+                        <tr class="bg-info bg-soft">
                             <th class="text-uppercase">Time
                             </th>
                             <th class="text-uppercase">Monday</th>
@@ -108,7 +108,7 @@
                         <tr>
                             <td class="align-middle">09:00am</td>
                             <td th:if="${period != null}" th:each="period : ${t1}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-warning bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "9:00-10:15" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -117,7 +117,7 @@
                         <tr>
                             <td class="align-middle">10:30am</td>
                             <td th:if="${period != null}" th:each="period : ${t2}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-danger bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "10:30-11:45" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -126,7 +126,7 @@
                         <tr>
                             <td class="align-middle">12:00am</td>
                             <td th:if="${period != null}" th:each="period : ${t3}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-success bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "12:00-13:15" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -135,7 +135,7 @@
                         <tr>
                             <td class="align-middle">13:30pm</td>
                             <td th:if="${period != null}" th:each="period : ${t4}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-primary bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "13:30-14:45" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -144,7 +144,7 @@
                         <tr>
                             <td class="align-middle">15:00pm</td>
                             <td th:if="${period != null}" th:each="period : ${t5}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-dark bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "15:00-16:15" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -154,7 +154,7 @@
                         <tr>
                             <td class="align-middle">16:30pm</td>
                             <td th:if="${period != null}" th:each="period : ${t6}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-info bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "16:30-17:45" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -163,7 +163,7 @@
                         <tr th:remove="${t7 == null ? 'all' : 'none'}">
                             <td class="align-middle">18:00pm</td>
                             <td th:if="${period != null}" th:each="period : ${t7}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-secondary bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "18:00-19:00" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -173,7 +173,7 @@
                         <tr th:remove="${t8 == null ? 'all' : 'none'}">
                             <td class="align-middle">19:00pm</td>
                             <td th:if="${period != null}" th:each="period : ${t8}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-secondary bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "19:00-20:00" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
@@ -182,7 +182,7 @@
                         <tr th:remove="${t9 == null ? 'all' : 'none'}">
                             <td class="align-middle">20:00pm</td>
                             <td th:if="${period != null}" th:each="period : ${t9}">
-                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13' : ''}"></span>
+                                <span th:text="${period.getClassName()}" th:attr="class=${period.getClassName() != '' ? 'bg-secondary bg-soft text-dark padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom font-size16 xs-font-size13' : ''}"></span>
                                 <div th:text='${period.getProfessorName() != "" ? "20:00-21:00" : ""}' class="margin-10px-top font-size14"></div>
                                 <div th:text="${period.getProfessorName()}" class="font-size13 text-light-gray"></div>
                             </td>
