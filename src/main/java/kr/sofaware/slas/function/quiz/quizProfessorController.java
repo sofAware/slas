@@ -347,7 +347,8 @@ public class quizProfessorController {
 
         model.addAttribute("quizSubmitList",quizSubmitList); //학생 학번과 이름을 가져오기 위하
         model.addAttribute("studentScoreList",studentScoreList); //점수를 담아놓은 리스트 (학생의 리스트 순서대로)
-
+        model.addAttribute("testNum",testNum);
+        model.addAttribute("syNo",syNo);
 
         //퀴즈 열람 페이지
         return "quiz/pQuizResult";

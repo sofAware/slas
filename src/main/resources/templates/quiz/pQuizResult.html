@@ -64,7 +64,7 @@
 
 <!-- add your content here! -->
 <div class="board-menu">
-    <h2 class="m-0 mb-3" >학생 퀴즈 점수 열람</h2>
+    <h2 class="m-0 mb-3" >💡 퀴즈 점수</h2>
 </div>
 
 <a class="card">
@@ -79,6 +79,7 @@
                     <tr>
                         <th>학정 번호</th>
                         <th>강의 제목</th>
+                        <th>퀴즈 번호</th>
                     </tr>
                 </th:block>
 
@@ -86,6 +87,9 @@
                 <tbody>
                 <th:block>
                     <tr>
+                        <td th:text="${syNo}"></td>
+                        <td th:text="${quizSubmitList.get(0).getQuiz().getSyllabus().getName()}"></td>
+                        <td th:text="${testNum}"></td>
                     </tr>
                 </th:block>
 
@@ -97,6 +101,36 @@
     </div>
 </a>
 
+<div class="card">
+    <div class="card-body">
+
+<!--        <h4 class="card-title">퀴즈점수</h4>-->
+<!--        <br>-->
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-nowrap mb-0">
+                <thead>
+                <tr>
+                    <th scope="col">이름</th>
+                    <th scope="col" class="text-center">
+                        학번
+                    </th>
+                    <th scope="col" class="text-center">
+                        점수
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr  th:each="i : ${#numbers.sequence(0,quizSubmitList.size()-1)}" >
+                    <th th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getId()}"></th>
+                    <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getName()}"></td>
+                    <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${studentScoreList.get(i)}" ></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <meta th:replace="frame/mid2.html">
 <!-- add your js here -->

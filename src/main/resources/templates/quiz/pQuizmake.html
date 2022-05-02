@@ -1,228 +1,256 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-    <meta th:replace="frame/head.html">
-    <title>퀴즈</title>
-</head>
-<body>
-<header th:replace="frame/pHeader.html"></header>
+<meta th:replace="frame/start.html">
+<!-- add your css here -->
+<style>
+    .board-menu {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .board-menu > * {
+        flex-shrink: 0;
+    }
+    .board-menu > div {
+        margin-left: auto;
+    }
 
-<input type="button" value="출제 완료" th:onclick="| location.href='@{/p/quiz/list}'|">
-       <table class="table table-striped table-hover">
+    .board-header {
+        padding: 0 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .board-header h5 {
+        font-weight: bold;
+        text-align: center;
+        margin: 0;
+    }
 
-    <thead>
-    <tr>
-        <th>퀴즈 번호</th>
-        <th>퀴즈 제목</th>
-        <th>제출 가능 시작 일자</th>
-        <th>제출 가능 마감 일자</th>
-    </tr>
-    </thead>
-    <tbody style="cursor: pointer;" th:if="${quizTest.isEmpty() eq false}">
-    <tr>
-        <td>
-            <input type="text" name="id" th:value="${quizTest.get(0).getId()}">
-        </td>
-        <td>
-            <input type="text" name="name" th:value="${quizTest.get(0).getName()}">
-        </td>
-        <td>
-            <input type="date" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
-        </td>
-        <td>
-            <input type="date" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
-        </td>
-    </tr>
-    </tbody>
-    <tbody th:unless="${quizTest.isEmpty() eq false}">                                                        <!-- 퀴즈 목록이 없는 경우 -->
-    <tr>
-        <td>
-            <input type="text"  name="id" >
-        </td>
-        <td>
-            <input type="text"  name="name">
-        </td>
-        <td>
-            <input type="date"  name="submitStart">
-        </td>
-        <td>
-            <input type="date"  name="submitEnd">
-        </td>
-    </tr>
-    </tbody>
+    .card {
+        margin-bottom: 0.5rem;
+        transition: color 0.1s, background-color 0.1s;
+    }
+    .card:hover {
+        background-color: #fafafa;
+    }
+    a.card {
+        color: #495057;
+    }
+    .card div,
+    .card span,
+    .card i {
+        text-align: center;
+    }
+    .card .fw-bold {
+        text-align: left;
+    }
+    .card:hover span {
+        color: black;
+    }
+    .card-body {
+        padding: 0.8rem 1rem;
+    }
 
-
-
-
-
-</table>
-
-<form class="sform" method="POST" id="addWrite">
-
-    <table id="dynamic_table" class="table table-striped table-hover">
-        <thead>
-            <td>항목 추가</td>
-        </thead>
-        <tr>
-            <th>문제 번호</th>
-            <th>카테고리</th>
-            <th>문제 내용</th>
-            <th>모범 답안</th>
-            <th>배점</th>
-            <th></th>
-        </tr>
-        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
-<!--    <tr><input type="button" value='항목 추가' onclick='createDiv()'></tr>--><input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
-    <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
-    <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
-    <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
-    <td>
-        <input type="number" name="questionNum">
-    </td>
-     <td>
-         <input type="number" name="category">
-     </td>
-    <td>
-        <input type="text" name="question">
-    </td>
-    <td>
-        <input type="text" name="correctAnswer">
-    </td>
-    <td>
-        <input type="number" name="score">
-    </td>
-    <td>
-        <input type="submit" name="complete" value="완료">
-    </td>
-
-</table>
-</form>
-<table id="table" class="table table-striped table-hover">
-<!--    <tr>-->
-<!--        <th>문제 번호</th>-->
-<!--        <th>카테고리</th>-->
-<!--        <th>문제 내용</th>-->
-<!--        <th>모범 답안</th>-->
-<!--        <th>배점</th>-->
-<!--        <th></th>-->
-<!--    </tr>-->
-    <thead>
-    <td>기존 퀴즈</td>
-    </thead>
-    <tbody style="cursor: pointer;" th:if="${quizTest.isEmpty() eq false}">                                                            <!-- 퀴즈 목록이 존재하는 경우 -->
-    <tr th:each="i : ${#numbers.sequence(0,quizTest.size()-1)}">
-        <form class="sform" method="POST" id="write">
-            <input type="hidden" id="csrf2" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
-            <input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
-            <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
-            <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
-            <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
-
-        <td>
-            <input type="text"  name="questionNum" th:value="${quizTest.get(i).getQuestionNum()}">
-        </td>
-        <td>
-            <input type="text" name="category" th:value="${quizTest.get(i).getCategory()}">
-        </td>
-        <td>
-            <input type="text"  name="question" th:value="${quizTest.get(i).getQuestion()}">
-        </td>
-        <td>
-            <input type="text"  name="correctAnswer" th:value="${quizTest.get(i).getCorrectAnswer()}">
-        </td>
-        <td>
-            <input type="number" name="score" th:value="${quizTest.get(i).getScore()}">';
-        </td>
-        <td>
-            <input type="submit" name="edit" value="수정">
-            <a class="btn btn-danger" th:attr="href='./delete/' + ${quizTest.get(0).getId()} + '&' + ${quizTest.get(0).getSyllabus().getId()} + '&'+ ${quizTest.get(i).getQuestionNum()}"
-               data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
-              >삭제</a>
-        </td>
-        </form>
-           </tr>
-    </tbody>
-    </tbody>
+    @media (max-width: 768px) {
+        .board-card-detail {
+            color: rgba(0, 0, 0, 0.4);
+        }
+    }
+</style>
+<title>퀴즈 출제</title>
+<meta th:replace="frame/mid.html">
 
 
-</table>
+<!-- add your content here! -->
+<div class="board-menu">
+    <h2 class="m-0 mb-3" >💡 퀴즈 출제</h2>
+</div>
+<a class="card">
+    <br>
+    <h4 class="card-title text-center">강의 정보</h4>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead class="table-light">
+                <th:block>
+                    <tr>
+                        <th>학정 번호</th>
+                        <th>강의 제목</th>
+                    </tr>
+                </th:block>
+
+                </thead>
+                <tbody>
+                <th:block>
+                    <tr>
+                        <td th:text="${syllabus.getId()}"></td>
+                        <td th:text="${syllabus.getName()}"></td>
+                    </tr>
+                </th:block>
+
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+    </div>
+</a>
+
+
+<a class="card">
+
+    <div class="card-body">
+        <div class="table-responsive">
+
+            <form class="sform" method="POST" id="addWrite">
+                <table class="table table-bordered table-striped table-nowrap mb-0">
+                    <thead>
+                    <br>
+                    <h4 class="card-title text-center">새 퀴즈 등록</h4>
+                    </thead>
+                    <th:block>
+                        <tr>
+                            <th>퀴즈 번호</th>
+                            <th>퀴즈 제목</th>
+                            <th>제출 가능 시작 일자</th>
+                            <th>제출 가능 마감 일자</th>
+                        </tr>
+                    </th:block>
+
+                    </thead>
+                    <tbody style="cursor: pointer;" th:if="${quizTest.isEmpty() eq false}">
+                    <th:block>
+                        <tr>
+                            <input type="hidden" name="syllabusId" th:value="${syllabus.getId()}">
+                            <td><input type="text" class="form-control" name="id" th:value="${quizTest.get(0).getId()}"></td>
+                            <td><input type="text" class="form-control" name="name" th:value="${quizTest.get(0).getName()}"></td>
+                            <td><input type="date" class="form-control" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}"></td>
+                            <td><input type="date" class="form-control" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}"></td>
+                        </tr>
+                    </th:block>
+
+                    </tbody>
+
+                    <tbody style="cursor: pointer;" th:unless="${quizTest.isEmpty() eq false}">
+                    <th:block>
+                        <tr>
+                            <input type="hidden" name="syllabusId" >
+                            <td><input type="text" class="form-control" name="id"></td>
+                            <td><input type="text" class="form-control" name="name" ></td>
+                            <td><input type="date" class="form-control" name="submitStart" ></td>
+                            <td><input type="date" class="form-control" name="submitEnd" ></td>
+                        </tr>
+                    </th:block>
+
+                    </tbody>
+                </table>
+
+
+                <table class="table table-bordered table-striped table-nowrap mb-0">
+                    <thead>
+                    <th:block>
+                        <tr>
+                            <th>문제 번호</th>
+                            <th>카테고리</th>
+                            <th>문제 내용</th>
+                            <th>모범 답안</th>
+                            <th>배점</th>
+                        </tr>
+                        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+                        <!--    <tr><input type="button" value='항목 추가' onclick='createDiv()'></tr>--><input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
+                        <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
+                        <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
+                        <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
+
+                    </th:block>
+
+                    </thead>
+                    <tbody>
 
 
 
-<!--<script>-->
-<!--    function createDiv() {-->
-<!--        const dynamicTable = document.getElementById('dynamic_table');-->
-<!--        const newRow = dynamicTable.insertRow();-->
-<!--        const cell1 = newRow.insertCell();-->
-<!--        const cell2 = newRow.insertCell();-->
-<!--        const cell3 = newRow.insertCell();-->
-<!--        const cell4 = newRow.insertCell();-->
-<!--        const cell5 = newRow.insertCell();-->
-<!--        const cell6 = newRow.insertCell();-->
+                    <th:block>
+                        <tr>
+                            <td><input type="number" class="form-control" name="questionNum"></td>
+                            <td>
+                                <!--              <select class="form-select" id="autoSizingSelect">-->
+                                <!--                <option selected="" name="category" value="1">객관식</option>-->
+                                <!--                <option name="category" value="2">단답식</option>-->
+                                <!--                <option name="category" value="3">주관식</option>-->
 
-<!--        cell1.innerHTML = '<input type="number" name="questionNum">';-->
-<!--        cell2.innerHTML = '<input type="number" name="category">';-->
-<!--        cell3.innerHTML = '<input type="text" name="question">';-->
-<!--        cell4.innerHTML = '<input type="text" name="correctAnswer">';``-->
-<!--        cell5.innerHTML = '<input type="number" name="score">';-->
-<!--        cell6.innerHTML = '<input type="submit" name="complete" value="완료">';-->
+                                <!--              </select>-->
+                                <input type="number" class="form-control" name="category">
+                            </td>
+                            <td><input type="text" class="form-control" name="question"></td>
+                            <td><input type="text" class="form-control" name="correctAnswer"></td>
+                            <td><input type="number" class="form-control" name="score"></td>
+                            <td><input type="submit" class="form-control" name="complete" value="완료"></td>
+                        </tr>
+                    </th:block>
 
-<!--        count++;-->
-<!--    }-->
+                    </tbody>
+                </table>
+            </form>
 
-<!--    function checkSize(input) {-->
-<!--        if (input.files && input.files[0].size > (20*1024*1024)) {-->
-<!--            alert("파일 사이즈가 20MB 초과되었습니다.");-->
-<!--        }-->
-<!--    }-->
+                <table class="table table-bordered table-striped table-nowrap mb-0">
+                    <thead>
+                    <br>
+                    <h4 class="card-title text-center">기존 퀴즈</h4>
+                    </thead>
+                    <thead>
+                    <th:block>
+<!--                        <tr>-->
+<!--                            <th>문제 번호</th>-->
+<!--                            <th>카테고리</th>-->
+<!--                            <th>문제 내용</th>-->
+<!--                            <th>모범 답안</th>-->
+<!--                            <th>배점</th>-->
+<!--                        </tr>-->
+                        <!--    <tr><input type="button" value='항목 추가' onclick='createDiv()'></tr>--><input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
+                        <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
+                        <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
+                        <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
 
-<!--    function deleteRow() {-->
-<!--        var table = document.getElementById('dynamic_table');-->
-<!--        var checkboxArray = document.getElementsByName('checkboxObj');-->
+                    </th:block>
 
-<!--        for (var i = checkboxArray.length-1; i>=0; i&#45;&#45;) {-->
-<!--            var check = checkboxArray[i].checked;-->
+                    </thead>
+                    <tbody style="cursor: pointer;" th:if="${quizTest.isEmpty() eq false}">                                                            <!-- 퀴즈 목록이 존재하는 경우 -->
+                    <tr th:each="i : ${#numbers.sequence(0,quizTest.size()-1)}">
+                        <form class="sform" method="POST" id="write">
+                            <input type="hidden" id="csrf2" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+                            <input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
+                            <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
+                            <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
+                            <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
+                            <th:block>
 
-<!--            if (check) {-->
-<!--                table.deleteRow(i);-->
-<!--            }-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
+                            <td><input type="number" class="form-control" name="questionNum" th:value="${quizTest.get(i).getQuestionNum()}"></td>
+                            <td>
+                                <!--              <select class="form-select" id="autoSizingSelect">-->
+                                <!--                <option selected="" name="category" value="1">객관식</option>-->
+                                <!--                <option name="category" value="2">단답식</option>-->
+                                <!--                <option name="category" value="3">주관식</option>-->
+
+                                <!--              </select>-->
+                                <input type="number" class="form-control" name="category" th:value="${quizTest.get(i).getCategory()}">
+                            </td>
+                            <td><input type="text" class="form-control" name="question" th:value="${quizTest.get(i).getQuestion()}"></td>
+                            <td><input type="text" class="form-control" name="correctAnswer" th:value="${quizTest.get(i).getCorrectAnswer()}"></td>
+                            <td><input type="number" class="form-control" name="score" th:value="${quizTest.get(i).getScore()}"></td>
+                            <td><input type="submit" class="form-control" name="complete" value="수정">
+                            </td>
+                            </th:block>
+                        </form>
+                    </tr>
+                    </th:block>
+
+                    </tbody>
+                </table>
+
+        </div>
+
+        <br>
+    </div>
+</a>
 
 
-<!--<script>-->
-<!--    function createDiv() {-->
-<!--        alert('더이상 추가하실수 없습니다.');-->
-<!--    }-->
-<!--        noTh = noTh + 1;-->
-
-<!--        <tr>하이</tr>-->
-<!--        layer1.innerHTML=layer1.innerHTML-->
-<!--            +'<table>'-->
-<!--            +'        <tr>'-->
-<!--            +'                  <td><input name=rg_ext20[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext21[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext22[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext23[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext24[] type=text class=basic size=20></td>'-->
-<!--            +'                  <td><input name=rg_ext25[] type=text class=basic size=20></td>'-->
-<!--            +'        </tr>';-->
-<!--        +'</table>';-->
-<!--        layer1.style.display = "";-->
-<!--    }-->
-<!--</script>-->
-
-<!--<script>-->
-<!--    const btnPut = document.querySelector('#addDoc');-->
-<!--    if(btnPut)-->
-<!--        document.getElementById("addDoc").addEventListener("click", function(e){-->
-<!--        var target = document.querySelector(".add_doctor").cloneNode(true);-->
-<!--        document.querySelector(".docList").innerHTML += target.innerHTML;-->
-<!--    });-->
-<!--</script>-->
-
-</body>
-</html>
+<meta th:replace="frame/mid2.html">
+<!-- add your js here -->
+<meta th:replace="frame/end.html">
