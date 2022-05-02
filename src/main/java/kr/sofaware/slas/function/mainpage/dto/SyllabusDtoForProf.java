@@ -11,6 +11,8 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class SyllabusDtoForProf extends SyllabusDto {
+    List<NoticeDto> noticeDtoList;                              // 이 과목의 최신 공지 List
+
     List<AssignmentDto> assignmentDtoList;                      // 이 과목의 남은 과제 List
     Map<Date,List<AssignmentDto>> urgentAssignments;            // 가장 빠른 마감기한에 해당하는 과제들 (같은 날에 마감인 과제들이 여러개일 경우 대비)
 
@@ -18,6 +20,7 @@ public class SyllabusDtoForProf extends SyllabusDto {
     public SyllabusDtoForProf(Syllabus entity){                        // entity 로부터 dto 생성
         super(entity);
 
+        this.noticeDtoList=new ArrayList<>();
         this.assignmentDtoList=new ArrayList<>();
     }
 

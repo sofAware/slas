@@ -1,12 +1,26 @@
 <meta th:replace="frame/start.html">
 <!-- add your css here -->
+<style>
+    .pageTitle {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .pageTitle > * {
+        flex-shrink: 0;
+    }
+    .pageTitle > div {
+        margin-left: auto;
+    }
+</style>
 <title>강의 종합</title>
 <meta th:replace="frame/mid.html">
 
 <!-- add your content here! -->
 
-<div class="row">                                                           <!-- 년도, 학기 선택 버튼 -->
-    <div class="mb-4 d-flex justify-content-start gap-4">
+<div class="pageTitle">                                                           <!-- 년도, 학기 선택 버튼 -->
+    <h2 class="m-0 mb-3">📚 강의 종합</h2>
+    <div class="mb-5 d-flex justify-content-end gap-4">
         <!-- 학기 선택 -->
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="semester" data-bs-toggle="dropdown" aria-expanded="true">

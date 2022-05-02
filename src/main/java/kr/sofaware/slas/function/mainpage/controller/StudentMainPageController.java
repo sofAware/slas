@@ -71,11 +71,12 @@ public class StudentMainPageController {
             // ↓ ↓ ↓ syllabusDtoList 의 각각의 syllabus 들의 noticeDtoList 에 최신 공지 3개 정도 add
             // board 테이블에서 ( 공지사항이고 && syllabus_id 는 syllabusDtoList.get(i).id ) 인 것들을 찾아서 등록일 빠른 순으로(datetime 내림차순) 정렬 => 위에서부터 레코드 3개만 가져오기 => noticeDtoList 로 결과 가져옴!!
             for(SyllabusDtoForStu s : syllabusDtoList) {
-                s.setNoticeDtoList(noticeService.findFirst3ByCategoryAndSyllabus_IdOrderByDateDesc(s.getId()));
+                s.setNoticeDtoList(noticeService.findByCategoryAndSyllabus_IdOrderByDateDesc(s.getId()));
             }
 
 
             // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 assignmentDtoList 에 아직 제출하지 않은 과제들을 제출 마감일 빠른 순으로 출력 => 최대 얼만큼까지 출력해줄지는 프론트에서 처리
+            boolean isAssignmentLeft=false;
             for(SyllabusDtoForStu s : syllabusDtoList) {
                 List<Assignment> assignmentList = assignmentService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
 
@@ -90,11 +91,14 @@ public class StudentMainPageController {
                 s.setAssignmentDtoList(assignmentDtoList);
 
                 // 이 과목에서 제출 마감일 젤 빠른 과제가 여러 개일 경우 처리
-                if(assignmentDtoList.isEmpty()==false)
+                if(assignmentDtoList.isEmpty()==false) {
                     s.setUrgentAssignments(assignmentDtoList);
+                    isAssignmentLeft=true;
+                }
             }
 
             // ↓ ↓ ↓  syllabusDtoList 의 각각의 syllabus 들의 lectureVideoDtoList 에 아직 수강하지 않은 강의들을 마감일 빠른 순으로 (최대 5개? 3개? 까지) 출력
+            boolean isLvLeft=false;
             for(SyllabusDtoForStu s : syllabusDtoList){
                 List<LectureVideo> lectureVideoList=lectureVideoService.findBySyllabus_IdSubmitEndAfterOrderBySubmitEndAsc(s.getId(),new Date());
 
@@ -109,10 +113,14 @@ public class StudentMainPageController {
                 s.setLectureVideoDtoList(lectureVideoDtoList);
 
                 // 이 과목에서 수강 마감일 젤 빠른 강의가 여러 개일 경우 처리
-                if(lectureVideoDtoList.isEmpty()==false)
+                if(lectureVideoDtoList.isEmpty()==false) {
                     s.setUrgentLectureVideos(lectureVideoDtoList);
+                    isLvLeft=true;
+                }
             }
 
+            model.addAttribute("isLvLeft",isLvLeft);                                              // 수강한 모든 과목들에 대해 남은 강의가 없을 경우 false
+            model.addAttribute("isAssignmentLeft",isAssignmentLeft);
 
             model.addAttribute("MainPageDto", StudentMainPageDto.builder()                       // studentMainPageDto 를 view 에 전달
                                                                             .id(username)
