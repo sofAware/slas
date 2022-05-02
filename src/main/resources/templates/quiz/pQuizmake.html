@@ -236,9 +236,6 @@
                             <td><input type="number" class="form-control" name="score" th:value="${quizTest.get(i).getScore()}"></td>
                             <td><input type="submit" class="form-control" name="complete" value="수정">
                             </td>
-                                <td><a class="btn btn-danger" th:attr="href='./delete/' + ${quizTest.get(0).getId()} + '&' + ${quizTest.get(0).getSyllabus().getId()} + '&'+ ${quizTest.get(i).getQuestionNum()}"
-                                       data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
-                                >삭제</a></td>
                             </th:block>
                         </form>
                     </tr>
