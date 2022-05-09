@@ -172,7 +172,7 @@
                     </div>
                 </div>
 
-                <div th:if="${qnAList.isEmpty() eq false}" data-simplebar="init" style="max-height: 310px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                <div th:if="${qnAList.isEmpty() eq false}" data-simplebar="init" style="height: 310px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
                     <ul class="list-group list-group-flush">
                         <li th:each="i : ${#numbers.sequence(0,qnAList.size()-1)}" class="list-group-item py-3">
                             <div class="d-flex">
@@ -195,7 +195,7 @@
                     </ul>
                 </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 364px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 264px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
 
-                <div th:unless="${qnAList.isEmpty() eq false}" data-simplebar="init" style="max-height: 100px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                <div th:unless="${qnAList.isEmpty() eq false}" data-simplebar="init" style="height: 100px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
                     <ul class="list-group list-group-flush">
 
                         <li class="list-group-item py-3">
@@ -388,4 +388,5 @@
 
 <meta th:replace="frame/mid2.html">
 <!-- add your js here -->
+<script src="/assets/libs/simplebar/simplebar.min.js"></script>
 <meta th:replace="frame/end.html">
