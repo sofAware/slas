@@ -21,7 +21,7 @@ public class MyMailSender {
 
             String htmlContent = "<a style=\"font-size: 32px\" href=\"" + href + "\">" + href + "</a><br><br>"
                     + content;
-            mailHandler.setText(htmlContent, true);
+            mailHandler.setText(htmlContent.replaceAll("\n", "<br>"), true);
             mailHandler.send();
         } catch (MessagingException e) {
             throw new RuntimeException(e);

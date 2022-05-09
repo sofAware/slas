@@ -152,7 +152,7 @@ public class NoticeProfessorController {
         List<Lecture> lectures = lectureService.findAllBySyllabusId(board.getSyllabus().getId());
         lectures.forEach(l -> myMailSender.send(
                 l.getStudent().getEmail(),
-                board.getTitle(),
+                "[공지] " + board.getTitle(),
                 "http://slas.kr/s/" + ROOT_URL + "/" + board.getId(),
                 board.getContent()));
 

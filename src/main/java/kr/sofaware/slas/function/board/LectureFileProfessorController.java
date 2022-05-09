@@ -1,11 +1,10 @@
 package kr.sofaware.slas.function.board;
 
 import kr.sofaware.slas.entity.Board;
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
-import kr.sofaware.slas.service.BoardService;
-import kr.sofaware.slas.service.FileService;
-import kr.sofaware.slas.service.MemberService;
-import kr.sofaware.slas.service.SyllabusService;
+import kr.sofaware.slas.function.mail.MyMailSender;
+import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -27,6 +26,8 @@ public class LectureFileProfessorController {
 
     private final MemberService memberService;
     private final SyllabusService syllabusService;
+    private final LectureService lectureService;
+    private final MyMailSender myMailSender;
     private final FileService fileService;
 
     // 전체 공지사항 리스트
@@ -145,6 +146,14 @@ public class LectureFileProfessorController {
         // 게시글 작성
         Board board = builder.build();
         lectureFileService.save(board);
+
+        // 메일 전송
+        List<Lecture> lectures = lectureService.findAllBySyllabusId(board.getSyllabus().getId());
+        lectures.forEach(l -> myMailSender.send(
+                l.getStudent().getEmail(),
+                "[자료] " + board.getTitle(),
+                "http://slas.kr/s/" + ROOT_URL + "/" + board.getId(),
+                board.getContent()));
 
         // 작성된 포스트 번호로 뷰 이동
         return "redirect:/p/" + ROOT_URL + "/" + board.getId();
