@@ -14,8 +14,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@Builder
 @Entity
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +32,7 @@ public class Member implements UserDetails {
     private String major;       // 전공
     private int semester;       // 학기
 
+    private String email;       // 이메일
     private String role;        // 역할
 
     @Lob
@@ -55,6 +58,7 @@ public class Member implements UserDetails {
                 memberDTO.getName(),
                 memberDTO.getMajor(),
                 memberDTO.getSemester(),
+                "",
                 memberDTO.getRole(),
                 null);
     }

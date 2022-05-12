@@ -1,19 +1,22 @@
 package kr.sofaware.slas.function.info;
 
 import kr.sofaware.slas.entity.Attendance;
+import kr.sofaware.slas.entity.Member;
+import kr.sofaware.slas.entity.Quiz;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.function.quiz.QuizSaveDto;
 import kr.sofaware.slas.service.AttendanceService;
 import kr.sofaware.slas.service.LectureService;
+import kr.sofaware.slas.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
@@ -23,6 +26,8 @@ import java.util.*;
 public class studentInfoController {
     private final LectureService lectureService; //강의 정보 받아올 곳 (강의 이름, 학정번호)
     private final AttendanceService attendanceService; //출석 체크 결과 받아올 곳
+
+    private final MemberService memberService; //이메일 수정 저장
 
 
     @GetMapping("/info")
@@ -72,4 +77,16 @@ public class studentInfoController {
         model.addAttribute("attendances", attendances);
         return "info/sInfo";
     }
+
+    @PostMapping("/info")
+    public String postInfo(@RequestParam("email") String email , Principal principal) throws IOException {
+
+        String Id = principal.getName();
+        Optional<Member> memberOptional = memberService.findById(Id);
+        memberOptional.ifPresent(selectWeek -> {
+            selectWeek.setEmail(email);
+            memberService.saveInfo(selectWeek);
+        });
+        return "redirect:/s/info";
+        }
 }

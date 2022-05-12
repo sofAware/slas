@@ -16,7 +16,9 @@
     <div class="col-xl-8">
         <div class="card-body">
         <div class="table-responsive">
-        <table class="table table-bordered table-striped table-nowrap mb-0">
+            <form method="POST" id="write">
+                <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
+                <table class="table table-bordered table-striped table-nowrap mb-0">
             <tbody th:each="attendance : ${attendances}">
             <tr>
                 <th class="text-nowrap" scope="row">이름</th>
@@ -38,10 +40,14 @@
                 <th class="text-nowrap" scope="row">학기</th>
                 <td th:text="${attendance.getStudent().getSemester()%2+1}"></td>
             </tr>
+            <tr>
+                <th class="text-nowrap" scope="row">email</th>
+                <td><input class="form-control" type="text" name="email" th:value="${attendance.getStudent().getEmail}"></td>
+                <td><input type="submit" class="form-control" name="complete" value="수정"></td>
+            </tr>
             </tbody>
-
         </table>
-
+            </form>
     </div>
         </div>
     </div>
@@ -52,6 +58,8 @@
         </div>
     </div>
 </div>
+
+
 
 
     <meta th:replace="frame/mid2.html">

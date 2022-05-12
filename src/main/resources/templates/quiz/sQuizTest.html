@@ -57,39 +57,37 @@
                         </div>
                     </div>
                     <div class="mb-1 d-flex justify-content-end gap-4">
-                    <td><input type="submit" value="저장하기" class="btn btn-secondary waves-effect waves-light float-right" ></td>
+                        <td><input type="submit" value="저장하기" class="btn btn-secondary waves-effect waves-light float-right" ></td>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <div class="col-xl-2">
-    <a class="card">
-        <div class="card-body">
-            <h4 class="card-title">문제 번호</h4>
-            <div class="table-responsive">
-                <table class="table table-bordered mb-0">
-                    <th:block  style="cursor: pointer;" th:each="i : ${#numbers.sequence(1,quizTest.size())}" >
-                        <tr>
-                            <th row scope="row">
-                            <a th:attr="href=${'?question_num=' + i} "
-                               th:text="${i}"></a></th>
-                            <input type="hidden" name="testId" th:value="${i}">
-                            <td>L</td>
-                        </tr>
-                    </th:block>
-                </table>
+        <a class="card">
+            <div class="card-body">
+                <h4 class="card-title">문제 번호</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                        <th:block  style="cursor: pointer;" th:each="i : ${#numbers.sequence(1,quizTest.size())}" >
+                            <tr>
+                                <th row scope="row">
+                                    <a th:attr="href=${'?question_num=' + i} "
+                                       th:text="${i}"></a></th>
+                                <input type="hidden" name="testId" th:value="${i}">
+                                <td>L</td>
+                            </tr>
+                        </th:block>
+                    </table>
+                </div>
+                <br>
+                <div class="mb-1 d-flex justify-content-center gap-4">
+                    <input type="button" value="제출하기" class="btn btn-primary waves-effect waves-light" th:onclick="| location.href='@{/s/quiz/list}'|">
+                </div>
             </div>
-            <br>
-            <div class="mb-1 d-flex justify-content-center gap-4">
-                <input type="button" value="제출하기" class="btn btn-primary waves-effect waves-light" th:onclick="| location.href='@{/s/quiz/list}'|">
-            </div>
-        </div>
-    </a>
+        </a>
     </div>
 </div>
-
-
 
 
 <meta th:replace="frame/mid2.html">
