@@ -2,7 +2,9 @@ package kr.sofaware.slas.function.board;
 
 import kr.sofaware.slas.entity.Board;
 import kr.sofaware.slas.entity.Comment;
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.function.mail.MyMailSender;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -31,6 +33,7 @@ public class QnaController {
     private final CommentService commentService;
     private final MemberService memberService;
     private final FileService fileService;
+    private final MyMailSender myMailSender;
 
     // 전체 질문 리스트
     @GetMapping
@@ -326,6 +329,13 @@ public class QnaController {
                 new Date());
         board.getComments().add(commentService.save(comment));
         qnaService.save(board);
+
+        // 메일 전송
+        myMailSender.send(
+                board.getMember().getEmail(),
+                "[질문답변] " + board.getTitle(),
+                "http://slas.kr/s/" + ROOT_URL + "/" + board.getId(),
+                comment.getMember().getName() + "님의 댓글<br><br>" + comment.getContent());
 
         // 수정된 포스트 번호로 뷰 이동
         return String.format("redirect:/%c/%s/%d",

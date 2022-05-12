@@ -1,7 +1,9 @@
 package kr.sofaware.slas.function.board;
 
 import kr.sofaware.slas.entity.Assignment;
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.function.mail.MyMailSender;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -22,6 +24,8 @@ public class AssignmentProfessorController {
     private final AssignmentService assignmentService;
     private final SyllabusService syllabusService;
     private final FileService fileService;
+    private final LectureService lectureService;
+    private final MyMailSender myMailSender;
 
     // 리스트
     @GetMapping
@@ -165,6 +169,14 @@ public class AssignmentProfessorController {
         // 과제 작성
         Assignment assignment = builder.build();
         assignmentService.save(assignment);
+
+        // 메일 전송
+        List<Lecture> lectures = lectureService.findAllBySyllabusId(assignment.getSyllabus().getId());
+        lectures.forEach(l -> myMailSender.send(
+                l.getStudent().getEmail(),
+                "[과제] " + assignment.getName(),
+                "http://slas.kr/s/assignment/" + assignment.getId(),
+                assignment.getContent()));
 
         // 작성된 과제로 리디렉션
         return "redirect:/p/assignment/" + assignment.getId();

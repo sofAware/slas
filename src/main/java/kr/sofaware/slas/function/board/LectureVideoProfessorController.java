@@ -1,7 +1,9 @@
 package kr.sofaware.slas.function.board;
 
+import kr.sofaware.slas.entity.Lecture;
 import kr.sofaware.slas.entity.LectureVideo;
 import kr.sofaware.slas.entity.Syllabus;
+import kr.sofaware.slas.function.mail.MyMailSender;
 import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.mp4parser.IsoFile;
@@ -21,8 +23,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class LectureVideoProfessorController {
 
+    private final LectureService lectureService;
     private final LectureVideoService lectureVideoService;
     private final SyllabusService syllabusService;
+    private final MyMailSender myMailSender;
     private final FileService fileService;
 
     // 전체 강의영상 리스트
@@ -169,6 +173,16 @@ public class LectureVideoProfessorController {
 
         // 강의 영상 작성
         lectureVideoService.save(lectureVideo);
+
+        // 메일 전송
+        List<Lecture> lectures = lectureService.findAllBySyllabusId(lectureVideo.getSyllabus().getId());
+        lectures.forEach(l -> myMailSender.send(
+                l.getStudent().getEmail(),
+                "[영상] " + lectureVideo.getName(),
+                "http://slas.kr/s/lv/view?"
+                        + "?syllabus-id=" + lectureVideo.getSyllabus().getId()
+                        + "&id=" + lectureVideo.getId(),
+                lectureVideo.getDuration() + "분"));
 
         // 작성된 강의영상 번호로 뷰 이동
         return "redirect:/p/lv/view"
