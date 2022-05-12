@@ -188,12 +188,12 @@
                                                 <div class="flex-grow-1">
                                                     <div>
                                                         <!-- 날짜 -->
-                                                        <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle me-3"></i><a class="d-inline-block mb-1" th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}" href="javascript: void(0);"></a>
+                                                        <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle me-3"></i><span class="d-inline-block mb-1 text-primary" th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}"></span>
 
                                                         <!-- 해당 강의 제목들 -->
                                                         <th:block th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getUrgentLectureVideos().get(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd()).size()-1)}">
                                                             <br>
-                                                            <p class="mb-0 mt-2 ms-4 d-inline-block text-truncate" style="max-width: 300px;"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i>[[${MainPageDto.getSyllabusDtoList().get(num).getUrgentLectureVideos().get(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd()).get(i).getName()}]]</p>
+                                                            <p class="mb-0 mt-2 ms-4 d-inline-block text-truncate" style="max-width: 300px;"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i><a th:href="@{'/s/lv/view'+'?syllabus-id='+${MainPageDto.getSyllabusDtoList().get(num).id}+'&id='+${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).id}}" class="text-dark">[[${MainPageDto.getSyllabusDtoList().get(num).getUrgentLectureVideos().get(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(0).getAttendanceEnd()).get(i).getName()}]]</a></p>
                                                         </th:block>
                                                     </div>
                                                 </div>
@@ -241,12 +241,12 @@
                                             <div class="flex-grow-1">
                                                 <div>
                                                     <!-- 날짜 -->
-                                                    <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle me-3"></i><a class="d-inline-block mb-1" th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}" href="javascript: void(0);"></a>
+                                                    <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle me-3"></i><span class="d-inline-block mb-1 text-primary" th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}" href="javascript: void(0);"></span>
 
                                                     <!-- 해당 과제 제목들 -->
                                                     <th:block th:each="i : ${#numbers.sequence(0,MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).size()-1)}">
                                                         <br>
-                                                        <p class="mb-0 mt-2 ms-4 d-inline-block text-truncate" style="max-width: 300px;"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i>[[${MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).get(i).getName()}]]</p>
+                                                        <p class="mb-0 mt-2 ms-4 d-inline-block text-truncate" style="max-width: 300px;"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i><a th:href="@{'/s/assignment/write/'+${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).id}}" class="text-dark">[[${MainPageDto.getSyllabusDtoList().get(num).getUrgentAssignments().get(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(0).getSubmitEnd()).get(i).getName()}]]</a></p>
                                                     </th:block>
                                                 </div>
                                             </div>
@@ -285,11 +285,11 @@
                 <div class="d-flex">
                     <div class="flex-grow-1 overflow-hidden">
                         <h5 th:text="${MainPageDto.getSyllabusDtoList().get(num).getName()}" class="text-truncate font-size-20 fw-bold mb-0 mt-2 mb-2"></h5>                            <!--과목명-->
-                        <div class="d-flex justify-content-around">
-                            <button type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">공지사항</button>
-                            <button type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">강의영상</button>
-                            <button type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">강의자료</button>
-                            <button type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">질문게시판</button>
+                        <div class="d-flex justify-content-around mb-1">
+                            <button th:onclick="'location.href=\''+ @{'/s/notice?syllabus-id='+${MainPageDto.getSyllabusDtoList().get(num).getId()}} + '\''" type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">공지사항</button>
+                            <button th:onclick="'location.href=\''+ @{'/s/lv?syllabus-id='+${MainPageDto.getSyllabusDtoList().get(num).getId()}} + '\''" type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">강의영상</button>
+                            <button th:onclick="'location.href=\''+ @{'/s/lf?syllabus-id='+${MainPageDto.getSyllabusDtoList().get(num).getId()}} + '\''" type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">강의자료</button>
+                            <button th:onclick="'location.href=\''+ @{'/s/qna?syllabus-id='+${MainPageDto.getSyllabusDtoList().get(num).getId()}} + '\''" type="button" class="mt-2 btn btn-info bg-info bg-soft text-dark text-gradient btn-sm waves-effect waves-light" style="border:none; width: 87px">질문게시판</button>
                         </div>
                     </div>
                 </div>
@@ -342,7 +342,7 @@
 
                                             <div class="align-self-center overflow-hidden me-auto">
                                                 <div>
-                                                    <h5 th:text="${MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}" class="font-size-14 fw-bold text-truncate"><a href="javascript: void(0);" class="text-dark"></a></h5>               <!-- 공지 제목 -->
+                                                    <h5 class="font-size-14 fw-bold text-truncate"><a th:href="@{'/s/notice/'+${MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).id}}" class="text-dark">[[${MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).title}]]</a></h5>               <!-- 공지 제목 -->
                                                     <p th:text="${#dates.format(MainPageDto.getSyllabusDtoList().get(num).getNoticeDtoList().get(i).getUploadDate(), 'yyyy-MM-dd')}" class="text-muted mb-0"></p>                                                                     <!-- 등록 날짜 -->
                                                 </div>
                                             </div>
@@ -369,7 +369,7 @@
 
                                         <div class="align-self-center overflow-hidden me-auto">
                                             <div>
-                                                <h5 th:text="${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}" class="font-size-14 fw-bold text-truncate"><a href="javascript: void(0);" class="text-dark"></a></h5>
+                                                <h5 class="font-size-14 fw-bold text-truncate"><a th:href="@{'/s/assignment/write/'+${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).id}}" class="text-dark">[[${MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getName()}]]</a></h5>
                                                 <p th:text="${'~ '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getAssignmentDtoList().get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-muted mb-0"></p>
                                             </div>
                                         </div>
@@ -396,7 +396,7 @@
 
                                             <div class="align-self-center overflow-hidden me-auto">
                                                 <div>
-                                                    <h5 th:text="${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}" class="font-size-14 fw-bold text-truncate"><a href="javascript: void(0);" class="text-dark"></a></h5>
+                                                    <h5 class="font-size-14 fw-bold text-truncate"><a th:href="@{'/s/lv/view'+'?syllabus-id='+${MainPageDto.getSyllabusDtoList().get(num).id}+'&id='+${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).id}}" class="text-dark">[[${MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getName()}]]</a></h5>
                                                     <p th:text="${'~ '+#dates.format(MainPageDto.getSyllabusDtoList().get(num).getLectureVideoDtoList().get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-muted mb-0"></p>
                                                 </div>
                                             </div>
