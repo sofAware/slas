@@ -12,12 +12,14 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class QnADto {
+    int id;
     String studentId;
     String studentName;
     String title;
     Date date;
 
     public QnADto(Board entity){
+        this.id=entity.getId();
         this.studentId=entity.getMember().getId();
         this.studentName=entity.getMember().getName();
         this.title=entity.getTitle();
