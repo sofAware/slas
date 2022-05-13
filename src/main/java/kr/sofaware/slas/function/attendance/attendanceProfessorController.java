@@ -78,9 +78,10 @@ public class attendanceProfessorController {
         //return "Attendance/pAttendancePut";
     }
 
-    @GetMapping("/attendance/{attendanceWeekStr:[0-9]+}")
+    @GetMapping("/attendance/{attendanceWeekStr:[0-9]+}&{syNo}")
     public String putAttendance(Model model, Authentication authentication, Principal principal,
                                 @PathVariable String attendanceWeekStr,
+                                @PathVariable String syNo,
                                 @Nullable @RequestParam("year-semester") String yearSemester,
                                 @Nullable @RequestParam("syllabus-id") String syllabusId) {
         Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
@@ -128,39 +129,30 @@ public class attendanceProfessorController {
         model.addAttribute("week",weekList);
         model.addAttribute("attendanceWeekStr",attendanceWeekStr);
 
-        List<Attendance> attendances = attendanceService.listAll(syllabusId);
+        List<Attendance> attendances = attendanceService.listAll(syNo);
         model.addAttribute("attendances", attendances);
+
+        model.addAttribute("syNo", syNo);
         return "Attendance/pAttendancePut";
     }
 
 
-    @PostMapping("/attendance/{attendanceWeekStr:[0-9]+}")
+    @PostMapping("/attendance/{attendanceWeekStr:[0-9]+}&{syNo}")
     public String postAttendance(Model model, Authentication authentication, Principal principal,
                                 @PathVariable String attendanceWeekStr,
-                                @Nullable @RequestParam("year-semester") String yearSemester,
+                                 @PathVariable String syNo,
+                                 @Nullable @RequestParam("year-semester") String yearSemester,
                                 @Nullable @RequestParam("syllabus-id") String syllabusId,
                                  @RequestParam("weekValue") int weekValue,
                                  @RequestParam("student-id") String studentId){
 
-//        int attendanceWeek = Integer.parseInt(attendanceWeekStr);
-//        List<Attendance> attendances = attendanceService.listAll(syllabusId);
-//        Optional<Attendance> attendanceOptional=attendanceService.update(syllabusId,attendanceWeek)
-//        model.addAttribute("attendances",attendances);
-//        model.addAttribute("attendanceWeek",attendanceWeek);
-//
-//        attendanceOptional.isPresent(selectAttendance ->  selectAttendance.setName());
 
-//        Attendance.AttendanceBuilder builder =Attendance.builder()
-//                .syllabus(syllabusService.findById(attendanceDto.getSyllabus()).get())
-
-
-        Optional<Attendance> attendances = attendanceService.findAllBySyllabus_IdAndStudent_Id(syllabusId,studentId);
-
+        Optional<Attendance> attendances = attendanceService.findAllBySyllabus_IdAndStudent_Id(syNo,studentId);
 
         attendances.ifPresent(selectWeek -> {
             selectWeek.setWeek(attendanceWeekStr,weekValue);
             attendanceService.save(selectWeek);
         });
-        return "redirect:/p/attendance/"+attendanceWeekStr;
+        return "redirect:/p/attendance/"+attendanceWeekStr+"&"+syNo;
     }
 }

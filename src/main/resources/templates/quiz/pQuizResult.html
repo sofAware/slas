@@ -66,7 +66,7 @@
 <div class="board-menu">
     <h2 class="m-0 mb-3" >💡 퀴즈 점수</h2>
 </div>
-
+<th:block th:if="${quizSubmitList.isEmpty() eq false}">
 <a class="card">
     <br>
     <h4 class="card-title text-center">강의 정보</h4>
@@ -101,36 +101,45 @@
     </div>
 </a>
 
-<div class="card">
-    <div class="card-body">
+    <div class="card">
+        <div class="card-body">
 
-<!--        <h4 class="card-title">퀴즈점수</h4>-->
-<!--        <br>-->
+            <!--        <h4 class="card-title">퀴즈점수</h4>-->
+            <!--        <br>-->
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-nowrap mb-0">
-                <thead>
-                <tr>
-                    <th scope="col">이름</th>
-                    <th scope="col" class="text-center">
-                        학번
-                    </th>
-                    <th scope="col" class="text-center">
-                        점수
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr  th:each="i : ${#numbers.sequence(0,quizSubmitList.size()-1)}" >
-                    <th th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getId()}"></th>
-                    <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getName()}"></td>
-                    <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${studentScoreList.get(i)}" ></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-nowrap mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col">이름</th>
+                        <th scope="col" class="text-center">
+                            학번
+                        </th>
+                        <th scope="col" class="text-center">
+                            점수
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr  th:each="i : ${#numbers.sequence(0,quizSubmitList.size()-1)}" >
+                        <th th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getId()}"></th>
+                        <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${quizSubmitList.get(i).getStudent().getName()}"></td>
+                        <td th:if="${quizSubmitList.get(i).getQuiz().getQuestionNum() eq 1}" th:text="${studentScoreList.get(i)}" ></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+</th:block>
+<th:block th:if="${quizSubmitList.isEmpty() eq true}">
+    <a class="card text-center">
+        <div class="card-body" >
+            응시한 학생이 없습니다
+        </div>
+    </a>
+</th:block>
+
 
 <meta th:replace="frame/mid2.html">
 <!-- add your js here -->

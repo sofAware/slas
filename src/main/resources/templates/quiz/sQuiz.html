@@ -134,7 +134,7 @@
         </div>
         <div class="col-xl-1">
             <a class="card" th:unless="${quizList.get(i).getSubmitted() eq true}"
-               th:href="${'/s/quiz/detail/' + quizList.get(i).getId() +'&'+ selectedSyllabusId}">
+               th:href="${'/s/quiz/detail/' + quizList.get(i).getId() +'&'+ selectedSyllabusId+'?question_num=1'}">
                 <div class="card-body" >
                     응시
                 </div>

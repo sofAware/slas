@@ -24,11 +24,11 @@
                     <td class="card-title" th:text="${quizTest.get(question_num).getQuestionNum()}"></td>
                 </h4>
                 <p> <td th:text="${quizTest.get(question_num).getQuestion()}"></td> </p>
-                <form action="#" class="custom-validation" novalidate="" method="post">
+                <form method="POST" id="write">
                     <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
                     <div class="mb-3">
                         <div class="mb-3">
-                            <td th:if="${quizTest.get(question_num).getCategory() eq 1}">
+                            <td th:if="${quizTest.get(question_num).getCategory() eq 1}" >
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="answer" id="inlineRadio1" value="1">
                                     <label class="form-check-label" for="inlineRadio1">1</label>
@@ -75,7 +75,6 @@
                                     <a th:attr="href=${'?question_num=' + i} "
                                        th:text="${i}"></a></th>
                                 <input type="hidden" name="testId" th:value="${i}">
-                                <td>L</td>
                             </tr>
                         </th:block>
                     </table>
