@@ -68,10 +68,10 @@
             <div class="card-body">
                 <h4 class="card-title">문제 번호</h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
+                    <table class="table table-bordered mb-0 center">
                         <th:block  style="cursor: pointer;" th:each="i : ${#numbers.sequence(1,quizTest.size())}" >
                             <tr>
-                                <th row scope="row">
+                                <th class="text-center" row scope="row">
                                     <a th:attr="href=${'?question_num=' + i} "
                                        th:text="${i}"></a></th>
                                 <input type="hidden" name="testId" th:value="${i}">
