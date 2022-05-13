@@ -178,13 +178,14 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar-xs">
-                                        <div class="avatar-title rounded-circle bg-light text-primary">
-                                            <i class="bx bxs-user"></i>
-                                        </div>
+<!--                                        <div class="avatar-title rounded-circle bg-light text-primary">-->
+<!--                                            <i class="bx bxs-user"></i>-->
+<!--                                        </div>-->
+                                        <img class="rounded-circle header-profile-user" th:src="'/assets/images/profile/'+${qnAList.get(i).getStudentId}" alt="Profile">
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="font-size-14 mb-1">[[${qnAList.get(i).getStudentName()}]]<small class="text-muted float-end" th:text="${#dates.format(qnAList.get(i).getDate(), 'yyyy-MM-dd')}"></small></h5>
+                                    <h5 class="font-size-14 mb-1">[[${qnAList.get(i).getStudentId+' '+qnAList.get(i).getStudentName()}]]<small class="text-muted float-end" th:text="${#dates.format(qnAList.get(i).getDate(), 'yyyy-MM-dd')}"></small></h5>
                                     <p th:text="${qnAList.get(i).getTitle()}" class="text-muted"></p>
                                     <div>
                                         <a th:href="@{'/p/qna/'+${qnAList.get(i).getId()}}" class="text-success"><i class="mdi mdi-reply me-1"></i>질문 바로가기</a>
@@ -230,7 +231,7 @@
                     <p class="card-title-desc"></p>
 
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0">
+                        <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                             <tr class="text-center">
                                 <th></th>
@@ -249,7 +250,7 @@
                             </tbody>
                             <tbody th:unless="${lectureFileList.isEmpty() eq false}">                                                        <!-- 강의 자료 목록이 없는 경우 -->
                             <tr>
-                                <td th:colspan="3" class="text-center">등록된 내용이 없습니다.</td>
+                                <td th:colspan="4" class="text-center">등록된 내용이 없습니다.</td>
                             </tr>
                             </tbody>
                         </table>

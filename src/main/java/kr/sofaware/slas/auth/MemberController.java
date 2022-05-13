@@ -67,4 +67,13 @@ public class MemberController {
         InputStream profile = member.getProfileContent();
         return profile == null ? null : profile.readAllBytes();
     }
+
+    // 특정 멤버 프로필 사진 요청
+    @GetMapping("/assets/images/profile/{id}")
+    @ResponseBody
+    public byte[] viewProfileOfId(@PathVariable("id") String id) throws IOException {
+        Member member = memberService.loadUserByUsername(id);
+        InputStream profile = member.getProfileContent();
+        return profile == null ? null : profile.readAllBytes();
+    }
 }
