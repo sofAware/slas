@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="flex-grow-1">
                                     <div>
-                                        <h5 th:text="${noticeList.get(i).title}" class="font-size-15"><a href="javascript: void(0);" class="text-dark"></a></h5>
+                                        <h5 class="font-size-15"><a th:href="@{'/s/notice/'+${noticeList.get(i).id}}" class="text-dark">[[${noticeList.get(i).title}]]</a></h5>
                                         <span th:text="${#dates.format(noticeList.get(i).getUploadDate(), 'yyyy-MM-dd')}" class="text-primary"></span>
                                     </div>
                                 </div>
@@ -147,8 +147,8 @@
                                                                 <i class="bx bx-right-arrow-alt"></i>
                                                             </span>
                     </div>
-                    <h5 class="font-size-15">Q&amp;A 게시판</h5>
-                    <p class="text-muted mb-0">바로가기</p>
+                    <h5 class="font-size-15" style="cursor: pointer;" th:onclick="'location.href=\''+ @{'/s/qna?syllabus-id='+${syllabusId}} + '\''">Q&amp;A 게시판</h5>
+                    <p class="text-muted mb-0"><a th:href="@{'/s/qna?syllabus-id='+${syllabusId}}" style="color:inherit">바로가기</a></p>
                 </div>
             </div>
         </div>
@@ -161,8 +161,8 @@
                                                                 <i class="bx bx-right-arrow-alt"></i>
                                                             </span>
                     </div>
-                    <h5 class="font-size-15">강의 계획서</h5>
-                    <p class="text-muted mb-0">바로가기</p>
+                    <h5 class="font-size-15" style="cursor: pointer;" th:onclick="'location.href=\''+ @{'/s/syllabusDetail/'+${syllabusId}} + '\''">강의 계획서</h5>
+                    <p class="text-muted mb-0"><a th:href="@{'/s/syllabusDetail/'+${syllabusId}}" style="color:inherit">바로가기</a></p>
                 </div>
             </div>
         </div>
@@ -245,13 +245,20 @@
                         </tr>
                         </thead>
                         <tbody th:if="${assignmentList.isEmpty() eq false}">
-                            <tr th:each="i : ${#numbers.sequence(0,assignmentList.size()-1)}" class="text-center">
-                                <th scope="row" th:text="${i+1}"></th>
-                                <td th:text="${assignmentList.get(i).getName()}"></td>
-                                <td th:text="${#dates.format(assignmentList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'   ~   '+#dates.format(assignmentList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                <td th:if="${assignmentList.get(i).getSubmitTrue() eq true}" th:text="O"></td>
-                                <td th:unless="${assignmentList.get(i).getSubmitTrue() eq true}" th:text="X"></td>
-                            </tr>
+                            <th:block th:each="i : ${#numbers.sequence(0,assignmentList.size()-1)}">
+                                <tr th:if="${assignmentList.get(i).getSubmitTrue() eq true}" class="text-center" style="cursor: pointer;" th:onclick="'location.href=\''+ @{'/s/assignment/'+${assignmentList.get(i).getId}} + '\''">
+                                    <th scope="row" th:text="${i+1}"></th>
+                                    <td th:text="${assignmentList.get(i).getName()}"></td>
+                                    <td th:text="${#dates.format(assignmentList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'   ~   '+#dates.format(assignmentList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td th:text="O"></td>
+                                </tr>
+                                <tr th:unless="${assignmentList.get(i).getSubmitTrue() eq true}" class="text-center" style="cursor: pointer;" th:onclick="'location.href=\''+ @{'/s/assignment/write/'+${assignmentList.get(i).getId}} + '\''">
+                                    <th scope="row" th:text="${i+1}"></th>
+                                    <td th:text="${assignmentList.get(i).getName()}"></td>
+                                    <td th:text="${#dates.format(assignmentList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'   ~   '+#dates.format(assignmentList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td th:text="X"></td>
+                                </tr>
+                            </th:block>
                         </tbody>
                         <tbody th:unless="${assignmentList.isEmpty() eq false}">                                                        <!-- 과제 목록이 없는 경우 -->
                             <tr>
@@ -307,26 +314,24 @@
                     <p class="card-title-desc"></p>
 
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0">
+                        <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr class="text-center">
+                                    <th></th>
                                     <th>제목</th>
                                     <th style="width : 150px">작성자</th>
                                     <th style="width : 320px">작성일</th>
-                                    <th style="width : 150px">다운로드</th>
                                 </tr>
                             </thead>
                             <tbody th:if="${lectureFileList.isEmpty() eq false}">
-                                <tr th:each="i : ${#numbers.sequence(0,lectureFileList.size()-1)}">
+                                <tr th:each="i : ${#numbers.sequence(0,lectureFileList.size()-1)}" style="cursor: pointer;" th:onclick="'location.href=\''+ @{'/s/lf/'+${lectureFileList.get(i).getId}} + '\''">
+                                    <th scope="row" th:text="${i+1}" class="text-center"></th>
                                     <td th:text="${lectureFileList.get(i).getTitle()}" class="text-center"></td>
                                     <td th:text="${lectureFileList.get(i).getMember().getName()}" class="text-center"></td>
                                     <td th:text="${#dates.format(lectureFileList.get(i).getDate(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-light btn-sm">Download</button>
-                                    </td>
                                 </tr>
                             </tbody>
-                            <tbody th:unless="${lectureFileList.isEmpty() eq false}">                                                        <!-- 강의 영상 목록이 없는 경우 -->
+                            <tbody th:unless="${lectureFileList.isEmpty() eq false}">                                                        <!-- 강의 자료 목록이 없는 경우 -->
                                 <tr>
                                     <td th:colspan="4" class="text-center">등록된 내용이 없습니다.</td>
                                 </tr>
@@ -366,7 +371,7 @@
                                     <td th:text="${#dates.format(lectureVideoList.get(i).getAttendanceStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(lectureVideoList.get(i).getAttendanceEnd(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
                                     <td th:text="${lectureVideoList.get(i).getDuration()}" class="text-center"></td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-light btn-sm">View</button>
+                                        <button type="button" class="btn btn-light btn-sm" th:onclick="'location.href=\''+ @{'/s/lv/view'+'?syllabus-id='+${syllabusId}+'&id='+${lectureVideoList.get(i).getId()}} + '\''">View</button>
                                     </td>
                                 </tr>
                             </tbody>
