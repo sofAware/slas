@@ -228,8 +228,9 @@ public class quizStudentController {
         }else{
             question_num-=1;
         }
-
+        List<QuizSubmit> quizzes=quizService.findByQuiz_Syllabus_IdAndQuiz_Id(syNo,testNum);
         List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId(syNo,testNum);
+        model.addAttribute("quizzes",quizzes);
         model.addAttribute("quizTest",quizTest);
         model.addAttribute("syllabusId",syNo);
         model.addAttribute("question_num",question_num);

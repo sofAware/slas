@@ -105,10 +105,9 @@
     <div class="col-12">
         <div class="row">
             <h5 class="col-2">번호</h5>
-            <h5 class="col-2">제목</h5>
+            <h5 class="col-4">제목</h5>
             <h5 class="col-4 ms-md-auto">응시 기간</h5>
-            <h5 class="col-2">상태</h5>
-            <h5 class="col-1">응시 결과</h5>
+            <h5 class="col-1">상태</h5>
             <h5 class="col-1">응시</h5>
         </div>
     </div>
@@ -117,38 +116,37 @@
 </div>
 
 <div class="row">
-<th:block th:if="${quizList.isEmpty() eq false}" th:each="i : ${#numbers.sequence(0,quizList.size()-1)}">
-    <div class="col-xl-11">
-    <a class="card" >
-        <div class="card-body" >
-            <div class="row">
-                <div class="col-2" th:text="${quizList.get(i).getId()}"></div>
-                <div class="col-2" th:text="${quizList.get(i).getName()}"></div>
-                <div class="col-4 ms-md-auto" th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></div>
-                <div class="col-2 " th:if="${quizList.get(i).getSubmitted() eq true}" th:text="O"></div>
-                <div class="col-2 " th:unless="${quizList.get(i).getSubmitted() eq true}" th:text="X"></div>
-                <div class="col-1 "></div>
-            </div>
+    <th:block th:if="${quizList.isEmpty() eq false}" th:each="i : ${#numbers.sequence(0,quizList.size()-1)}">
+        <div class="col-xl-11">
+            <a class="card" >
+                <div class="card-body" >
+                    <div class="row">
+                        <div class="col-2" th:text="${quizList.get(i).getId()}"></div>
+                        <div class="col-4" th:text="${quizList.get(i).getName()}"></div>
+                        <div class="col-4 ms-md-auto" th:text="${#dates.format(quizList.get(i).getSubmitStart(), 'yyyy-MM-dd HH:mm:ss')+'~'+#dates.format(quizList.get(i).getSubmitEnd(), 'yyyy-MM-dd HH:mm:ss')}"></div>
+                        <div class="col-1 " th:if="${quizList.get(i).getSubmitted() eq true}" th:text="O"></div>
+                        <div class="col-1 " th:unless="${quizList.get(i).getSubmitted() eq true}" th:text="X"></div>
+                    </div>
+                </div>
+            </a>
         </div>
-    </a>
-    </div>
-    <div class="col-xl-1">
-        <a class="card" th:unless="${quizList.get(i).getSubmitted() eq true}"
-           th:href="${'/s/quiz/detail/' + quizList.get(i).getId() +'&'+ selectedSyllabusId}">
+        <div class="col-xl-1">
+            <a class="card" th:unless="${quizList.get(i).getSubmitted() eq true}"
+               th:href="${'/s/quiz/detail/' + quizList.get(i).getId() +'&'+ selectedSyllabusId+'?question_num=1'}">
+                <div class="card-body" >
+                    응시
+                </div>
+            </a>
+        </div>
+    </th:block>
+
+    <th:block th:unless="${quizList.isEmpty() eq false}">
+        <a class="card text-center">
             <div class="card-body" >
-                응시
+                등록된 내용이 없습니다.
             </div>
         </a>
-    </div>
-</th:block>
-
-<th:block th:unless="${quizList.isEmpty() eq false}">
-    <a class="card text-center">
-        <div class="card-body" >
-        등록된 내용이 없습니다.
-        </div>
-    </a>
-</th:block>
+    </th:block>
 </div>
 
 

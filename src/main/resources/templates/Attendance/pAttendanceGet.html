@@ -142,7 +142,7 @@
                 <th>이름</th>
                 <th:block th:each="i : ${#numbers.sequence(1,16)}">
                     <td><a
-                            th:attr="href='./attendance/' + ${i}" th:text="${i+'주차'}">
+                            th:attr="href='./attendance/' + ${i}+'&'+${attendances.get(0).getSyllabus().getId()}" th:text="${i+'주차'}">
                     </a>
                     </td>
                 </th:block>

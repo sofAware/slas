@@ -173,4 +173,7 @@ public class QuizService {
     public List<QuizSubmit> findByQuiz_Syllabus_IdAndQuiz_Id(String Quiz_syllabusId, String Quiz_id){
         return quizSubmitRepository.findByQuiz_Syllabus_IdAndQuiz_Id(Quiz_syllabusId,Quiz_id);
     }
+
+
+
 }

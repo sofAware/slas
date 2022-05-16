@@ -155,6 +155,9 @@
                     <th scope="col" class="text-center">
                         학기
                     </th>
+                    <th scope="col" class="text-center">
+                        email
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -164,6 +167,7 @@
                     <td th:text="${attendance.getStudent().getMajor()}"></td>
                     <td th:text="${attendance.getStudent().getSemester()/2}">학년</td>
                     <td th:text="${attendance.getStudent().getSemester()%2+1}">학기</td>
+                    <td th:text="${attendance.getStudent().getEmail}">학기</td>
                 </tr>
                 </tbody>
             </table>

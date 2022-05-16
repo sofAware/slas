@@ -3,10 +3,8 @@ package kr.sofaware.slas.function.quiz;
 
 import kr.sofaware.slas.entity.*;
 import kr.sofaware.slas.function.board.AssignmentSubmitInfo;
-import kr.sofaware.slas.service.AttendanceService;
-import kr.sofaware.slas.service.MemberService;
-import kr.sofaware.slas.service.QuizService;
-import kr.sofaware.slas.service.SyllabusService;
+import kr.sofaware.slas.function.mail.MyMailSender;
+import kr.sofaware.slas.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
@@ -29,6 +27,9 @@ public class quizProfessorController {
     private final AttendanceService attendanceService;
     private final SyllabusService syllabusService;
     private final QuizService quizService;
+    private final MyMailSender myMailSender;
+    private final LectureService lectureService;
+
 
 
     @GetMapping("/list")
@@ -260,6 +261,14 @@ public class quizProfessorController {
 
 //        List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId("a","a");
 //        model.addAttribute("quizTest",quizTest);
+
+        List<Lecture> lectures = lectureService.findAllBySyllabusId(quiz.getSyllabus().getId());
+        lectures.forEach(l -> myMailSender.send(
+                l.getStudent().getEmail(),
+                "[퀴즈] " + quiz.getId() +":" + quiz.getName(),
+                "http://slas.kr/s/quiz/list" ,
+                quiz.getId()+ ": 새 퀴즈가 업로드 되었습니다\n 응시 가능 시작 일자: "+quiz.getSubmitStart()+"\n응시 가능 마감 일자: "+quiz.getSubmitEnd())) ;
+
 
         return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(quizDto.getSyllabusId()).get().getId();
     }

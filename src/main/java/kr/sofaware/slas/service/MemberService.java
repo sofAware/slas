@@ -1,6 +1,7 @@
 package kr.sofaware.slas.service;
 
 import kr.sofaware.slas.auth.MemberDto;
+import kr.sofaware.slas.entity.Attendance;
 import kr.sofaware.slas.entity.Member;
 import kr.sofaware.slas.repository.LectureRepository;
 import kr.sofaware.slas.repository.MemberRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,4 +36,10 @@ public class MemberService implements UserDetailsService {
 
         return userRepository.save(Member.from(memberDTO)).getId();
     }
+    //소현//
+    public Member saveInfo(Member member) {
+        return userRepository.save(member);
+    }
+    public Optional<Member> findById(String id){return userRepository.findById(id);}
+
 }
