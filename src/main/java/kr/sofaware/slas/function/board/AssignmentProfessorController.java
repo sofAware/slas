@@ -204,7 +204,7 @@ public class AssignmentProfessorController {
         // 페이지 전송
         model.addAttribute("syllabus", assignment.get().getSyllabus());
         model.addAttribute("assignment", assignment.get());
-        return "/assignment/pWrite";
+        return "assignment/pWrite";
     }
     @PostMapping("edit/{assignmentIdStr:[0-9]+}")
     public String postEditing(AssignmentDto assignmentDto, Principal principal,
