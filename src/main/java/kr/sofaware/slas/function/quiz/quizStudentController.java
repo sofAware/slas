@@ -251,12 +251,18 @@ public class quizStudentController {
         Quiz quiz = quizService.findById(syNo, testNum, question_num);
         Member student = memberRepository.findById("2019010101").get();
 
+        int scores=0;
+        if(quiz.getCorrectAnswer().equals(quizSubmitDto.getAnswer())){
+            scores=quiz.getScore();
+        }
+
         //스코어는..? 답 값 가져와서 원래 답이랑 비교하고 맞으면 거기 점수 받아와서
         // 넣어주고 다르면 0점 처리
         //Member student = memberRepository.findById(Id).get();
         QuizSubmit.QuizSubmitBuilder builder=QuizSubmit.builder()
                 .answer(quizSubmitDto.getAnswer())
                 .student(memberService.loadUserByUsername(principal.getName()))
+                .score(scores)
                 .quiz(quiz);
 
         QuizSubmit quizSubmit1 =builder.build();
