@@ -60,11 +60,11 @@
 
 
 <div class="row">
-    <div class="col-md-4">                                                    <!-- 공지 사항 -->
+    <div class="col-md-4">                                          <!-- 공지 사항 -->
         <div class="card" style="height: 325px">
             <div class="card-body">
                 <h4 class="card-title mb-5">공지 사항</h4>
-                <div class="">
+                <div data-simplebar="init" class="mt-2" style="height: 210px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: -17px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
                     <ul class="verti-timeline list-unstyled">
                         <li th:each="i : ${#numbers.sequence(0,noticeList.size()-1)}" class="event-list">
                             <div class="event-timeline-dot">
@@ -83,13 +83,13 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 454px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 172px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
             </div>
         </div>
     </div>
 
     <div class="col-md-4">                                                      <!-- 과목 현황 -->
-        <div class="card">
+        <div class="card" style="height: 325px">
             <div class="card-body">
                 <h4 class="card-title mb-5">과목 현황</h4>
                 <ul class="verti-timeline list-unstyled">
@@ -391,4 +391,5 @@
 
 <meta th:replace="frame/mid2.html">
 <!-- add your js here -->
+<script src="/assets/libs/simplebar/simplebar.min.js"></script>
 <meta th:replace="frame/end.html">
