@@ -211,7 +211,7 @@ public class NoticeProfessorController {
         model.addAttribute("title", TITLE);
         model.addAttribute("syllabus", oBoard.get().getSyllabus());
         model.addAttribute("board", oBoard.get());
-        return "/board/write";
+        return "board/write";
     }
     @PostMapping("edit/{boardIdStr:[0-9]+}")
     public String postEditing(BoardDto boardDto, Principal principal,

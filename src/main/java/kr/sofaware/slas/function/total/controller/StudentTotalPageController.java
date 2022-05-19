@@ -127,6 +127,7 @@ public class StudentTotalPageController {
         List<Board> lectureFileList=new ArrayList<>();
         lectureFileList.addAll(lectureFileService.listAll(syllabusId));
 
+        model.addAttribute("syllabusId",syllabusId);                                // 학정 번호
         model.addAttribute("noticeList",noticeDtoList);                             // 공지 사항
         model.addAttribute("assignmentList",assignmentDtoList);                     // 과제 목록
         model.addAttribute("quizList",quizDtoList);                                 // 퀴즈 목록
