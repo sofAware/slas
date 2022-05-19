@@ -9,6 +9,8 @@ JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
+echo "> $CURRENT_PID" >> /home/ubuntu/deploy.log
+
 if [ -z "$CURRENT_PID" ]
 then
   echo "> 종료할 것 없음." >> /home/ubuntu/deploy.log
