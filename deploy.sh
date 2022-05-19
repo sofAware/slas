@@ -9,12 +9,12 @@ JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
-if [ -z $CURRENT_PID ]
+if [ -z "$CURRENT_PID" ]
 then
   echo "> 종료할 것 없음." >> /home/ubuntu/deploy.log
 else
   echo "> kill -9 $CURRENT_PID" >> /home/ubuntu/deploy.log
-  kill -15 $CURRENT_PID >> /home/ubuntu/deploy.log
+  kill -15 "$CURRENT_PID" >> /home/ubuntu/deploy.log
   sleep 5
 fi
 
