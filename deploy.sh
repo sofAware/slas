@@ -22,3 +22,5 @@ fi
 
 echo "> $JAR_PATH 배포" >> /home/ubuntu/deploy.log
 nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+
+echo "> ----------------------------------" >> /home/ubuntu/deploy.log
