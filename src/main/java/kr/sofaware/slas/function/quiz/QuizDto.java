@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class QuizDto {
     private String id;
-    // 퀴즈 id
+      // 퀴즈 id
     private String name;                                // 퀴즈명
     private int questionNum;
     private Date submitStart;                           // 응시 시작일
