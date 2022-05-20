@@ -133,7 +133,7 @@
         <div class="col-xl-1">
             <a class="card" th:unless="${quizList.get(i).getSubmitted() eq true}"
                th:href="${'/s/quiz/detail/' + quizList.get(i).getId() +'&'+ selectedSyllabusId+'?question_num=1'}">
-                <div class="card-body" >
+                <div class="card-body bg-warning bg-soft " >
                     응시
                 </div>
             </a>

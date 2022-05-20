@@ -235,6 +235,8 @@ public class quizProfessorController {
 
         // 작성
         model.addAttribute("syllabus", syllabus.get());
+
+
         return "quiz/pQuizNew";
     }
 

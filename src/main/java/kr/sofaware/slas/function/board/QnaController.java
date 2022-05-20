@@ -159,7 +159,7 @@ public class QnaController {
                 findFirstSyllabus.apply(principal.getName()).get() :
                 syllabusService.findById(syllabusId).get());
 
-        return "/board/write";
+        return "board/write";
     }
     @PostMapping("write")
     public String postWriting(BoardDto boardDto, Principal principal, HttpServletRequest request)
@@ -221,7 +221,7 @@ public class QnaController {
         model.addAttribute("title", TITLE);
         model.addAttribute("syllabus", oBoard.get().getSyllabus());
         model.addAttribute("board", oBoard.get());
-        return "/board/write";
+        return "board/write";
     }
     @PostMapping("edit/{boardIdStr:[0-9]+}")
     public String postEditing(BoardDto boardDto, Principal principal, HttpServletRequest request,

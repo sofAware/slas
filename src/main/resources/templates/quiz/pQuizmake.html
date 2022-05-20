@@ -99,8 +99,7 @@
     <div class="card-body">
         <div class="table-responsive">
 
-            <form class="sform" method="POST" id="addWrite">
-                <table class="table table-bordered table-striped table-nowrap mb-0">
+              <table class="table table-bordered table-striped table-nowrap mb-0">
                     <thead>
                     <br>
                     <h4 class="card-title text-center">새 퀴즈 등록</h4>
@@ -119,29 +118,37 @@
                     <th:block>
                         <tr>
                             <input type="hidden" name="syllabusId" th:value="${syllabus.getId()}">
-                            <td><input type="text" class="form-control" name="id" th:value="${quizTest.get(0).getId()}"></td>
-                            <td><input type="text" class="form-control" name="name" th:value="${quizTest.get(0).getName()}"></td>
-                            <td><input type="date" class="form-control" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}"></td>
-                            <td><input type="date" class="form-control" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}"></td>
+                            <input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
+                            <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
+                            <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
+                            <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
+                            <td th:text="${quizTest.get(0).getId()}"></td>
+                            <td th:text="${quizTest.get(0).getName()}"></td>
+                            <td th:text="${quizTest.get(0).getSubmitStart()}"></td>
+                            <td th:text="${quizTest.get(0).getSubmitEnd()}"></td>
                         </tr>
                     </th:block>
 
                     </tbody>
 
-                    <tbody style="cursor: pointer;" th:unless="${quizTest.isEmpty() eq false}">
-                    <th:block>
-                        <tr>
-                            <input type="hidden" name="syllabusId" >
-                            <td><input type="text" class="form-control" name="id"></td>
-                            <td><input type="text" class="form-control" name="name" ></td>
-                            <td><input type="date" class="form-control" name="submitStart" ></td>
-                            <td><input type="date" class="form-control" name="submitEnd" ></td>
-                        </tr>
-                    </th:block>
+<!--                    <tbody style="cursor: pointer;" th:unless="${quizTest.isEmpty() eq false}">-->
+<!--                    <th:block>-->
+<!--                        <tr>-->
+<!--                            <input type="hidden" name="syllabusId" >-->
+<!--                            <td><input type="text" class="form-control" name="id"></td>-->
+<!--                            <td><input type="text" class="form-control" name="name" ></td>-->
+<!--                            <td><input type="date" class="form-control" name="submitStart" ></td>-->
+<!--                            <td><input type="date" class="form-control" name="submitEnd" ></td>-->
+<!--                        </tr>-->
+<!--                    </th:block>-->
 
-                    </tbody>
+<!--                    </tbody>-->
                 </table>
 
+                <br>
+
+            <form class="sform" method="POST" id="addWrite">
+                <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
 
                 <table class="table table-bordered table-striped table-nowrap mb-0">
                     <thead>
@@ -153,8 +160,7 @@
                             <th>모범 답안</th>
                             <th>배점</th>
                         </tr>
-                        <input type="hidden" id="csrf" th:attr="data-header-name=${_csrf.headerName}" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>
-                        <!--    <tr><input type="button" value='항목 추가' onclick='createDiv()'></tr>--><input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
+                         <!--    <tr><input type="button" value='항목 추가' onclick='createDiv()'></tr>--><input type="hidden" name="id" th:value="${quizTest.get(0).getId()}">
                         <input type="hidden" name="name" th:value="${quizTest.get(0).getName()}">
                         <input type="hidden" name="submitStart" th:value="${quizTest.get(0).getSubmitStart()}">
                         <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
@@ -168,7 +174,8 @@
 
                     <th:block>
                         <tr>
-                            <td><input type="number" class="form-control" name="questionNum"></td>
+                            <input type="hidden" class="form-control" name="questionNum" th:value="${quizTest.size()+1}">
+                            <td th:text="${quizTest.size()+1}"></td>
                             <td>
                                 <!--              <select class="form-select" id="autoSizingSelect">-->
                                 <!--                <option selected="" name="category" value="1">객관식</option>-->
@@ -221,20 +228,21 @@
                             <input type="hidden" name="submitEnd" th:value="${quizTest.get(0).getSubmitEnd()}">
                             <th:block>
 
-                            <td><input type="number" class="form-control" name="questionNum" th:value="${quizTest.get(i).getQuestionNum()}"></td>
-                            <td>
+                                <input type="hidden" class="form-control" name="questionNum" th:value="${quizTest.get(i).getQuestionNum()}">
+                                <td th:text="${quizTest.get(i).getQuestionNum()}"></td>
+
+
                                 <!--              <select class="form-select" id="autoSizingSelect">-->
                                 <!--                <option selected="" name="category" value="1">객관식</option>-->
                                 <!--                <option name="category" value="2">단답식</option>-->
                                 <!--                <option name="category" value="3">주관식</option>-->
 
                                 <!--              </select>-->
-                                <input type="number" class="form-control" name="category" th:value="${quizTest.get(i).getCategory()}">
-                            </td>
+                                <td><input type="text" class="form-control" name="category" th:value="${quizTest.get(i).getCategory()}"></td>
                             <td><input type="text" class="form-control" name="question" th:value="${quizTest.get(i).getQuestion()}"></td>
                             <td><input type="text" class="form-control" name="correctAnswer" th:value="${quizTest.get(i).getCorrectAnswer()}"></td>
                             <td><input type="number" class="form-control" name="score" th:value="${quizTest.get(i).getScore()}"></td>
-                            <td><input type="submit" class="form-control" name="complete" value="수정">
+                                <td><input type="submit" class="form-control" name="complete" value="수정"></td>
                                 <td><a class="btn btn-danger" th:attr="href='./delete/' + ${quizTest.get(0).getId()} + '&' + ${quizTest.get(0).getSyllabus().getId()} + '&'+ ${quizTest.get(i).getQuestionNum()}"
                                        data-bs-toggle="tooltip" data-bs-placement="top" title="누르면 바로 삭제됨"
                                 >삭제</a></td>

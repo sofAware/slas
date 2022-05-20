@@ -14,6 +14,5 @@ public interface QuizRepository extends JpaRepository<Quiz, QuizPK> {
     List<Quiz> findBySyllabus_IdOrderByQuestionNumAsc(String id);
     List<Quiz> findBySyllabus_IdAndId(String syllabus_id, String id);
 
-
     List<Quiz> findAllBySyllabus_IdAndId(String syllabus_id, String id);
 }
