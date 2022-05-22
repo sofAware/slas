@@ -28,7 +28,6 @@
               <div class="col-sm-6">
                 <div class="row">
                   <div class="col-md-6">
-                    <h5 class="font-size-14 fw-bold" key="t-ui-components">양경호</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
                       <li><a class="d-block" href="/p/notice">공지사항</a></li>
@@ -47,15 +46,14 @@
                     </ul>
                   </div>
                   <div class="col-md-6">
-                    <h5 class="font-size-14 fw-bold" key="t-extra-pages">정지민</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
-                      <li><a class="d-block" href="/p/main">메인페이지</a></li>
+                      <li><a class="d-block" href="/">메인페이지</a></li>
                       <li><a class="d-block" href="/p/total">강의 종합</a></li>
                     </ul>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                      <li><a class="d-block" href="/s/main">메인페이지</a></li>
+                      <li><a class="d-block" href="/">메인페이지</a></li>
                       <li><a class="d-block" href="/s/total">강의 종합</a></li>
                     </ul>
                   </div>
@@ -64,7 +62,6 @@
               <div class="col-sm-6">
                 <div class="row">
                   <div class="col-md-6">
-                    <h5 class="font-size-14 fw-bold" key="t-applications">김수헌</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
                       <li><a class="d-block" href="/p/timetable">시간표</a></li>
@@ -79,7 +76,6 @@
                     </ul>
                   </div>
                   <div class="col-sm-6">
-                    <h5 class="font-size-14 fw-bold" key="t-ui-components">박소현</h5>
                     <ul class="list-unstyled megamenu-list"
                         th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">
                       <li><a class="d-block" href="/p/attendance">출석체크</a></li>
@@ -101,40 +97,36 @@
         </div>
       </div>
 
-        <div class="dropdown d-inline-block">
-          <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="rounded-circle header-profile-user" src="/assets/images/profile"
-                 alt="Profile">
-            <span class="d-none d-xl-inline-block ms-1" key="t-henry" th:text="${#authentication.getPrincipal().getName()}">김소파</span>
-            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end">
-            <!-- item-->
-            <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
-                key="t-profile">프로필</span></a>
-            <a class="dropdown-item" href="#"><i class="bx bx-wallet font-size-16 align-middle me-1"></i> <span
-                key="t-my-wallet">지갑</span></a>
-            <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end">11</span><i
-                class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings">설정</span></a>
-            <a class="dropdown-item" href="#"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i> <span
-                key="t-lock-screen">잠금화면</span></a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item text-danger" href="/logout"><i
-                class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span
-                key="t-logout">로그아웃</span></a>
-          </div>
+      <div class="dropdown d-inline-block">
+        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="rounded-circle header-profile-user" src="/assets/images/profile"
+               alt="Profile">
+          <span class="d-none d-xl-inline-block ms-1" key="t-henry" th:text="${#authentication.getPrincipal().getName()}">김소파</span>
+          <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end">
+          <!-- item-->
+          <a class="dropdown-item" href="/s/info"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
+                  key="t-profile" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">개인정보</span></a>
+          <a class="dropdown-item" href="/p/info"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
+                  key="t-profile" th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">개인정보</span></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-danger" href="/logout"><i
+                  class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span
+                  key="t-logout">로그아웃</span></a>
         </div>
-
-<!--        <div class="dropdown d-inline-block">-->
-<!--          <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">-->
-<!--            <i class="bx bx-cog bx-spin"></i>-->
-<!--          </button>-->
-<!--        </div>-->
-
       </div>
+
+      <!--        <div class="dropdown d-inline-block">-->
+      <!--          <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">-->
+      <!--            <i class="bx bx-cog bx-spin"></i>-->
+      <!--          </button>-->
+      <!--        </div>-->
+
     </div>
-  </header>
-  <div class="main-content">
-    <div class="page-content mt-0">
-      <div class="container-fluid">
+</div>
+</header>
+<div class="main-content">
+  <div class="page-content mt-0">
+    <div class="container-fluid">
