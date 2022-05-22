@@ -107,10 +107,10 @@
         </button>
         <div class="dropdown-menu dropdown-menu-end">
           <!-- item-->
-          <a class="dropdown-item" href="/s/info"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
-                  key="t-profile" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">개인정보</span></a>
-          <a class="dropdown-item" href="/p/info"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
-                  key="t-profile" th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}">개인정보</span></a>
+          <a class="dropdown-item" href="/s/info" th:if="${#authorization.expression('hasRole(''STUDENT'')')}"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
+                  key="t-profile">개인정보</span></a>
+          <a class="dropdown-item" href="/p/info" th:if="${#authorization.expression('hasRole(''PROFESSOR'')')}"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
+                  key="t-profile">개인정보</span></a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item text-danger" href="/logout"><i
                   class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span
