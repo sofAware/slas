@@ -7,6 +7,12 @@
     #viewer img {
         width: 100%;
     }
+    th, td {
+      border: 1px solid #aaa;
+    }
+    th {
+      background-color: #eee;
+    }
 </style>
 <title th:text="${title.substring(3)} + ' - ' + ${board.getSyllabus().getName()}"></title>
 <meta th:replace="frame/mid.html">
