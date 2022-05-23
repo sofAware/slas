@@ -140,8 +140,8 @@ public class   Attendance {
     public static String formatWeek(int week){
         switch (week){
             case  1 : return "O"; // 출석
-            case  2 : return "L"; // 지각
-            case  3 : return "X"; // 결석
+            case  2 : return "X"; // 결석
+            case  3 : return "L"; // 지각
             case  4 : return "A"; // 공결
         }
         return "Z";
