@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
@@ -264,12 +265,15 @@ public class quizProfessorController {
 //        List<Quiz> quizTest=quizService.findAllBySyllabus_IdAndId("a","a");
 //        model.addAttribute("quizTest",quizTest);
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일"); //원하는 데이터 포맷 지정 String strNowDate = simpleDateFormat.format(nowDate);
+
         List<Lecture> lectures = lectureService.findAllBySyllabusId(quiz.getSyllabus().getId());
         lectures.forEach(l -> myMailSender.send(
                 l.getStudent().getEmail(),
                 "[퀴즈] " + quiz.getId() +":" + quiz.getName(),
                 "http://slas.kr/s/quiz/list" ,
-                quiz.getId()+ ": 새 퀴즈가 업로드 되었습니다\n 응시 가능 시작 일자: "+quiz.getSubmitStart()+"\n응시 가능 마감 일자: "+quiz.getSubmitEnd())) ;
+                quiz.getId()+ ": 새 퀴즈가 업로드 되었습니다\n 응시 가능 시작 일자: "+simpleDateFormat.format(quiz.getSubmitStart())+"\n응시 가능 마감 일자: "+simpleDateFormat.format(quiz.getSubmitEnd()))) ;
+
 
 
         return "redirect:/p/quiz/make/"+ quizDto.getId() + "&" + syllabusService.findById(quizDto.getSyllabusId()).get().getId();
