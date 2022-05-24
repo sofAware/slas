@@ -334,9 +334,15 @@ public class quizProfessorController {
                          @PathVariable String syNo,
                          @PathVariable String testNum,@PathVariable String testInNum) {
 
+        String A = "redirect:/p/quiz/list";
         QuizPK optionalQuiz = new QuizPK(syNo, testNum, parseInt(testInNum));
         quizService.delete(optionalQuiz);
-        String A = "redirect:/p/quiz/list";
+        if(testInNum.equals("1")){
+            A = "redirect:/p/quiz/list";
+        }else{
+            A = "redirect:/p/quiz/make/"+testNum+"&"+syNo;
+        }
+
 
         // 목록으로 리디렉션
         return A;
